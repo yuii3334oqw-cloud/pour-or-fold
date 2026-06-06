@@ -55,11 +55,19 @@ h1,h2,h3,.brand,.bignum,.btn-lg{font-family:'Bebas Neue','Noto Sans SC',sans-ser
 /* ============ 顶栏 ============ */
 .topbar{
   display:flex;align-items:center;justify-content:space-between;
-  padding:14px 4px 6px;
+  padding:14px 2px 8px;min-height:48px;
 }
-.brand{font-size:30px;line-height:1;color:var(--gold);text-shadow:0 1px 0 #000,0 0 18px rgba(212,175,55,.25);}
-.brand small{display:block;font-family:'Noto Sans SC';font-size:11px;letter-spacing:.34em;color:var(--muted);margin-top:3px;}
-.topbar .link{color:var(--muted);font-size:13px;background:none;border:none;padding:8px;cursor:pointer;}
+.brand{font-size:clamp(22px,6vw,30px);line-height:1;color:var(--gold);text-shadow:0 1px 0 #000,0 0 18px rgba(212,175,55,.25);}
+.menu-btn{
+  display:inline-flex;align-items:center;gap:7px;flex:none;
+  background:var(--panel);border:1px solid var(--panel-border);
+  color:var(--text);font-family:inherit;font-size:13px;font-weight:500;
+  padding:9px 14px;border-radius:999px;cursor:pointer;
+  transition:border-color .15s,background .15s,transform .06s;
+}
+.menu-btn:active{transform:scale(.95);}
+.menu-btn:hover{border-color:rgba(212,175,55,.5);background:rgba(212,175,55,.06);}
+.menu-btn svg{width:15px;height:15px;stroke:var(--gold);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
 
 /* ============ 通用按钮 ============ */
 .btn{
@@ -89,14 +97,14 @@ h1,h2,h3,.brand,.bignum,.btn-lg{font-family:'Bebas Neue','Noto Sans SC',sans-ser
 
 /* ============ 首页/选择游戏 ============ */
 .home-hero{
-  text-align:center;padding:30px 10px 18px;
+  text-align:center;padding:clamp(24px,7vw,46px) 10px clamp(16px,4vw,24px);
 }
 .home-hero .logo{
-  font-family:'Bebas Neue';font-size:64px;line-height:.9;color:var(--gold);
+  font-family:'Bebas Neue';font-size:clamp(46px,13vw,84px);line-height:.9;color:var(--gold);
   text-shadow:0 2px 0 #000,0 0 40px rgba(212,175,55,.3);
 }
-.home-hero .tag{color:var(--muted);letter-spacing:.3em;font-size:12px;margin-top:6px;}
-.home-hero .cn{margin-top:10px;font-size:15px;color:var(--gold-soft);}
+.home-hero .tag{color:var(--muted);letter-spacing:.3em;font-size:clamp(11px,2.6vw,13px);margin-top:8px;}
+.home-hero .cn{margin-top:12px;font-size:clamp(14px,3.4vw,16px);color:var(--gold-soft);}
 .game-list{display:grid;gap:14px;margin-top:8px;}
 .game-card{
   display:flex;align-items:center;gap:14px;text-align:left;
@@ -271,8 +279,11 @@ h1,h2,h3,.brand,.bignum,.btn-lg{font-family:'Bebas Neue','Noto Sans SC',sans-ser
 
   <!-- 顶栏 -->
   <div class="topbar" id="topbar">
-    <div class="brand">POUR <span style="color:var(--muted)">or</span> FOLD<small>酒 局 德 州</small></div>
-    <button class="link" id="homeBtn">⌂ 主菜单</button>
+    <div class="brand">POUR <span style="color:var(--muted)">or</span> FOLD</div>
+    <button class="menu-btn" id="homeBtn" aria-label="返回主菜单">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v9h5v-5h4v5h5v-9"/></svg>
+      <span>主菜单</span>
+    </button>
   </div>
 
   <!-- ============ 1. 首页 选择游戏 ============ -->
@@ -424,6 +435,8 @@ function rankStr(r){ return r===14?'A':r===13?'K':r===12?'Q':r===11?'J':String(r
 
 function show(screen){
   ['home','setup','table','result'].forEach(s=> $('screen-'+s).classList.toggle('hidden', s!==screen));
+  // 已在主菜单时,隐藏右上角「主菜单」按钮(避免冗余)
+  $('homeBtn').classList.toggle('hidden', screen==='home');
 }
 function applyTheme(){
   document.body.classList.toggle('theme-green', G.themeIdx % 2 === 1);
