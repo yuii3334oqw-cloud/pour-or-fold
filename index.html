@@ -456,6 +456,14 @@ const SUIT_CH = {s:'♠',h:'♥',d:'♦',c:'♣'};
 const cup = (x)=> (x % 1 === 0 ? String(x) : x.toFixed(1));
 function rankStr(r){ return r===14?'A':r===13?'K':r===12?'Q':r===11?'J':String(r); }
 
+/* 震动反馈(Android 浏览器支持;iOS Safari 不支持会自动忽略) */
+function buzz(p){ try{ if(navigator.vibrate) navigator.vibrate(p); }catch(e){} }
+const HAPTIC = {
+  tap:8, fold:[18], check:12, call:[14,40,14],
+  raiseHalf:[12,40,22], raiseFull:[14,45,14,45,30],
+  peek:10, deal:[10,40,10], win:[30,40,30,40,90]
+};
+
 function show(screen){
   ['home','setup','table','result'].forEach(s=> $('screen-'+s).classList.toggle('hidden', s!==screen));
   // 已在主菜单时,隐藏右上角「主菜单」按钮(避免冗余)
@@ -644,7 +652,7 @@ function peekStep(i){
 
 /* 按住显示 / 松手盖回(handEl/handText 可选:按住时同时显示当前牌型) */
 function bindHold(pad, cardsEl, cards, handEl, handText){
-  const reveal=()=>{ pad.classList.add('holding'); cardsEl.innerHTML=cardFace(cards[0])+cardFace(cards[1]); if(handEl) handEl.textContent='当前牌型 · '+handText; };
+  const reveal=()=>{ buzz(HAPTIC.peek); pad.classList.add('holding'); cardsEl.innerHTML=cardFace(cards[0])+cardFace(cards[1]); if(handEl) handEl.textContent='当前牌型 · '+handText; };
   const hide=()=>{ pad.classList.remove('holding'); cardsEl.innerHTML=cardBack()+cardBack(); if(handEl) handEl.textContent=''; };
   pad.addEventListener('pointerdown',e=>{e.preventDefault();reveal();});
   ['pointerup','pointerleave','pointercancel'].forEach(ev=>pad.addEventListener(ev,hide));
@@ -661,6 +669,7 @@ function beginBetting(){
 }
 
 function act(type){
+  buzz(HAPTIC[type] || HAPTIC.tap);
   const p=G.players[G.actor];
   if(type==='fold'){
     p.folded=true;
@@ -715,6 +724,7 @@ function finishHand(winners, reason, bestScore){
   G.revealed=5;
   renderResult(winners, reason, bestScore);
   show('result');
+  buzz(HAPTIC.win);
 }
 
 /* =========================================================
@@ -912,14 +922,15 @@ function collectNames(){
 /* =========================================================
    事件绑定
 ========================================================= */
-$('startTexas').onclick=()=>{ show('setup'); renderNames(); };
+$('startTexas').onclick=()=>{ buzz(HAPTIC.tap); show('setup'); renderNames(); };
 $('backHome').onclick=()=> show('home');
 $('homeBtn').onclick=()=>{ if(confirm('返回主菜单?当前牌局将不会保留。')) show('home'); };
 
-$('minus').onclick=()=>{ if(G.numPlayers>2){G.numPlayers--; renderNames();} };
-$('plus').onclick=()=>{ if(G.numPlayers<8){G.numPlayers++; renderNames();} };
+$('minus').onclick=()=>{ if(G.numPlayers>2){buzz(HAPTIC.tap);G.numPlayers--; renderNames();} };
+$('plus').onclick=()=>{ if(G.numPlayers<8){buzz(HAPTIC.tap);G.numPlayers++; renderNames();} };
 
 $('toDeal').onclick=()=>{
+  buzz(HAPTIC.deal);
   collectNames();
   G.dealer=0;
   G.handNo=0;
@@ -927,6 +938,7 @@ $('toDeal').onclick=()=>{
 };
 
 $('nextHand').onclick=()=>{
+  buzz(HAPTIC.deal);
   G.dealer=(G.dealer+1)%G.numPlayers;  // 庄家顺移
   newHand();
 };
