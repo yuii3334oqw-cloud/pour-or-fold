@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>酒局德州 · Pour or Fold</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ============ 基础与变量 ============ */
+:root{
+  --bg:#0a0d12;
+  --bg2:#11161f;
+  --panel:rgba(255,255,255,.04);
+  --panel-border:rgba(255,255,255,.08);
+  --gold:#d4af37;
+  --gold-soft:#e7cd72;
+  --gold-deep:#a8841f;
+  --text:#f4f1e8;
+  --muted:#9aa3b0;
+  --red:#e8616b;
+  --danger:#c0392b;
+  /* 牌桌主题(蓝/绿轮换) */
+  --felt1:#0f3d5c;
+  --felt2:#0a2740;
+  --felt-rim:#06182a;
+  --glow:rgba(212,175,55,.55);
+}
+body.theme-green{
+  --felt1:#11543f;
+  --felt2:#0a3528;
+  --felt-rim:#04201a;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;height:100%;}
+body{
+  background:
+    radial-gradient(120% 80% at 50% -10%, #1a2230 0%, var(--bg) 60%),
+    var(--bg);
+  color:var(--text);
+  font-family:'Noto Sans SC',system-ui,-apple-system,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+  touch-action:manipulation;
+}
+.app{
+  max-width:820px;margin:0 auto;min-height:100%;
+  padding:env(safe-area-inset-top) 16px calc(20px + env(safe-area-inset-bottom));
+  display:flex;flex-direction:column;
+}
+h1,h2,h3,.brand,.bignum,.btn-lg{font-family:'Bebas Neue','Noto Sans SC',sans-serif;letter-spacing:.04em;}
+.hidden{display:none !important;}
+
+/* ============ 顶栏 ============ */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 4px 6px;
+}
+.brand{font-size:30px;line-height:1;color:var(--gold);text-shadow:0 1px 0 #000,0 0 18px rgba(212,175,55,.25);}
+.brand small{display:block;font-family:'Noto Sans SC';font-size:11px;letter-spacing:.34em;color:var(--muted);margin-top:3px;}
+.topbar .link{color:var(--muted);font-size:13px;background:none;border:none;padding:8px;cursor:pointer;}
+
+/* ============ 通用按钮 ============ */
+.btn{
+  appearance:none;border:1px solid var(--panel-border);
+  background:var(--panel);color:var(--text);
+  border-radius:14px;padding:14px 16px;font-size:16px;font-weight:500;
+  cursor:pointer;transition:transform .06s ease,background .15s,border-color .15s;
+  font-family:inherit;
+}
+.btn:active{transform:scale(.97);}
+.btn.gold{
+  background:linear-gradient(180deg,var(--gold-soft),var(--gold-deep));
+  color:#1a1305;border:none;font-weight:700;
+  box-shadow:0 6px 18px rgba(212,175,55,.22),inset 0 1px 0 rgba(255,255,255,.4);
+}
+.btn.ghost{background:transparent;}
+.btn.danger{background:rgba(192,57,43,.16);border-color:rgba(192,57,43,.5);color:#f2a99f;}
+.btn.full{width:100%;}
+.btn:disabled{opacity:.35;cursor:not-allowed;}
+.btn-lg{font-size:24px;letter-spacing:.06em;}
+
+/* ============ 卡片容器 ============ */
+.card-panel{
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+  border:1px solid var(--panel-border);border-radius:20px;padding:18px;
+}
+
+/* ============ 首页/选择游戏 ============ */
+.home-hero{
+  text-align:center;padding:30px 10px 18px;
+}
+.home-hero .logo{
+  font-family:'Bebas Neue';font-size:64px;line-height:.9;color:var(--gold);
+  text-shadow:0 2px 0 #000,0 0 40px rgba(212,175,55,.3);
+}
+.home-hero .tag{color:var(--muted);letter-spacing:.3em;font-size:12px;margin-top:6px;}
+.home-hero .cn{margin-top:10px;font-size:15px;color:var(--gold-soft);}
+.game-list{display:grid;gap:14px;margin-top:8px;}
+.game-card{
+  display:flex;align-items:center;gap:14px;text-align:left;
+  border-radius:18px;padding:18px;cursor:pointer;
+  background:linear-gradient(135deg,var(--felt1),var(--felt2));
+  border:1px solid rgba(212,175,55,.25);
+  box-shadow:0 10px 30px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);
+  position:relative;overflow:hidden;
+}
+.game-card.soon{background:linear-gradient(135deg,#1b2230,#141923);border-color:var(--panel-border);cursor:not-allowed;opacity:.7;}
+.game-card .emoji{font-size:34px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5));}
+.game-card .gc-body{flex:1;}
+.game-card .gc-title{font-size:19px;font-weight:700;}
+.game-card .gc-desc{font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.5;}
+.badge-soon{font-size:11px;color:var(--gold);border:1px solid var(--gold-deep);border-radius:20px;padding:3px 9px;}
+
+/* ============ 设置玩家 ============ */
+.section-title{font-size:14px;color:var(--muted);letter-spacing:.1em;margin:22px 4px 10px;text-transform:uppercase;}
+.count-row{display:flex;align-items:center;justify-content:center;gap:18px;margin:6px 0 4px;}
+.count-row .num{font-family:'Bebas Neue';font-size:54px;color:var(--gold);min-width:60px;text-align:center;}
+.stepper{width:54px;height:54px;border-radius:50%;font-size:28px;display:flex;align-items:center;justify-content:center;padding:0;}
+.names{display:grid;gap:10px;margin-top:6px;}
+.name-input{
+  display:flex;align-items:center;gap:10px;background:var(--panel);
+  border:1px solid var(--panel-border);border-radius:14px;padding:6px 8px 6px 14px;
+}
+.name-input .seat{font-family:'Bebas Neue';color:var(--gold);font-size:20px;width:28px;}
+.name-input input{
+  flex:1;background:none;border:none;color:var(--text);font-size:16px;
+  font-family:inherit;padding:10px 4px;outline:none;
+}
+.rules{font-size:13px;color:var(--muted);line-height:1.9;margin-top:6px;}
+.rules b{color:var(--gold-soft);font-weight:500;}
+
+/* ============ 牌 ============ */
+.card{
+  position:relative;width:var(--cw,58px);height:calc(var(--cw,58px)*1.45);
+  border-radius:9px;background:linear-gradient(160deg,#fdfcf7,#ece7d8);
+  color:#1a1a1a;display:flex;flex-direction:column;justify-content:space-between;
+  padding:6px 7px;box-shadow:0 4px 10px rgba(0,0,0,.4),inset 0 0 0 1px rgba(0,0,0,.06);
+  font-weight:700;flex:none;
+}
+.card .r{font-size:calc(var(--cw,58px)*.38);line-height:1;font-family:'Bebas Neue';letter-spacing:0;}
+.card .s{font-size:calc(var(--cw,58px)*.4);line-height:1;text-align:right;}
+.card.red{color:var(--red);}
+.card.back{
+  background:
+    repeating-linear-gradient(45deg,rgba(212,175,55,.10) 0 6px,transparent 6px 12px),
+    linear-gradient(160deg,#16314a,#0c1c2e);
+  color:var(--gold);align-items:center;justify-content:center;
+  box-shadow:0 4px 10px rgba(0,0,0,.5),inset 0 0 0 2px rgba(212,175,55,.45);
+}
+.card.back span{font-family:'Bebas Neue';font-size:calc(var(--cw,58px)*.7);text-shadow:0 1px 4px rgba(0,0,0,.6);opacity:.92;}
+.card.empty{background:rgba(255,255,255,.04);box-shadow:inset 0 0 0 1px var(--panel-border);}
+
+/* ============ 牌桌 ============ */
+.felt{
+  background:
+    radial-gradient(120% 90% at 50% 38%, var(--felt1), var(--felt2) 70%);
+  border:6px solid var(--felt-rim);
+  border-radius:120px/80px;
+  padding:24px 16px 22px;margin-top:6px;
+  box-shadow:0 14px 40px rgba(0,0,0,.5),inset 0 0 60px rgba(0,0,0,.45),inset 0 0 0 2px rgba(212,175,55,.18);
+  text-align:center;
+}
+.street-label{font-family:'Bebas Neue';letter-spacing:.2em;color:var(--gold-soft);font-size:15px;opacity:.85;}
+.community{display:flex;gap:7px;justify-content:center;margin:12px 0 14px;min-height:90px;align-items:center;}
+.pot{display:inline-flex;flex-direction:column;align-items:center;gap:2px;}
+.pot .plabel{font-size:11px;letter-spacing:.25em;color:var(--gold-soft);opacity:.8;}
+.pot .pval{font-family:'Bebas Neue';font-size:42px;color:var(--gold);line-height:1;text-shadow:0 2px 10px rgba(212,175,55,.4);}
+.pot .pval small{font-size:18px;color:var(--gold-soft);margin-left:4px;}
+
+/* 座位 */
+.seats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px;}
+.seat{
+  background:var(--panel);border:1px solid var(--panel-border);border-radius:14px;
+  padding:10px 12px;display:flex;flex-direction:column;gap:7px;position:relative;
+  transition:border-color .2s,box-shadow .2s,background .2s;
+}
+.seat.active{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 22px var(--glow);background:rgba(212,175,55,.06);}
+.seat.folded{opacity:.45;}
+.seat.winner{border-color:var(--gold);box-shadow:0 0 26px var(--glow);background:rgba(212,175,55,.1);}
+.seat-top{display:flex;align-items:center;justify-content:space-between;gap:6px;}
+.seat-name{font-weight:700;font-size:15px;display:flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pos-badge{font-family:'Bebas Neue';font-size:11px;padding:1px 6px;border-radius:8px;border:1px solid var(--gold-deep);color:var(--gold);line-height:1.4;}
+.pos-D{background:rgba(212,175,55,.15);}
+.seat-stat{font-size:11.5px;color:var(--muted);}
+.seat-stat .in{color:var(--gold-soft);}
+.seat-bot{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.bet-chip{font-size:12px;color:var(--text);background:rgba(0,0,0,.28);border:1px solid var(--panel-border);border-radius:20px;padding:3px 9px;min-height:22px;}
+.peek-btn{font-size:13px;padding:7px 12px;border-radius:10px;}
+.seat-cards{display:flex;gap:5px;}
+.tag-fold{color:var(--red);font-size:12px;font-weight:700;}
+
+/* 行动条 */
+.action-bar{
+  position:sticky;bottom:0;margin-top:16px;padding-top:10px;
+  background:linear-gradient(180deg,transparent,var(--bg) 24%);
+}
+.turn-of{text-align:center;font-size:14px;color:var(--muted);margin-bottom:8px;}
+.turn-of b{color:var(--gold);font-size:17px;}
+.actions{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;}
+.actions .wide{grid-column:span 2;}
+
+/* ============ 看牌覆盖层 ============ */
+.overlay{
+  position:fixed;inset:0;z-index:50;background:rgba(5,7,11,.94);
+  backdrop-filter:blur(6px);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:24px;text-align:center;
+  animation:fade .2s ease;
+}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.overlay h2{font-size:30px;color:var(--gold);margin:0 0 4px;}
+.overlay .sub{color:var(--muted);font-size:14px;margin-bottom:24px;}
+.hold-pad{
+  width:100%;max-width:340px;border:2px dashed rgba(212,175,55,.45);
+  border-radius:22px;padding:30px 18px;margin:8px 0 22px;
+  display:flex;flex-direction:column;align-items:center;gap:16px;
+  background:rgba(212,175,55,.04);user-select:none;
+}
+.hold-pad.holding{border-style:solid;border-color:var(--gold);background:rgba(212,175,55,.08);}
+.hold-cards{display:flex;gap:14px;--cw:96px;}
+.hold-hint{font-size:15px;color:var(--gold-soft);letter-spacing:.04em;}
+.confirm-card{max-width:360px;}
+.confirm-card h2{margin-bottom:6px;}
+.ov-actions{display:flex;gap:10px;width:100%;max-width:340px;}
+.ov-actions .btn{flex:1;}
+
+/* ============ 摊牌结果 ============ */
+.result-banner{text-align:center;margin:4px 0 14px;}
+.result-banner .rt{font-family:'Bebas Neue';font-size:38px;color:var(--gold);letter-spacing:.08em;}
+.result-banner .rs{color:var(--gold-soft);font-size:15px;margin-top:2px;}
+.drink-list{display:grid;gap:9px;margin-top:6px;}
+.drink-row{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--panel);border:1px solid var(--panel-border);border-radius:13px;padding:12px 14px;
+}
+.drink-row.safe{border-color:rgba(212,175,55,.4);background:rgba(212,175,55,.07);}
+.drink-row .dn{font-weight:700;display:flex;align-items:center;gap:8px;}
+.drink-row .da{font-family:'Bebas Neue';font-size:22px;}
+.drink-row .da.drink{color:var(--red);}
+.drink-row .da.safe{color:var(--gold);}
+.cup-emoji{font-size:18px;}
+.showdown-hands{display:grid;gap:8px;margin-top:14px;}
+.sd-row{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--panel-border);border-radius:13px;padding:8px 10px;}
+.sd-row.win{border-color:var(--gold);background:rgba(212,175,55,.08);}
+.sd-row .sd-cards{display:flex;gap:4px;--cw:34px;}
+.sd-row .sd-info{flex:1;min-width:0;}
+.sd-row .sd-name{font-weight:700;font-size:14px;}
+.sd-row .sd-hand{font-size:12px;color:var(--gold-soft);}
+.sd-row.fold .sd-name{color:var(--muted);}
+
+/* ============ 自适应 iPad / 大屏 ============ */
+@media (min-width:680px){
+  .app{padding-left:28px;padding-right:28px;}
+  .seats{grid-template-columns:repeat(4,1fr);}
+  .actions{grid-template-columns:repeat(5,1fr);}
+  .actions .wide{grid-column:span 1;}
+  .felt{border-radius:160px/110px;padding:32px;}
+  .community{--cw:72px;min-height:108px;}
+  .card{--cw:64px;}
+  .game-list{grid-template-columns:repeat(2,1fr);}
+}
+@media (max-width:360px){
+  .seats{grid-template-columns:1fr;}
+}
+.foot{text-align:center;color:var(--muted);font-size:11px;padding:18px 0 4px;opacity:.6;}
+</style>
+</head>
+<body class="theme-blue">
+<div class="app">
+
+  <!-- 顶栏 -->
+  <div class="topbar" id="topbar">
+    <div class="brand">POUR <span style="color:var(--muted)">or</span> FOLD<small>酒 局 德 州</small></div>
+    <button class="link" id="homeBtn">⌂ 主菜单</button>
+  </div>
+
+  <!-- ============ 1. 首页 选择游戏 ============ -->
+  <section id="screen-home">
+    <div class="home-hero">
+      <div class="logo">POUR OR FOLD</div>
+      <div class="tag">D R I N K &nbsp; T H E &nbsp; P O T</div>
+      <div class="cn">输牌的人,喝下整池的酒 🍻</div>
+    </div>
+    <div class="section-title">选择一个酒桌游戏</div>
+    <div class="game-list">
+      <button class="game-card" id="startTexas">
+        <div class="emoji">🃏</div>
+        <div class="gc-body">
+          <div class="gc-title">德州扑克 · 喝酒版</div>
+          <div class="gc-desc">2–8 人 · 一台手机传着玩<br>小盲半杯,大盲一杯,倒酒下注</div>
+        </div>
+      </button>
+      <button class="game-card soon" disabled>
+        <div class="emoji">🎲</div>
+        <div class="gc-body">
+          <div class="gc-title">骰子吹牛</div>
+          <div class="gc-desc">经典酒桌骰子博弈</div>
+        </div>
+        <span class="badge-soon">敬请期待</span>
+      </button>
+      <button class="game-card soon" disabled>
+        <div class="emoji">✊</div>
+        <div class="gc-body">
+          <div class="gc-title">划拳 / 数字炸弹</div>
+          <div class="gc-desc">快节奏惩罚小游戏</div>
+        </div>
+        <span class="badge-soon">敬请期待</span>
+      </button>
+      <button class="game-card soon" disabled>
+        <div class="emoji">🂡</div>
+        <div class="gc-body">
+          <div class="gc-title">21 点 · 喝酒版</div>
+          <div class="gc-desc">爆牌就干杯</div>
+        </div>
+        <span class="badge-soon">敬请期待</span>
+      </button>
+    </div>
+    <div class="foot">请理性饮酒 · 切勿酒驾 · 未成年人请勿饮酒</div>
+  </section>
+
+  <!-- ============ 2. 设置玩家 ============ -->
+  <section id="screen-setup" class="hidden">
+    <div class="section-title">人数</div>
+    <div class="card-panel">
+      <div class="count-row">
+        <button class="btn stepper" id="minus">−</button>
+        <div class="num" id="countNum">4</div>
+        <button class="btn stepper" id="plus">+</button>
+      </div>
+      <div class="section-title" style="margin-top:14px">玩家昵称</div>
+      <div class="names" id="namesBox"></div>
+    </div>
+
+    <div class="section-title">玩法规则</div>
+    <div class="card-panel rules">
+      • 庄家左手第一位下 <b>小盲 = 半杯</b>,第二位下 <b>大盲 = 一杯</b>。<br>
+      • 下注 / 跟注 / 加注 = 往中间池子 <b>倒入对应杯数的酒</b>。<br>
+      • 先轮流传手机,每人 <b>按住看自己的底牌</b>,看完盖上。<br>
+      • 再进入牌桌依次行动:<b>弃牌 · 过牌 · 跟注 · 加注半杯 · 加注一杯</b>。<br>
+      • 自动发翻牌 / 转牌 / 河牌,摊牌自动比牌型定赢家。<br>
+      • 一局结束,<b>输家平分喝掉整池的酒</b> 🍶。
+    </div>
+
+    <div style="margin-top:18px;display:grid;gap:10px;">
+      <button class="btn gold full btn-lg" id="toDeal">开 始 发 牌</button>
+      <button class="btn ghost full" id="backHome">返回</button>
+    </div>
+    <div class="foot">请理性饮酒 · 切勿酒驾</div>
+  </section>
+
+  <!-- ============ 3. 牌桌 ============ -->
+  <section id="screen-table" class="hidden">
+    <div class="felt">
+      <div class="street-label" id="streetLabel">PRE-FLOP</div>
+      <div class="community" id="community"></div>
+      <div class="pot">
+        <div class="plabel">P O T · 池底</div>
+        <div class="pval"><span id="potVal">0</span><small>杯</small></div>
+      </div>
+    </div>
+    <div class="seats" id="seats"></div>
+
+    <div class="action-bar" id="actionBar">
+      <div class="turn-of">轮到 <b id="turnName">—</b> 行动 · 请把手机递给 TA</div>
+      <div class="actions" id="actions"></div>
+    </div>
+    <div class="foot">按住任意座位的「看牌」可私密查看本人底牌</div>
+  </section>
+
+  <!-- ============ 4. 摊牌结果 ============ -->
+  <section id="screen-result" class="hidden">
+    <div class="result-banner">
+      <div class="rt" id="resultTitle">SHOWDOWN</div>
+      <div class="rs" id="resultSub"></div>
+    </div>
+
+    <div class="section-title">谁该喝酒 🍻</div>
+    <div class="drink-list" id="drinkList"></div>
+
+    <div class="showdown-hands" id="showdownHands"></div>
+
+    <div style="margin-top:20px;display:grid;gap:10px;">
+      <button class="btn gold full btn-lg" id="nextHand">下 一 局</button>
+      <button class="btn ghost full" id="endGame">结束游戏 · 回主菜单</button>
+    </div>
+    <div class="foot">请理性饮酒 · 切勿酒驾</div>
+  </section>
+
+</div>
+
+<!-- ============ 看牌覆盖层(共用) ============ -->
+<div class="overlay hidden" id="overlay"></div>
+
+<script>
+"use strict";
+/* =========================================================
+   状态(全部存于 JS 变量,不使用 localStorage)
+========================================================= */
+const G = {
+  numPlayers: 4,
+  names: [],
+  players: [],      // {name, cards:[], folded, hasActed, roundBet, contributed}
+  deck: [],
+  community: [],    // 5 张公共牌(预发,按 revealed 显示)
+  revealed: 0,      // 已翻开的公共牌数
+  street: 'preflop',// preflop/flop/turn/river/showdown
+  currentBet: 0,    // 本轮最高注(杯)
+  actor: 0,         // 当前行动玩家下标
+  dealer: 0,        // 庄家下标
+  sb: 0.5, bb: 1,   // 盲注
+  handNo: 0,
+  themeIdx: 0,
+};
+
+/* =========================================================
+   工具
+========================================================= */
+const $ = (id)=>document.getElementById(id);
+const SUITS = ['s','h','d','c'];
+const SUIT_CH = {s:'♠',h:'♥',d:'♦',c:'♣'};
+const cup = (x)=> (x % 1 === 0 ? String(x) : x.toFixed(1));
+function rankStr(r){ return r===14?'A':r===13?'K':r===12?'Q':r===11?'J':String(r); }
+
+function show(screen){
+  ['home','setup','table','result'].forEach(s=> $('screen-'+s).classList.toggle('hidden', s!==screen));
+}
+function applyTheme(){
+  document.body.classList.toggle('theme-green', G.themeIdx % 2 === 1);
+  document.body.classList.toggle('theme-blue', G.themeIdx % 2 === 0);
+}
+
+/* =========================================================
+   牌 HTML
+========================================================= */
+function cardFace(c){
+  const red = (c.s==='h'||c.s==='d');
+  return `<div class="card ${red?'red':''}"><span class="r">${rankStr(c.r)}</span><span class="s">${SUIT_CH[c.s]}</span></div>`;
+}
+function cardBack(){ return `<div class="card back"><span>9</span></div>`; }
+function cardEmpty(){ return `<div class="card empty"></div>`; }
+
+/* =========================================================
+   牌型评估(7选5)
+========================================================= */
+function eval5(cards){
+  const ranks = cards.map(c=>c.r);
+  const suits = cards.map(c=>c.s);
+  const isFlush = suits.every(s=>s===suits[0]);
+  const cnt = {};
+  ranks.forEach(r=> cnt[r]=(cnt[r]||0)+1);
+  // 按 出现次数 再按 点数 降序
+  const groups = Object.keys(cnt).map(Number).sort((a,b)=> (cnt[b]-cnt[a]) || (b-a));
+  const counts = groups.map(r=>cnt[r]);
+  // 顺子
+  const uniq = [...new Set(ranks)].sort((a,b)=>b-a);
+  let straightHigh = 0;
+  if(uniq.length===5){
+    if(uniq[0]-uniq[4]===4) straightHigh = uniq[0];
+    else if(uniq[0]===14 && uniq[1]===5 && uniq[2]===4 && uniq[3]===3 && uniq[4]===2) straightHigh = 5; // A2345
+  }
+  if(straightHigh && isFlush) return [8, straightHigh];
+  if(counts[0]===4)             return [7, groups[0], groups[1]];
+  if(counts[0]===3&&counts[1]===2) return [6, groups[0], groups[1]];
+  if(isFlush)                   return [5, ...groups];
+  if(straightHigh)              return [4, straightHigh];
+  if(counts[0]===3)             return [3, ...groups];
+  if(counts[0]===2&&counts[1]===2) return [2, ...groups];
+  if(counts[0]===2)             return [1, ...groups];
+  return [0, ...groups];
+}
+function cmp(a,b){
+  const n=Math.max(a.length,b.length);
+  for(let i=0;i<n;i++){ const x=a[i]||0,y=b[i]||0; if(x!==y) return x-y; }
+  return 0;
+}
+function combos(arr,k){
+  const res=[]; const n=arr.length;
+  const idx=[...Array(k).keys()];
+  while(true){
+    res.push(idx.map(i=>arr[i]));
+    let i=k-1;
+    while(i>=0 && idx[i]===i+n-k) i--;
+    if(i<0) break;
+    idx[i]++;
+    for(let j=i+1;j<k;j++) idx[j]=idx[j-1]+1;
+  }
+  return res;
+}
+function eval7(seven){
+  let best=null;
+  for(const c of combos(seven,5)){
+    const s=eval5(c);
+    if(!best||cmp(s,best)>0) best=s;
+  }
+  return best;
+}
+const CAT_NAME = ['高牌','一对','两对','三条','顺子','同花','葫芦','四条','同花顺'];
+function handName(score){
+  if(score[0]===8 && score[1]===14) return '皇家同花顺';
+  return CAT_NAME[score[0]];
+}
+
+/* =========================================================
+   游戏流程
+========================================================= */
+function freshDeck(){
+  const d=[];
+  for(const s of SUITS) for(let r=2;r<=14;r++) d.push({r,s});
+  for(let i=d.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [d[i],d[j]]=[d[j],d[i]]; }
+  return d;
+}
+function activeIdx(){ return G.players.map((p,i)=>p.folded?-1:i).filter(i=>i>=0); }
+function firstActiveFrom(start){
+  const n=G.players.length;
+  for(let i=0;i<n;i++){ const j=(start+i)%n; if(!G.players[j].folded) return j; }
+  return -1;
+}
+function nextToAct(start){
+  const n=G.players.length;
+  for(let i=0;i<n;i++){ const j=(start+i)%n; const p=G.players[j]; if(!p.folded && !p.hasActed) return j; }
+  return -1;
+}
+
+function newHand(){
+  G.handNo++;
+  G.themeIdx = G.handNo % 2;
+  applyTheme();
+  const n=G.numPlayers;
+  G.deck=freshDeck();
+  G.players=[];
+  for(let i=0;i<n;i++){
+    G.players.push({
+      name:G.names[i], cards:[G.deck.pop(),G.deck.pop()],
+      folded:false, hasActed:false, roundBet:0, contributed:0
+    });
+  }
+  G.community=[G.deck.pop(),G.deck.pop(),G.deck.pop(),G.deck.pop(),G.deck.pop()];
+  G.revealed=0;
+  G.street='preflop';
+  G.currentBet=G.bb;
+
+  // 盲注位置
+  let sbIdx, bbIdx;
+  if(n===2){ sbIdx=G.dealer; bbIdx=(G.dealer+1)%n; }
+  else { sbIdx=(G.dealer+1)%n; bbIdx=(G.dealer+2)%n; }
+  pay(G.players[sbIdx], G.sb);
+  pay(G.players[bbIdx], G.bb);
+  G._sbIdx=sbIdx; G._bbIdx=bbIdx;
+  G.actor=(bbIdx+1)%n;   // 大盲后第一位行动
+
+  // 进入看牌阶段
+  startPeekPhase();
+}
+
+function pay(p,amt){ p.roundBet+=amt; p.contributed+=amt; }
+function potTotal(){ return G.players.reduce((s,p)=>s+p.contributed,0); }
+
+/* ---------- 看牌阶段:依次传手机 ---------- */
+function startPeekPhase(){
+  show('table');
+  renderTable();           // 先把牌桌渲染好(底牌全盖)
+  peekStep(0);
+}
+function peekStep(i){
+  if(i>=G.players.length){
+    closeOverlay();
+    beginBetting();
+    return;
+  }
+  const p=G.players[i];
+  const ov=$('overlay');
+  ov.classList.remove('hidden');
+  ov.innerHTML=`
+    <div class="confirm-card">
+      <h2>请把手机交给</h2>
+      <h2 style="color:var(--text);font-size:40px">${escapeHtml(p.name)}</h2>
+      <div class="sub">第 ${i+1} / ${G.players.length} 位 · 看完盖上再传给下一位</div>
+      <div class="hold-pad" id="holdPad">
+        <div class="hold-cards" id="holdCards">${cardBack()}${cardBack()}</div>
+        <div class="hold-hint">👇 按住查看底牌 · 松手盖回</div>
+      </div>
+      <div class="ov-actions">
+        <button class="btn gold full" id="peekNext">看好了 · 下一位 →</button>
+      </div>
+    </div>`;
+  bindHold($('holdPad'), $('holdCards'), p.cards);
+  $('peekNext').onclick=()=> peekStep(i+1);
+}
+
+/* 按住显示 / 松手盖回 */
+function bindHold(pad, cardsEl, cards){
+  const reveal=()=>{ pad.classList.add('holding'); cardsEl.innerHTML=cardFace(cards[0])+cardFace(cards[1]); };
+  const hide=()=>{ pad.classList.remove('holding'); cardsEl.innerHTML=cardBack()+cardBack(); };
+  pad.addEventListener('pointerdown',e=>{e.preventDefault();reveal();});
+  ['pointerup','pointerleave','pointercancel'].forEach(ev=>pad.addEventListener(ev,hide));
+  // 防止触摸时滚动/选中
+  pad.addEventListener('touchstart',e=>e.preventDefault(),{passive:false});
+}
+
+function closeOverlay(){ const ov=$('overlay'); ov.classList.add('hidden'); ov.innerHTML=''; }
+function escapeHtml(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+/* ---------- 下注阶段 ---------- */
+function beginBetting(){
+  renderTable();
+}
+
+function act(type){
+  const p=G.players[G.actor];
+  if(type==='fold'){
+    p.folded=true;
+  } else if(type==='check'){
+    p.hasActed=true;
+  } else if(type==='call'){
+    pay(p, G.currentBet - p.roundBet);
+    p.hasActed=true;
+  } else if(type==='raiseHalf' || type==='raiseFull'){
+    const inc = type==='raiseHalf'?0.5:1;
+    const newBet=G.currentBet+inc;
+    pay(p, newBet - p.roundBet);
+    G.currentBet=newBet;
+    G.players.forEach((q,i)=>{ if(!q.folded && i!==G.actor) q.hasActed=false; });
+    p.hasActed=true;
+  }
+
+  // 只剩一人 → 直接结束
+  if(activeIdx().length<=1){ finishHand(activeIdx(), 'fold'); return; }
+
+  const nxt=nextToAct((G.actor+1)%G.players.length);
+  if(nxt===-1){ endRound(); }
+  else { G.actor=nxt; renderTable(); }
+}
+
+function endRound(){
+  if(G.street==='river'){ showdown(); return; }
+  // 进入下一条街
+  if(G.street==='preflop'){ G.street='flop'; G.revealed=3; }
+  else if(G.street==='flop'){ G.street='turn'; G.revealed=4; }
+  else if(G.street==='turn'){ G.street='river'; G.revealed=5; }
+  G.currentBet=0;
+  G.players.forEach(p=>{ p.roundBet=0; if(!p.folded) p.hasActed=false; });
+  G.actor=firstActiveFrom((G.dealer+1)%G.players.length);
+  renderTable();
+}
+
+function showdown(){
+  const live=activeIdx();
+  // 评估每位存活玩家
+  const scores={};
+  live.forEach(i=>{ scores[i]=eval7([...G.players[i].cards, ...G.community]); });
+  let best=null;
+  live.forEach(i=>{ if(!best||cmp(scores[i],best)>0) best=scores[i]; });
+  const winners=live.filter(i=>cmp(scores[i],best)===0);
+  G._scores=scores;
+  finishHand(winners,'showdown', best);
+}
+
+function finishHand(winners, reason, bestScore){
+  G.street='showdown';
+  G.revealed=5;
+  renderResult(winners, reason, bestScore);
+  show('result');
+}
+
+/* =========================================================
+   渲染:牌桌
+========================================================= */
+function renderTable(){
+  // 街名 & 池底
+  const labels={preflop:'PRE-FLOP',flop:'FLOP',turn:'TURN',river:'RIVER',showdown:'SHOWDOWN'};
+  $('streetLabel').textContent=labels[G.street]||'';
+  $('potVal').textContent=cup(potTotal());
+
+  // 公共牌
+  let comm='';
+  for(let i=0;i<5;i++){
+    if(i<G.revealed) comm+=cardFace(G.community[i]);
+    else comm+=cardEmpty();
+  }
+  $('community').innerHTML=comm;
+
+  // 座位
+  const toCall = Math.max(0, G.currentBet - G.players[G.actor].roundBet);
+  let html='';
+  G.players.forEach((p,i)=>{
+    const cls=['seat'];
+    if(i===G.actor && !p.folded) cls.push('active');
+    if(p.folded) cls.push('folded');
+    let pos='';
+    if(i===G.dealer) pos+=`<span class="pos-badge pos-D">D</span>`;
+    if(i===G._sbIdx) pos+=`<span class="pos-badge">SB</span>`;
+    if(i===G._bbIdx) pos+=`<span class="pos-badge">BB</span>`;
+    const stat = p.folded
+      ? `<span class="tag-fold">已弃牌</span>`
+      : `已倒入 <span class="in">${cup(p.contributed)} 杯</span>`;
+    const betChip = p.roundBet>0 ? `<span class="bet-chip">本轮 ${cup(p.roundBet)} 杯</span>` : `<span class="bet-chip" style="opacity:.4">—</span>`;
+    html+=`
+      <div class="${cls.join(' ')}">
+        <div class="seat-top">
+          <div class="seat-name">${escapeHtml(p.name)} ${pos}</div>
+          <div class="seat-cards">${cardBack()}${cardBack()}</div>
+        </div>
+        <div class="seat-stat">${stat}</div>
+        <div class="seat-bot">
+          ${betChip}
+          <button class="btn peek-btn" data-peek="${i}" ${p.folded?'disabled':''}>👁 看牌</button>
+        </div>
+      </div>`;
+  });
+  $('seats').innerHTML=html;
+  $('seats').querySelectorAll('[data-peek]').forEach(b=>{
+    b.onclick=()=> seatPeek(parseInt(b.dataset.peek,10));
+  });
+
+  // 行动条
+  const cur=G.players[G.actor];
+  $('turnName').textContent=cur.name;
+  let acts='';
+  acts+=`<button class="btn danger" data-act="fold">弃牌</button>`;
+  if(toCall>0){
+    acts+=`<button class="btn" data-act="call">跟注 ${cup(toCall)} 杯</button>`;
+  } else {
+    acts+=`<button class="btn" data-act="check">过牌</button>`;
+  }
+  acts+=`<button class="btn" data-act="raiseHalf">加注半杯</button>`;
+  acts+=`<button class="btn gold" data-act="raiseFull">加注一杯</button>`;
+  $('actions').innerHTML=acts;
+  $('actions').querySelectorAll('[data-act]').forEach(b=>{
+    b.onclick=()=> act(b.dataset.act);
+  });
+}
+
+/* 牌桌上某座位「看牌」:先确认本人,再按住显示 */
+function seatPeek(i){
+  const p=G.players[i];
+  const ov=$('overlay');
+  ov.classList.remove('hidden');
+  ov.innerHTML=`
+    <div class="confirm-card">
+      <h2>确认身份</h2>
+      <div class="sub">只有 <b style="color:var(--gold)">${escapeHtml(p.name)}</b> 本人可以查看这副底牌</div>
+      <div class="ov-actions" style="margin-bottom:18px">
+        <button class="btn ghost" id="peekCancel">不是我</button>
+        <button class="btn gold" id="peekConfirm">我是 ${escapeHtml(p.name)}</button>
+      </div>
+    </div>`;
+  $('peekCancel').onclick=closeOverlay;
+  $('peekConfirm').onclick=()=>{
+    ov.innerHTML=`
+      <div class="confirm-card">
+        <h2 style="color:var(--text)">${escapeHtml(p.name)}</h2>
+        <div class="sub">按住查看 · 松手立即盖回</div>
+        <div class="hold-pad" id="holdPad">
+          <div class="hold-cards" id="holdCards">${cardBack()}${cardBack()}</div>
+          <div class="hold-hint">👇 按住查看底牌</div>
+        </div>
+        <div class="ov-actions">
+          <button class="btn gold full" id="peekDone">盖上 · 完成</button>
+        </div>
+      </div>`;
+    bindHold($('holdPad'), $('holdCards'), p.cards);
+    $('peekDone').onclick=closeOverlay;
+  };
+}
+
+/* =========================================================
+   渲染:摊牌结果
+========================================================= */
+function renderResult(winners, reason, bestScore){
+  const pot=potTotal();
+  const winNames=winners.map(i=>G.players[i].name);
+  const losers=G.players.map((p,i)=>i).filter(i=>!winners.includes(i));
+  const drinkEach = losers.length>0 ? pot/losers.length : 0;
+
+  // 标题
+  if(winners.length===1){
+    $('resultTitle').textContent='WINNER';
+    let sub = `🏆 <b style="color:var(--gold)">${escapeHtml(winNames[0])}</b> 赢得这一池 ${cup(pot)} 杯`;
+    if(reason==='showdown' && bestScore) sub+=` · 牌型:${handName(bestScore)}`;
+    else sub+=` · 其余玩家全部弃牌`;
+    $('resultSub').innerHTML=sub;
+  } else {
+    $('resultTitle').textContent='SPLIT POT';
+    $('resultSub').innerHTML=`🏆 平局:${winNames.map(escapeHtml).join(' · ')} · 共 ${cup(pot)} 杯`;
+  }
+
+  // 喝酒清单
+  let dl='';
+  G.players.forEach((p,i)=>{
+    const isWin=winners.includes(i);
+    if(isWin){
+      dl+=`<div class="drink-row safe">
+        <div class="dn">${escapeHtml(p.name)} <span style="font-size:12px;color:var(--gold)">赢家</span></div>
+        <div class="da safe">免喝 🎉</div></div>`;
+    } else {
+      dl+=`<div class="drink-row">
+        <div class="dn">${escapeHtml(p.name)}</div>
+        <div class="da drink"><span class="cup-emoji">🍶</span> 喝 ${cup(drinkEach)} 杯</div></div>`;
+    }
+  });
+  $('drinkList').innerHTML=dl;
+
+  // 摊牌牌面(仅 showdown 且未弃牌者亮牌)
+  let sh='';
+  if(reason==='showdown'){
+    sh+=`<div class="section-title" style="margin-bottom:0">亮牌</div>`;
+    G.players.forEach((p,i)=>{
+      if(p.folded) return;
+      const sc=G._scores&&G._scores[i];
+      const win=winners.includes(i);
+      sh+=`<div class="sd-row ${win?'win':''}">
+        <div class="sd-cards">${cardFace(p.cards[0])}${cardFace(p.cards[1])}</div>
+        <div class="sd-info">
+          <div class="sd-name">${escapeHtml(p.name)} ${win?'🏆':''}</div>
+          <div class="sd-hand">${sc?handName(sc):''}</div>
+        </div>
+      </div>`;
+    });
+    // 公共牌回顾
+    sh+=`<div class="section-title" style="margin-bottom:0">公共牌</div>
+      <div class="sd-row"><div class="sd-cards">${G.community.map(cardFace).join('')}</div></div>`;
+  }
+  $('showdownHands').innerHTML=sh;
+}
+
+/* =========================================================
+   设置界面
+========================================================= */
+function renderNames(){
+  $('countNum').textContent=G.numPlayers;
+  let html='';
+  for(let i=0;i<G.numPlayers;i++){
+    const v=G.names[i]||`玩家${i+1}`;
+    html+=`<div class="name-input">
+      <span class="seat">${i+1}</span>
+      <input type="text" maxlength="8" value="${escapeHtml(v)}" data-i="${i}" placeholder="玩家${i+1}">
+    </div>`;
+  }
+  $('namesBox').innerHTML=html;
+  $('namesBox').querySelectorAll('input').forEach(inp=>{
+    inp.oninput=()=>{ G.names[parseInt(inp.dataset.i,10)]=inp.value; };
+  });
+}
+function collectNames(){
+  for(let i=0;i<G.numPlayers;i++){
+    if(!G.names[i] || !G.names[i].trim()) G.names[i]=`玩家${i+1}`;
+    else G.names[i]=G.names[i].trim();
+  }
+  G.names=G.names.slice(0,G.numPlayers);
+}
+
+/* =========================================================
+   事件绑定
+========================================================= */
+$('startTexas').onclick=()=>{ show('setup'); renderNames(); };
+$('backHome').onclick=()=> show('home');
+$('homeBtn').onclick=()=>{ if(confirm('返回主菜单?当前牌局将不会保留。')) show('home'); };
+
+$('minus').onclick=()=>{ if(G.numPlayers>2){G.numPlayers--; renderNames();} };
+$('plus').onclick=()=>{ if(G.numPlayers<8){G.numPlayers++; renderNames();} };
+
+$('toDeal').onclick=()=>{
+  collectNames();
+  G.dealer=0;
+  G.handNo=0;
+  newHand();
+};
+
+$('nextHand').onclick=()=>{
+  G.dealer=(G.dealer+1)%G.numPlayers;  // 庄家顺移
+  newHand();
+};
+$('endGame').onclick=()=> show('home');
+
+// 初始
+G.names=['玩家1','玩家2','玩家3','玩家4'];
+show('home');
+applyTheme();
+</script>
+</body>
+</html>
