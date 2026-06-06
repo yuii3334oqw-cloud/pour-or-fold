@@ -3,10 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>酒局德州 · Pour or Fold</title>
+<title>Pour or Fold · 喝酒德州</title>
+<meta name="theme-color" content="#0a0d12">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Pour or Fold">
+<link rel="icon" href="icon.jpg">
+<link rel="apple-touch-icon" href="icon.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Great+Vibes&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 /* ============ 基础与变量 ============ */
 :root{
@@ -33,7 +39,8 @@ body.theme-green{
   --felt-rim:#04201a;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
-html,body{margin:0;padding:0;height:100%;}
+*{max-width:100%;}
+html,body{margin:0;padding:0;height:100%;width:100%;max-width:100%;overflow-x:hidden;}
 body{
   background:
     radial-gradient(120% 80% at 50% -10%, #1a2230 0%, var(--bg) 60%),
@@ -152,12 +159,25 @@ h1,h2,h3,.brand,.bignum,.btn-lg{font-family:'Bebas Neue','Noto Sans SC',sans-ser
 .card.red{color:var(--red);}
 .card.back{
   background:
-    repeating-linear-gradient(45deg,rgba(212,175,55,.10) 0 6px,transparent 6px 12px),
+    repeating-linear-gradient(45deg,rgba(212,175,55,.08) 0 6px,transparent 6px 12px),
     linear-gradient(160deg,#16314a,#0c1c2e);
-  color:var(--gold);align-items:center;justify-content:center;
-  box-shadow:0 4px 10px rgba(0,0,0,.5),inset 0 0 0 2px rgba(212,175,55,.45);
+  position:relative;overflow:hidden;
+  box-shadow:0 4px 10px rgba(0,0,0,.5),inset 0 0 0 1.5px rgba(212,175,55,.5),inset 0 0 0 4px rgba(212,175,55,.12);
 }
-.card.back span{font-family:'Bebas Neue';font-size:calc(var(--cw,58px)*.7);text-shadow:0 1px 4px rgba(0,0,0,.6);opacity:.92;}
+/* 中心暗纹菱形点缀 */
+.card.back::after{
+  content:"";position:absolute;left:50%;top:50%;
+  width:calc(var(--cw,58px)*.5);height:calc(var(--cw,58px)*.5);
+  transform:translate(-50%,-50%) rotate(45deg);
+  border:1px solid rgba(212,175,55,.2);border-radius:3px;
+}
+/* 右上角精致花体 9(左下角镜像) */
+.card.back .r9{
+  position:absolute;font-family:'Great Vibes',cursive;
+  font-size:calc(var(--cw,58px)*.42);line-height:1;color:var(--gold-soft);
+  top:1px;right:6px;text-shadow:0 1px 3px rgba(0,0,0,.55);z-index:1;
+}
+.card.back .r9.br{top:auto;right:auto;bottom:1px;left:6px;transform:rotate(180deg);}
 .card.empty{background:rgba(255,255,255,.04);box-shadow:inset 0 0 0 1px var(--panel-border);}
 
 /* ============ 牌桌 ============ */
@@ -227,6 +247,9 @@ h1,h2,h3,.brand,.bignum,.btn-lg{font-family:'Bebas Neue','Noto Sans SC',sans-ser
 }
 .hold-pad.holding{border-style:solid;border-color:var(--gold);background:rgba(212,175,55,.08);}
 .hold-cards{display:flex;gap:14px;--cw:96px;}
+.hold-hand{min-height:24px;font-size:17px;font-weight:700;color:var(--gold);letter-spacing:.04em;
+  display:flex;align-items:center;gap:6px;}
+.hold-hand:not(:empty){padding:4px 14px;border:1px solid rgba(212,175,55,.45);border-radius:999px;background:rgba(212,175,55,.08);}
 .hold-hint{font-size:15px;color:var(--gold-soft);letter-spacing:.04em;}
 .confirm-card{max-width:360px;}
 .confirm-card h2{margin-bottom:6px;}
@@ -450,7 +473,7 @@ function cardFace(c){
   const red = (c.s==='h'||c.s==='d');
   return `<div class="card ${red?'red':''}"><span class="r">${rankStr(c.r)}</span><span class="s">${SUIT_CH[c.s]}</span></div>`;
 }
-function cardBack(){ return `<div class="card back"><span>9</span></div>`; }
+function cardBack(){ return `<div class="card back"><span class="r9">9</span><span class="r9 br">9</span></div>`; }
 function cardEmpty(){ return `<div class="card empty"></div>`; }
 
 /* =========================================================
@@ -512,6 +535,23 @@ const CAT_NAME = ['高牌','一对','两对','三条','顺子','同花','葫芦'
 function handName(score){
   if(score[0]===8 && score[1]===14) return '皇家同花顺';
   return CAT_NAME[score[0]];
+}
+/* 用现有可见牌(底牌+已翻公共牌,2~7张)算出当前最佳牌型名,给玩家看牌时一眼判断 */
+function bestHandName(cards){
+  if(cards.length>=5){
+    let best=null;
+    for(const c of combos(cards,5)){ const s=eval5(c); if(!best||cmp(s,best)>0) best=s; }
+    return handName(best);
+  }
+  // 不足5张(翻牌前只有2张):按点数重复情况粗判
+  const cnt={}; cards.forEach(c=>cnt[c.r]=(cnt[c.r]||0)+1);
+  const counts=Object.values(cnt).sort((a,b)=>b-a);
+  if(counts[0]===4) return '四条';
+  if(counts[0]===3) return '三条';
+  if(counts[0]===2 && counts[1]===2) return '两对';
+  if(counts[0]===2) return '一对';
+  const hi=Math.max(...cards.map(c=>c.r));
+  return rankStr(hi)+' 高牌';
 }
 
 /* =========================================================
@@ -591,20 +631,21 @@ function peekStep(i){
       <div class="sub">第 ${i+1} / ${G.players.length} 位 · 看完盖上再传给下一位</div>
       <div class="hold-pad" id="holdPad">
         <div class="hold-cards" id="holdCards">${cardBack()}${cardBack()}</div>
+        <div class="hold-hand" id="holdHand"></div>
         <div class="hold-hint">👇 按住查看底牌 · 松手盖回</div>
       </div>
       <div class="ov-actions">
         <button class="btn gold full" id="peekNext">看好了 · 下一位 →</button>
       </div>
     </div>`;
-  bindHold($('holdPad'), $('holdCards'), p.cards);
+  bindHold($('holdPad'), $('holdCards'), p.cards, $('holdHand'), bestHandName(p.cards));
   $('peekNext').onclick=()=> peekStep(i+1);
 }
 
-/* 按住显示 / 松手盖回 */
-function bindHold(pad, cardsEl, cards){
-  const reveal=()=>{ pad.classList.add('holding'); cardsEl.innerHTML=cardFace(cards[0])+cardFace(cards[1]); };
-  const hide=()=>{ pad.classList.remove('holding'); cardsEl.innerHTML=cardBack()+cardBack(); };
+/* 按住显示 / 松手盖回(handEl/handText 可选:按住时同时显示当前牌型) */
+function bindHold(pad, cardsEl, cards, handEl, handText){
+  const reveal=()=>{ pad.classList.add('holding'); cardsEl.innerHTML=cardFace(cards[0])+cardFace(cards[1]); if(handEl) handEl.textContent='当前牌型 · '+handText; };
+  const hide=()=>{ pad.classList.remove('holding'); cardsEl.innerHTML=cardBack()+cardBack(); if(handEl) handEl.textContent=''; };
   pad.addEventListener('pointerdown',e=>{e.preventDefault();reveal();});
   ['pointerup','pointerleave','pointercancel'].forEach(ev=>pad.addEventListener(ev,hide));
   // 防止触摸时滚动/选中
@@ -766,13 +807,15 @@ function seatPeek(i){
         <div class="sub">按住查看 · 松手立即盖回</div>
         <div class="hold-pad" id="holdPad">
           <div class="hold-cards" id="holdCards">${cardBack()}${cardBack()}</div>
+          <div class="hold-hand" id="holdHand"></div>
           <div class="hold-hint">👇 按住查看底牌</div>
         </div>
         <div class="ov-actions">
           <button class="btn gold full" id="peekDone">盖上 · 完成</button>
         </div>
       </div>`;
-    bindHold($('holdPad'), $('holdCards'), p.cards);
+    const hand=bestHandName([...p.cards, ...G.community.slice(0,G.revealed)]);
+    bindHold($('holdPad'), $('holdCards'), p.cards, $('holdHand'), hand);
     $('peekDone').onclick=closeOverlay;
   };
 }
