@@ -12,17 +12,21 @@
 <link rel="apple-touch-icon" href="icon.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Great+Vibes&family=Griffy&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Griffy&family=Pixelify+Sans:wght@400;500;600;700&family=Silkscreen:wght@400;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 /* ============ 基础与变量 ============ */
 :root{
   --bg:#0a0d12;
   --bg2:#11161f;
   --panel:rgba(255,255,255,.04);
-  --panel-border:rgba(255,255,255,.08);
+  --panel2:#222b38;
+  --panel-border:rgba(255,255,255,.10);
   --blood:#b3241c;
   --bone:#e9e2cf;
+  --orange:#d97757;
+  --orange-soft:#e8a585;
   --gold:#d4af37;
+  --pix:'Pixelify Sans','Silkscreen',system-ui,sans-serif;
   --gold-soft:#e7cd72;
   --gold-deep:#a8841f;
   --text:#f4f1e8;
@@ -63,7 +67,7 @@ body{
   padding:calc(env(safe-area-inset-top) + 4px) calc(16px + env(safe-area-inset-right)) calc(18px + env(safe-area-inset-bottom)) calc(16px + env(safe-area-inset-left));
   display:flex;flex-direction:column;
 }
-h1,h2,h3,.brand,.bignum,.btn-lg{font-family:'Bebas Neue','Noto Sans SC',sans-serif;letter-spacing:.04em;}
+h1,h2,h3,.brand,.bignum,.btn-lg{font-family:var(--pix),'Noto Sans SC',sans-serif;letter-spacing:.04em;}
 .hidden{display:none !important;}
 
 /* ============ 顶栏 ============ */
@@ -93,15 +97,16 @@ h1,h2,h3,.brand,.bignum,.btn-lg{font-family:'Bebas Neue','Noto Sans SC',sans-ser
 .icon-btn:active{transform:scale(.92);}
 .icon-btn.off{opacity:.55;}
 
-/* ============ 通用按钮 ============ */
+/* ============ 通用按钮(像素厚块) ============ */
 .btn{
-  appearance:none;border:1px solid var(--panel-border);
-  background:var(--panel);color:var(--text);
-  border-radius:14px;padding:14px 16px;font-size:16px;font-weight:500;
-  cursor:pointer;transition:transform .06s ease,background .15s,border-color .15s;
+  appearance:none;border:2px solid rgba(0,0,0,.55);
+  background:var(--panel2,#222a36);color:var(--text);
+  border-radius:7px;padding:13px 16px;font-size:16px;font-weight:600;
+  cursor:pointer;transition:transform .05s ease,box-shadow .05s ease,background .15s,border-color .15s;
   font-family:inherit;position:relative;overflow:hidden;
+  box-shadow:0 3px 0 rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.06);
 }
-.btn:active{transform:scale(.97);}
+.btn:active{transform:translateY(3px);box-shadow:0 0 0 rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.06);}
 /* 点击波纹特效 */
 .game-card,.stepper,.menu-btn,.icon-btn,.peek-btn{position:relative;overflow:hidden;}
 .ripple{position:absolute;border-radius:50%;transform:translate(-50%,-50%) scale(0);
@@ -111,15 +116,18 @@ h1,h2,h3,.brand,.bignum,.btn-lg{font-family:'Bebas Neue','Noto Sans SC',sans-ser
 @keyframes rip{to{transform:translate(-50%,-50%) scale(1);opacity:0;}}
 .btn>*{position:relative;z-index:1;}
 .btn.gold{
-  background:linear-gradient(180deg,var(--gold-soft),var(--gold-deep));
-  color:#1a1305;border:none;font-weight:700;
-  box-shadow:0 6px 18px rgba(212,175,55,.22),inset 0 1px 0 rgba(255,255,255,.4);
+  background:linear-gradient(180deg,var(--orange-soft),var(--orange));
+  color:#241006;border:2px solid #5e2b18;font-weight:700;
+  box-shadow:0 3px 0 #5e2b18,inset 0 1px 0 rgba(255,255,255,.35);
 }
-.btn.ghost{background:transparent;}
-.btn.danger{background:rgba(192,57,43,.16);border-color:rgba(192,57,43,.5);color:#f2a99f;}
+.btn.gold:active{box-shadow:0 0 0 #5e2b18,inset 0 1px 0 rgba(255,255,255,.35);}
+.btn.ghost{background:transparent;box-shadow:none;border-color:var(--panel-border);}
+.btn.ghost:active{transform:translateY(2px);}
+.btn.danger{background:#3a1714;border-color:#7a2a22;color:#f2a99f;box-shadow:0 3px 0 #2a0f0d;}
+.btn.danger:active{box-shadow:0 0 0 #2a0f0d;}
 .btn.full{width:100%;}
 .btn:disabled{opacity:.35;cursor:not-allowed;}
-.btn-lg{font-size:24px;letter-spacing:.06em;}
+.btn-lg{font-size:22px;letter-spacing:.06em;}
 
 /* ============ 卡片容器 ============ */
 .card-panel{
@@ -127,36 +135,41 @@ h1,h2,h3,.brand,.bignum,.btn-lg{font-family:'Bebas Neue','Noto Sans SC',sans-ser
   border:1px solid var(--panel-border);border-radius:20px;padding:18px;
 }
 
-/* ============ 首页/选择游戏 ============ */
+/* ============ 首页/选择游戏(像素·暗黑可爱) ============ */
 .home-hero{
-  text-align:center;padding:clamp(24px,7vw,46px) 10px clamp(16px,4vw,24px);
+  text-align:center;padding:clamp(22px,6vw,40px) 10px clamp(12px,3vw,18px);
 }
 .home-hero .logo{
-  font-family:'Bebas Neue';font-size:clamp(46px,13vw,84px);line-height:.9;color:var(--gold);
-  text-shadow:0 2px 0 #000,0 0 40px rgba(212,175,55,.3);
+  font-family:var(--pix);font-weight:700;font-size:clamp(40px,11.5vw,72px);line-height:.92;color:var(--orange);
+  text-shadow:3px 3px 0 #000,0 0 26px rgba(217,119,87,.35);
 }
-.home-hero .tag{color:var(--muted);letter-spacing:.3em;font-size:clamp(11px,2.6vw,13px);margin-top:8px;}
-.home-hero .cn{margin-top:12px;font-size:clamp(14px,3.4vw,16px);color:var(--gold-soft);}
-.game-list{display:grid;gap:14px;margin-top:8px;}
+.home-hero .tag{color:var(--muted);letter-spacing:.34em;font-size:clamp(10px,2.4vw,12px);margin-top:10px;font-family:var(--pix);}
+.game-list{display:grid;gap:13px;margin-top:8px;}
 .game-card{
   display:flex;align-items:center;gap:14px;text-align:left;
-  border-radius:18px;padding:18px;cursor:pointer;
-  background:linear-gradient(135deg,var(--felt1),var(--felt2));
-  border:1px solid rgba(212,175,55,.25);
-  box-shadow:0 10px 30px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.08);
-  position:relative;overflow:hidden;
+  border-radius:10px;padding:15px;cursor:pointer;
+  background:linear-gradient(160deg,#1a212c,#11161e);
+  border:2px solid rgba(0,0,0,.55);
+  box-shadow:0 4px 0 rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.05);
+  position:relative;overflow:hidden;transition:transform .05s,box-shadow .05s;
 }
-.game-card.soon{background:linear-gradient(135deg,#1b2230,#141923);border-color:var(--panel-border);cursor:not-allowed;opacity:.7;}
-.game-card .emoji{font-size:34px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.5));}
-.game-card .gc-body{flex:1;}
-.game-card .gc-title{font-size:19px;font-weight:700;}
-.game-card .gc-desc{font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.5;}
-.badge-soon{font-size:11px;color:var(--gold);border:1px solid var(--gold-deep);border-radius:20px;padding:3px 9px;}
+.game-card:active{transform:translateY(4px);box-shadow:0 0 0 rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.05);}
+.game-card::after{content:"▶";position:absolute;right:14px;color:var(--orange);font-size:13px;opacity:.7;}
+.g-icon{
+  width:56px;height:56px;flex:none;border-radius:9px;display:grid;place-items:center;font-size:30px;
+  border:2px solid var(--gi,#3a4658);background:var(--gib,#0e131b);
+  box-shadow:0 3px 0 rgba(0,0,0,.5),inset 0 0 14px rgba(0,0,0,.5);
+}
+.gc-body{flex:1;min-width:0;}
+.gc-title{font-family:var(--pix);font-weight:700;font-size:19px;letter-spacing:.02em;}
+.gc-desc{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.5;}
+.gc-pill{display:inline-block;margin-top:6px;font-size:10.5px;font-family:var(--pix);
+  color:var(--gi,#9fb0c6);border:1px solid var(--gi,#3a4658);border-radius:5px;padding:1px 7px;}
 
 /* ============ 设置玩家 ============ */
 .section-title{font-size:14px;color:var(--muted);letter-spacing:.1em;margin:22px 4px 10px;text-transform:uppercase;}
 .count-row{display:flex;align-items:center;justify-content:center;gap:18px;margin:6px 0 4px;}
-.count-row .num{font-family:'Bebas Neue';font-size:54px;color:var(--gold);min-width:60px;text-align:center;}
+.count-row .num{font-family:var(--pix);font-size:54px;color:var(--gold);min-width:60px;text-align:center;}
 .stepper{width:54px;height:54px;border-radius:50%;font-size:28px;display:flex;align-items:center;justify-content:center;padding:0;}
 .names{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;margin-top:6px;}
 .name-input{
@@ -167,7 +180,7 @@ h1,h2,h3,.brand,.bignum,.btn-lg{font-family:'Bebas Neue','Noto Sans SC',sans-ser
 .name-input .seat-num{
   flex:none;width:32px;height:44px;border-radius:6px;
   display:flex;align-items:center;justify-content:center;
-  font-family:'Bebas Neue';font-size:22px;color:#1a1a1a;line-height:1;
+  font-family:var(--pix);font-size:22px;color:#1a1a1a;line-height:1;
   background:linear-gradient(160deg,#fdfcf7,#ece7d8);
   box-shadow:0 2px 6px rgba(0,0,0,.45),inset 0 0 0 1px rgba(0,0,0,.08);
 }
@@ -194,8 +207,8 @@ h1,h2,h3,.brand,.bignum,.btn-lg{font-family:'Bebas Neue','Noto Sans SC',sans-ser
 .card:not(.back):not(.empty)::before{
   content:"";position:absolute;inset:2px;border:1px solid rgba(23,19,16,.4);border-radius:5px;pointer-events:none;
 }
-.card .r{font-size:calc(var(--cw,58px)*.46);line-height:.85;font-family:'Griffy',cursive;}
-.card .s{font-size:calc(var(--cw,58px)*.4);line-height:1;text-align:right;}
+.card .r{font-size:calc(var(--cw,58px)*.37);line-height:.85;font-family:'Griffy',cursive;}
+.card .s{font-size:calc(var(--cw,58px)*.33);line-height:1;text-align:right;}
 .card.red{color:#b3241c;}
 /* 牌背:黑炭底 + 粗白手绘描边 + 哥特红点缀的中心 9 */
 .card.back{
@@ -235,11 +248,11 @@ h1,h2,h3,.brand,.bignum,.btn-lg{font-family:'Bebas Neue','Noto Sans SC',sans-ser
   box-shadow:0 14px 40px rgba(0,0,0,.5),inset 0 0 60px rgba(0,0,0,.45),inset 0 0 0 2px rgba(212,175,55,.18);
   text-align:center;
 }
-.street-label{font-family:'Bebas Neue';letter-spacing:.2em;color:var(--gold-soft);font-size:15px;opacity:.85;}
+.street-label{font-family:var(--pix);letter-spacing:.2em;color:var(--gold-soft);font-size:15px;opacity:.85;}
 .community{display:flex;gap:6px;justify-content:center;margin:12px 0 14px;min-height:84px;align-items:center;--cw:clamp(42px,12.5vw,60px);}
 .pot{display:inline-flex;flex-direction:column;align-items:center;gap:2px;}
 .pot .plabel{font-size:11px;letter-spacing:.25em;color:var(--gold-soft);opacity:.8;}
-.pot .pval{font-family:'Bebas Neue';font-size:42px;color:var(--gold);line-height:1;text-shadow:0 2px 10px rgba(212,175,55,.4);}
+.pot .pval{font-family:var(--pix);font-size:42px;color:var(--gold);line-height:1;text-shadow:0 2px 10px rgba(212,175,55,.4);}
 .pot .pval small{font-size:18px;color:var(--gold-soft);margin-left:4px;}
 
 /* 座位 */
@@ -255,7 +268,7 @@ h1,h2,h3,.brand,.bignum,.btn-lg{font-family:'Bebas Neue','Noto Sans SC',sans-ser
 .seat.winner{border-color:var(--gold);box-shadow:0 0 26px var(--glow);background:rgba(212,175,55,.1);}
 .seat-top{display:flex;align-items:center;justify-content:space-between;gap:6px;min-width:0;}
 .seat-name{font-weight:700;font-size:15px;display:flex;align-items:center;gap:6px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.pos-badge{font-family:'Bebas Neue';font-size:11px;padding:1px 6px;border-radius:8px;border:1px solid var(--gold-deep);color:var(--gold);line-height:1.4;}
+.pos-badge{font-family:var(--pix);font-size:11px;padding:1px 6px;border-radius:8px;border:1px solid var(--gold-deep);color:var(--gold);line-height:1.4;}
 .pos-D{background:rgba(212,175,55,.15);}
 .seat-stat{font-size:11.5px;color:var(--muted);}
 .seat-stat .in{color:var(--gold-soft);}
@@ -278,7 +291,7 @@ h1,h2,h3,.brand,.bignum,.btn-lg{font-family:'Bebas Neue','Noto Sans SC',sans-ser
 .raise-step{font-size:24px;padding:6px 0;}
 .raise-amt{display:flex;align-items:center;justify-content:center;gap:3px;
   background:var(--panel);border:1px solid var(--panel-border);border-radius:14px;min-width:84px;}
-.raise-amt span{font-family:'Bebas Neue';font-size:26px;color:var(--gold);}
+.raise-amt span{font-family:var(--pix);font-size:26px;color:var(--gold);}
 .raise-amt small{font-size:12px;color:var(--muted);}
 
 /* ===== 牌桌:整屏 App 壳布局(牌桌固定,座位区内部滚动,行动条永远在底部) ===== */
@@ -323,7 +336,7 @@ body.table-mode #screen-bj-table .foot{flex:none;}
 
 /* ============ 摊牌结果 ============ */
 .result-banner{text-align:center;margin:4px 0 14px;}
-.result-banner .rt{font-family:'Bebas Neue';font-size:38px;color:var(--gold);letter-spacing:.08em;}
+.result-banner .rt{font-family:var(--pix);font-size:38px;color:var(--gold);letter-spacing:.08em;}
 .result-banner .rs{color:var(--gold-soft);font-size:15px;margin-top:2px;}
 .drink-list{display:grid;gap:9px;margin-top:6px;}
 .drink-row{
@@ -332,7 +345,7 @@ body.table-mode #screen-bj-table .foot{flex:none;}
 }
 .drink-row.safe{border-color:rgba(212,175,55,.4);background:rgba(212,175,55,.07);}
 .drink-row .dn{font-weight:700;display:flex;align-items:center;gap:8px;}
-.drink-row .da{font-family:'Bebas Neue';font-size:22px;}
+.drink-row .da{font-family:var(--pix);font-size:22px;}
 .drink-row .da.drink{color:var(--red);}
 .drink-row .da.safe{color:var(--gold);}
 .cup-emoji{font-size:18px;}
@@ -364,7 +377,7 @@ body.table-mode #screen-bj-table .foot{flex:none;}
 /* ============ 21点 ============ */
 .bj-dealer{display:flex;flex-direction:column;align-items:center;gap:8px;padding:6px 0 2px;}
 .bj-dealer .bj-cards{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;--cw:clamp(40px,12vw,58px);min-height:80px;align-items:center;}
-.hand-val{font-family:'Bebas Neue';font-size:22px;color:var(--gold);letter-spacing:.04em;}
+.hand-val{font-family:var(--pix);font-size:22px;color:var(--gold);letter-spacing:.04em;}
 .hand-val.bust{color:var(--blood);}
 .hand-val.bj{color:#5ad17a;}
 .seat .seat-cards.bj-h{--cw:clamp(34px,9vw,44px);flex-wrap:wrap;}
@@ -372,7 +385,7 @@ body.table-mode #screen-bj-table .foot{flex:none;}
 .tag-bust{color:var(--blood);}
 .tag-stand{color:var(--muted);}
 .tag-win{color:#5ad17a;}
-.bj-badge{font-family:'Bebas Neue';font-size:11px;padding:1px 6px;border-radius:8px;border:1px solid var(--blood);color:#e88;}
+.bj-badge{font-family:var(--pix);font-size:11px;padding:1px 6px;border-radius:8px;border:1px solid var(--blood);color:#e88;}
 
 /* ============ 点球大战 ============ */
 .soccer-wrap{display:flex;flex-direction:column;height:100%;min-height:0;text-align:center;}
@@ -380,9 +393,9 @@ body.table-mode #screen-bj-table .foot{flex:none;}
 .sc-side{flex:1;background:var(--panel);border:1px solid var(--panel-border);border-radius:16px;padding:12px 8px;}
 .sc-side.active{border-color:var(--gold);box-shadow:0 0 18px var(--glow);}
 .sc-side .nm{font-weight:700;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.sc-side .gg{font-family:'Bebas Neue';font-size:40px;color:var(--gold);line-height:1;}
+.sc-side .gg{font-family:var(--pix);font-size:40px;color:var(--gold);line-height:1;}
 .sc-side .role{font-size:11px;color:var(--muted);}
-.sc-vs{display:flex;align-items:center;font-family:'Bebas Neue';color:var(--muted);}
+.sc-vs{display:flex;align-items:center;font-family:var(--pix);color:var(--muted);}
 .sc-pitch{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;}
 .goal{position:relative;width:min(86vw,420px);height:140px;border:5px solid #e9e2cf;border-bottom:none;border-radius:8px 8px 0 0;
   background:repeating-linear-gradient(90deg,rgba(233,226,207,.10) 0 1px,transparent 1px 16px),repeating-linear-gradient(0deg,rgba(233,226,207,.10) 0 1px,transparent 1px 16px);
@@ -394,9 +407,27 @@ body.table-mode #screen-bj-table .foot{flex:none;}
 .sc-prompt{font-size:16px;color:var(--gold-soft);min-height:24px;}
 .sc-prompt b{color:var(--gold);}
 .sc-hint{font-size:12.5px;color:var(--muted);margin-top:2px;}
-.sc-big{font-family:'Bebas Neue';font-size:40px;letter-spacing:.06em;}
+.sc-big{font-family:var(--pix);font-size:38px;letter-spacing:.06em;}
 .sc-big.goal-txt{color:#5ad17a;}
 .sc-big.save-txt{color:var(--blood);}
+.sc-big.miss-txt{color:var(--orange);}
+.sc-big.pop{animation:scpop .45s cubic-bezier(.3,1.8,.5,1);}
+@keyframes scpop{0%{transform:scale(.3);opacity:0}60%{transform:scale(1.18)}100%{transform:scale(1);opacity:1}}
+.goal{transition:box-shadow .2s;}
+.goal.flash{box-shadow:inset 0 0 30px rgba(0,0,0,.4),0 0 26px rgba(90,209,134,.7);}
+.goal.shake{animation:scshake .4s;}
+@keyframes scshake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
+.sc-pitch.quake{animation:scquake .35s;}
+@keyframes scquake{0%,100%{transform:translate(0,0)}25%{transform:translate(-5px,2px)}50%{transform:translate(5px,-2px)}75%{transform:translate(-3px,1px)}}
+.keeper{position:absolute;bottom:6px;font-size:44px;transition:left .4s cubic-bezier(.4,1.7,.5,1),transform .4s cubic-bezier(.4,1.7,.5,1);transform:translateX(-50%);}
+.ball{position:absolute;left:50%;bottom:-46px;font-size:30px;transition:left .45s cubic-bezier(.3,.7,.5,1),bottom .45s cubic-bezier(.4,-0.2,.6,1),transform .5s linear;transform:translateX(-50%);will-change:left,bottom,transform;}
+.spot{position:absolute;left:50%;bottom:10px;width:6px;height:6px;border-radius:50%;background:rgba(233,226,207,.6);transform:translateX(-50%);}
+.pwr{position:relative;width:min(86vw,420px);height:38px;border:2px solid rgba(0,0,0,.55);border-radius:7px;overflow:hidden;
+  background:linear-gradient(90deg,var(--blood) 0 14%,#2a3340 14% 86%,var(--blood) 86% 100%);
+  box-shadow:inset 0 0 10px rgba(0,0,0,.5),0 3px 0 rgba(0,0,0,.5);}
+.pwr-sweet{position:absolute;left:42%;width:16%;top:0;bottom:0;background:repeating-linear-gradient(45deg,rgba(95,207,134,.55) 0 6px,rgba(95,207,134,.28) 6px 12px);}
+.pwr-marker{position:absolute;top:-3px;bottom:-3px;width:5px;background:#fff;left:0;box-shadow:0 0 8px #fff;}
+.pwr-tip{font-size:11.5px;color:var(--muted);margin-top:2px;}
 </style>
 </head>
 <body class="theme-blue">
@@ -418,46 +449,30 @@ body.table-mode #screen-bj-table .foot{flex:none;}
   <section id="screen-home">
     <div class="home-hero">
       <div class="logo">POUR OR FOLD</div>
-      <div class="tag">D R I N K &nbsp; T H E &nbsp; P O T</div>
+      <div class="tag">▚ &nbsp;P I X E L &nbsp; P A R T Y&nbsp; ▞</div>
     </div>
-    <div class="section-title">选择一个酒桌游戏</div>
+    <div class="section-title">▶ 选 择 关 卡</div>
     <div class="game-list">
-      <button class="game-card" id="startTexas">
-        <div class="emoji">🃏</div>
+      <button class="game-card" id="startTexas" style="--gi:#5fa6e0;--gib:#10243a">
+        <div class="g-icon">🃏</div>
         <div class="gc-body">
-          <div class="gc-title">德州扑克 · 喝酒版</div>
-          <div class="gc-desc">2–8 人 · 一台手机传着玩<br>小盲半杯,大盲一杯,倒酒下注</div>
+          <div class="gc-title">德州扑克</div>
+          <div class="gc-desc">2–8 人 · 一台手机传着玩,倒酒下注<br><span class="gc-pill">2-8 P</span></div>
         </div>
       </button>
-      <button class="game-card soon" disabled>
-        <div class="emoji">🎲</div>
+      <button class="game-card" id="startBJ" style="--gi:#e08a5f;--gib:#3a1c10">
+        <div class="g-icon">🂡</div>
         <div class="gc-body">
-          <div class="gc-title">骰子吹牛</div>
-          <div class="gc-desc">经典酒桌骰子博弈</div>
-        </div>
-        <span class="badge-soon">敬请期待</span>
-      </button>
-      <button class="game-card" id="startBJ">
-        <div class="emoji">🂡</div>
-        <div class="gc-body">
-          <div class="gc-title">21 点 · 喝酒版</div>
-          <div class="gc-desc">2–8 人轮流坐庄 · 爆牌或输给庄家就喝<br>赢庄家?换庄家喝!</div>
+          <div class="gc-title">21 点</div>
+          <div class="gc-desc">轮流坐庄 · 爆牌或输庄就喝,赢庄换庄喝<br><span class="gc-pill">2-8 P</span></div>
         </div>
       </button>
-      <button class="game-card" id="startSoccer">
-        <div class="emoji">⚽️</div>
+      <button class="game-card" id="startSoccer" style="--gi:#5fcf86;--gib:#0e2c1a">
+        <div class="g-icon">⚽️</div>
         <div class="gc-body">
-          <div class="gc-title">点球大战 · 喝酒版</div>
-          <div class="gc-desc">射门 vs 扑救的心理博弈<br>输的一方喝酒</div>
+          <div class="gc-title">点球大战</div>
+          <div class="gc-desc">瞄准 + 蓄力射门 vs 门将扑救的博弈<br><span class="gc-pill">2 P · 对战</span></div>
         </div>
-      </button>
-      <button class="game-card soon" disabled>
-        <div class="emoji">✊</div>
-        <div class="gc-body">
-          <div class="gc-title">划拳 / 数字炸弹</div>
-          <div class="gc-desc">快节奏惩罚小游戏</div>
-        </div>
-        <span class="badge-soon">敬请期待</span>
       </button>
     </div>
     <div class="foot">请理性饮酒 · 切勿酒驾 · 未成年人请勿饮酒</div>
@@ -1312,7 +1327,19 @@ function bjRenderResult(){
    点球大战 · 喝酒版
 ========================================================= */
 const SC = { a:'球员1', b:'球员2', penalty:3, kickIndex:0, scoreA:0, scoreB:0,
-  view:'setup', shotDir:null, saveDir:null, lastGoal:false };
+  view:'setup', shotDir:null, saveDir:null, lastOutcome:'goal', pos:0, pdir:1, shotMiss:false, sweet:false };
+let scRAF=null;
+const SCDL={left:'左',center:'中',right:'右'};
+function scStopLoop(){ if(scRAF){ cancelAnimationFrame(scRAF); scRAF=null; } }
+function scPowerLoop(){
+  SC.pos += SC.pdir*1.9;
+  if(SC.pos>=100){ SC.pos=100; SC.pdir=-1; }
+  if(SC.pos<=0){ SC.pos=0; SC.pdir=1; }
+  const m=document.getElementById('scMarker');
+  if(!m){ scStopLoop(); return; }
+  m.style.left=SC.pos+'%';
+  scRAF=requestAnimationFrame(scPowerLoop);
+}
 
 function scDirPct(d){ return d==='left'?'22%':d==='right'?'78%':'50%'; }
 function scBoard(){
@@ -1329,6 +1356,7 @@ function scRoundLabel(){
   return `突然死亡 · 第 ${Math.floor((kicksDone-reg)/2)+1} 轮`;
 }
 function scRender(){
+  scStopLoop();
   const v=$('soccerView');
   if(SC.view==='setup'){
     v.innerHTML=`
@@ -1395,6 +1423,15 @@ function scRender(){
         <button class="btn" data-dir="center">↑ 中</button>
         <button class="btn" data-dir="right">右 →</button>
       </div></div>`;
+  } else if(SC.view==='power'){
+    pitch=`<div class="sc-pitch">
+      <div class="sc-prompt"><b>${escapeHtml(shooter)}</b> 蓄力射门</div>
+      <div class="sc-hint">瞄准 <b>${SCDL[SC.shotDir]}</b> 路 · 停在<b style="color:#5ad17a">绿色刁钻区</b>=必进!两端红色=射偏</div>
+      <div class="goal"><div class="spot"></div><div class="ball" style="left:${scDirPct(SC.shotDir)};bottom:-46px">⚽️</div></div>
+      <div class="pwr"><div class="pwr-sweet"></div><div class="pwr-marker" id="scMarker" style="left:0%"></div></div>
+      <div class="pwr-tip">轻点「射门」锁定力度与角度</div>
+      <button class="btn gold" id="scKickBtn" style="width:min(86vw,420px)">射 门!</button>
+    </div>`;
   } else if(SC.view==='save'){
     pitch=`<div class="sc-pitch">
       <div class="sc-prompt">把手机交给 <b>${escapeHtml(keeper)}</b></div>
@@ -1406,45 +1443,67 @@ function scRender(){
         <button class="btn" data-dir="right">右扑 →</button>
       </div></div>`;
   } else if(SC.view==='reveal'){
-    const goal=SC.lastGoal;
-    pitch=`<div class="sc-pitch">
-      <div class="goal">
+    const oc=SC.lastOutcome;
+    const txt = oc==='goal'?'⚽️ 进 球!':oc==='save'?'🧤 扑 出!':'😵 射 偏!';
+    const cls = oc==='goal'?'goal-txt':oc==='save'?'save-txt':'miss-txt';
+    pitch=`<div class="sc-pitch" id="scPitch">
+      <div class="goal" id="scGoal"><div class="spot"></div>
         <div class="keeper" id="scKeeper" style="left:50%">🧤</div>
-        <div class="ball" id="scBall" style="left:50%;bottom:-44px">⚽️</div>
+        <div class="ball" id="scBall" style="left:${scDirPct(SC.shotDir)};bottom:-46px">⚽️</div>
       </div>
-      <div class="sc-big ${goal?'goal-txt':'save-txt'}">${goal?'⚽️ 进 球!':'🧤 扑 出!'}</div>
-      <div class="sc-prompt">${escapeHtml(shooter)} 射${({left:'左',center:'中',right:'右'})[SC.shotDir]} · ${escapeHtml(keeper)} 扑${({left:'左',center:'中',right:'右'})[SC.saveDir]}</div>
-      <button class="btn gold" id="scNext" style="width:min(86vw,420px)">下 一 球</button>
+      <div class="sc-big pop ${cls}">${txt}</div>
+      <div class="sc-prompt">${escapeHtml(shooter)} 射${SCDL[SC.shotDir]}${SC.sweet?'<span style="color:#5ad17a">(刁钻)</span>':''} · ${escapeHtml(keeper)} 扑${SCDL[SC.saveDir]}</div>
+      <button class="btn gold" id="scNext" style="width:min(86vw,420px)">${(SC.kickIndex+1>=10 && (SC.kickIndex+1)%2===0)?'查看战况':'下 一 球'}</button>
     </div>`;
   }
   v.innerHTML=scBoard()+pitch;
   if(SC.view==='shoot'||SC.view==='save'){
     v.querySelectorAll('[data-dir]').forEach(b=>{ b.onclick=()=> scPick(b.dataset.dir); });
   }
+  if(SC.view==='power'){
+    SC.pos=0; SC.pdir=1; scRAF=requestAnimationFrame(scPowerLoop);
+    $('scKickBtn').onclick=scKick;
+  }
   if(SC.view==='reveal'){
-    const k=$('scKeeper'), ball=$('scBall');
+    const oc=SC.lastOutcome, k=$('scKeeper'), ball=$('scBall'), goalEl=$('scGoal'), pitchEl=$('scPitch');
+    const kd = SC.saveDir==='left'?-24:SC.saveDir==='right'?24:0;
     requestAnimationFrame(()=>requestAnimationFrame(()=>{
-      if(k) k.style.left=scDirPct(SC.saveDir);
-      if(ball){ ball.style.left=scDirPct(SC.shotDir); ball.style.bottom=SC.lastGoal?'58%':'30%'; }
+      if(k){ k.style.left=scDirPct(SC.saveDir); k.style.transform=`translateX(-50%) rotate(${kd}deg) scale(1.05)`; }
+      if(ball){
+        if(oc==='miss'){
+          if(SC.shotDir==='center'){ ball.style.left='50%'; ball.style.bottom='96%'; }
+          else { ball.style.left=SC.shotDir==='left'?'-8%':'108%'; ball.style.bottom='62%'; }
+        } else if(oc==='goal'){ ball.style.left=scDirPct(SC.shotDir); ball.style.bottom='56%'; }
+        else { ball.style.left=scDirPct(SC.saveDir); ball.style.bottom='24%'; }
+        ball.style.transform='translateX(-50%) rotate(900deg)';
+      }
+      if(oc==='goal'&&goalEl){ goalEl.classList.add('shake','flash'); }
+      if(oc==='goal'&&pitchEl){ pitchEl.classList.add('quake'); }
     }));
-    feedback(SC.lastGoal?'win':'fold');
+    feedback(oc==='goal'?'win':'fold');
     $('scNext').onclick=scNext;
   }
 }
 function scPick(dir){
-  if(SC.view==='shoot'){ SC.shotDir=dir; SC.view='save'; scRender(); return; }
-  // keeper picks → 结算这一球
+  if(SC.view==='shoot'){ SC.shotDir=dir; SC.view='power'; scRender(); return; }
+  // 门将选择方向 → 结算这一球
   SC.saveDir=dir;
-  const aShoot=SC.kickIndex%2===0;
-  SC.lastGoal = (SC.shotDir!==SC.saveDir);
-  if(SC.lastGoal){ if(aShoot) SC.scoreA++; else SC.scoreB++; }
+  if(SC.shotMiss) SC.lastOutcome='miss';
+  else if(SC.sweet) SC.lastOutcome='goal';
+  else SC.lastOutcome=(SC.saveDir===SC.shotDir)?'save':'goal';
+  if(SC.lastOutcome==='goal'){ if(SC.kickIndex%2===0) SC.scoreA++; else SC.scoreB++; }
   SC.view='reveal'; scRender();
+}
+function scKick(){
+  scStopLoop();
+  SC.shotMiss = (SC.pos<14 || SC.pos>86);
+  SC.sweet = (!SC.shotMiss && SC.pos>=42 && SC.pos<=58);
+  SC.view='save'; scRender();
 }
 function scNext(){
   SC.kickIndex++;
-  // 判定是否分出胜负:常规 10 球后(或突然死亡每对结束)比分不同即结束
   if(SC.kickIndex>=10 && SC.kickIndex%2===0 && SC.scoreA!==SC.scoreB){ SC.view='end'; scRender(); return; }
-  SC.shotDir=null; SC.saveDir=null; SC.view='shoot'; scRender();
+  SC.shotDir=null; SC.saveDir=null; SC.shotMiss=false; SC.sweet=false; SC.view='shoot'; scRender();
 }
 
 /* =========================================================
