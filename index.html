@@ -339,7 +339,7 @@ h1,h2,h3,.brand,.bignum,.btn-lg{font-family:'Bebas Neue','Noto Sans SC',sans-ser
       • 先轮流传手机,每人 <b>按住看自己的底牌</b>,看完盖上。<br>
       • 再进入牌桌依次行动:<b>弃牌 · 过牌 · 跟注 · 加注半杯 · 加注一杯</b>。<br>
       • 自动发翻牌 / 转牌 / 河牌,摊牌自动比牌型定赢家。<br>
-      • 一局结束,<b>输家平分喝掉整池的酒</b> 🍶。
+      • 一局结束,<b>赢家免喝,其余每人喝掉自己倒进池子的酒</b> 🍶。
     </div>
 
     <div style="margin-top:18px;display:grid;gap:10px;">
@@ -771,7 +771,6 @@ function renderResult(winners, reason, bestScore){
   const pot=potTotal();
   const winNames=winners.map(i=>G.players[i].name);
   const losers=G.players.map((p,i)=>i).filter(i=>!winners.includes(i));
-  const drinkEach = losers.length>0 ? pot/losers.length : 0;
 
   // 标题
   if(winners.length===1){
@@ -785,7 +784,7 @@ function renderResult(winners, reason, bestScore){
     $('resultSub').innerHTML=`🏆 平局:${winNames.map(escapeHtml).join(' · ')} · 共 ${cup(pot)} 杯`;
   }
 
-  // 喝酒清单
+  // 喝酒清单:谁下注多少喝多少(赢家免喝)
   let dl='';
   G.players.forEach((p,i)=>{
     const isWin=winners.includes(i);
@@ -793,10 +792,14 @@ function renderResult(winners, reason, bestScore){
       dl+=`<div class="drink-row safe">
         <div class="dn">${escapeHtml(p.name)} <span style="font-size:12px;color:var(--gold)">赢家</span></div>
         <div class="da safe">免喝 🎉</div></div>`;
-    } else {
+    } else if(p.contributed>0){
       dl+=`<div class="drink-row">
         <div class="dn">${escapeHtml(p.name)}</div>
-        <div class="da drink"><span class="cup-emoji">🍶</span> 喝 ${cup(drinkEach)} 杯</div></div>`;
+        <div class="da drink"><span class="cup-emoji">🍶</span> 喝 ${cup(p.contributed)} 杯</div></div>`;
+    } else {
+      dl+=`<div class="drink-row safe">
+        <div class="dn">${escapeHtml(p.name)}</div>
+        <div class="da safe">没下注 · 免喝</div></div>`;
     }
   });
   $('drinkList').innerHTML=dl;
