@@ -1541,32 +1541,35 @@ function scNext(){
    小姐牌 · 抽牌整蛊
 ========================================================= */
 const X = { names:['玩家1','玩家2','玩家3','玩家4','玩家5','玩家6'], n:6,
-  deck:[], drawer:0, kCount:0, view:'setup', card:null, info:null };
+  deck:[], drawer:0, kPending:null, kPick:1, view:'setup', card:null, info:null };
 
 function xjRule(card){
   const me=X.names[X.drawer], prev=X.names[(X.drawer-1+X.n)%X.n], next=X.names[(X.drawer+1)%X.n];
   const r=card.r;
   if(r===14) return {tag:'A · 点杀', desc:`蒙住一人的眼睛,<b>${escapeHtml(me)}</b> 依次指向其他人,问被蒙的人「这个人喝不喝?」——被判「喝」的人干半杯。`};
-  if(r===2)  return {tag:'2 · 小姐 👑', desc:`<b>${escapeHtml(me)}</b> 成为本局「小姐」,要立刻亮明身份。之后谁喝酒都能点小姐陪喝半杯,小姐陪喝后要说「谢谢老板」,直到下一张 A 解除。`};
+  if(r===2)  return {tag:'2 · 小姐 👑', desc:`<b>${escapeHtml(me)}</b> 成为「小姐」,要立刻亮明身份。之后谁喝酒都能点小姐陪喝半杯,陪喝后要说「谢谢老板」——<b>直到下一张 2 出现才换人/解除</b>。`};
   if(r===3)  return {tag:'3 · 逛三园', desc:`从 <b>${escapeHtml(me)}</b> 开始「逛三园」:轮流说 动物园 / 植物园 / 水果园 里的东西,不能重复、不能卡壳,出错者喝半杯。`};
-  if(r===4)  return {tag:'4 · 找人决斗', desc:`<b>${escapeHtml(me)}</b> 点名一人决斗:猜拳三局两胜,输的人喝一杯!`};
+  if(r===4)  return {tag:'4 · 找人决斗', desc:`<b>${escapeHtml(me)}</b> 点名一人决斗,<b>玩什么自己定</b>(猜拳、划拳、闷酒……),输的人喝一杯!`};
   if(r===5)  return {tag:'5 · 石头剪刀布', desc:`<b>${escapeHtml(me)}</b> 和大家一起出拳,每输一轮 +半杯,可连续淘汰到只剩一人。`};
   if(r===6)  return {tag:'6 · 摸鼻子', desc:`<b>${escapeHtml(me)}</b> 喊停并最后一个摸鼻子,全场跟着摸——最慢的那个喝半杯。`};
   if(r===7)  return {tag:'7 · 七的倍数', desc:`从 <b>${escapeHtml(me)}</b> 开始报数,遇到 7、含 7、或 7 的倍数 要拍桌说「过」并反向,出错者喝一杯。`};
   if(r===8)  return {tag:'8 · 尿牌 🎫', desc:`<b>${escapeHtml(me)}</b> 获得一张「尿牌」收好:任何时候可打出,指定一人喝一杯,或抵消一次自己的罚酒。`};
   if(r===9)  return {tag:'9 · 自己喝', desc:`<b>${escapeHtml(me)}</b> 自己喝一杯,认栽 🍶。`};
-  if(r===10) return {tag:'10 · 神经病 🤪', desc:`<b>${escapeHtml(me)}</b> 变身神经病:做个夸张动作或喊句口号,全场必须跟着模仿,没跟上的喝半杯。`};
+  if(r===10) return {tag:'10 · 神经病 🤪', desc:`<b>${escapeHtml(me)}</b> 先大喊一声「<b>我是神经病!</b>」,此后<b>谁搭理 TA(回应/对话)谁喝</b>——<b>直到下一张 10 出现才换人</b>。`};
   if(r===11) return {tag:'J · 上家喝', desc:`<b>${escapeHtml(me)}</b> 的上家「<b>${escapeHtml(prev)}</b>」喝一杯。`};
   if(r===12) return {tag:'Q · 下家喝', desc:`<b>${escapeHtml(me)}</b> 的下家「<b>${escapeHtml(next)}</b>」喝一杯。`};
-  // K
-  if(X.kCount>=4){ const t={tag:'K · 定酒 💀', desc:`第 4 张 K!<b>${escapeHtml(me)}</b> 把「定酒杯」里的酒一口闷掉!定酒杯清空,重新累积。`}; X.kCount=0; return t; }
-  return {tag:'K · 定酒', desc:`第 ${X.kCount} 张 K:<b>${escapeHtml(me)}</b> 往「定酒杯」里倒一些酒。集满第 4 张 K 的人要一口闷掉整杯!(${X.kCount}/4)`};
+  // K · 定酒:首张 K 先喝半杯,之后每张 K 喝上一张 K 指定的量,再指定下一张
+  if(r===13){
+    const drinkNow=(X.kPending==null)?0.5:X.kPending;
+    return {tag:'K · 定酒', isK:true, drinkNow,
+      desc:`<b>${escapeHtml(me)}</b> 抽到 K,先喝 <b>${cup(drinkNow)} 杯</b>;再指定「下一个抽到 K 的人」喝几杯 👇`};
+  }
 }
 const XJ_REF = [
-  ['A','点杀:蒙眼指人问喝不喝'],['2','小姐:当小姐,被点要陪喝'],['3','逛三园:接龙说不出喝'],
-  ['4','找人决斗:猜拳输了喝'],['5','石头剪刀布:每输+半杯'],['6','摸鼻子:最慢喝'],
-  ['7','七的倍数:报错喝'],['8','尿牌:保命/罚人牌'],['9','自己喝'],['10','神经病:全场模仿'],
-  ['J','上家喝'],['Q','下家喝'],['K','定酒:第4张K闷整杯']
+  ['A','点杀:蒙眼指人问喝不喝'],['2','小姐:当小姐被点陪喝,下张2换人'],['3','逛三园:接龙说不出喝'],
+  ['4','找人决斗:玩啥自己定,输了喝'],['5','石头剪刀布:每输+半杯'],['6','摸鼻子:最慢喝'],
+  ['7','七的倍数:报错喝'],['8','尿牌:保命/罚人牌'],['9','自己喝'],['10','神经病:喊我是神经病,搭理者喝,下张10换人'],
+  ['J','上家喝'],['Q','下家喝'],['K','定酒:首张喝半杯并指定下张K喝几杯']
 ];
 function xjRenderNames(){
   let html='';
@@ -1578,11 +1581,11 @@ function xjRenderNames(){
   return html;
 }
 function xjCollectNames(){ for(let i=0;i<X.n;i++){ X.names[i]=(X.names[i]&&X.names[i].trim())?X.names[i].trim():`玩家${i+1}`; } X.names=X.names.slice(0,X.n); }
-function xjStart(){ xjCollectNames(); X.deck=freshDeck(); X.drawer=0; X.kCount=0; X.view='draw'; xjRender(); }
+function xjStart(){ xjCollectNames(); X.deck=freshDeck(); X.drawer=0; X.kPending=null; X.kPick=1; X.view='draw'; xjRender(); }
 function xjDraw(){
   if(X.deck.length===0) X.deck=freshDeck();
   X.card=X.deck.pop();
-  if(X.card.r===13) X.kCount++;
+  if(X.card.r===13) X.kPick=1;
   X.info=xjRule(X.card);
   X.view='reveal'; xjRender();
 }
@@ -1627,7 +1630,8 @@ function xjRender(){
     return;
   }
   const me=X.names[X.drawer];
-  const top=`<div class="xj-top">定酒杯 🍶 <b>${X.kCount}/4</b> · 牌堆剩 <b>${X.deck.length}</b> 张</div>`;
+  const pend = X.kPending!=null ? ` · 下张 K 喝 <b>${cup(X.kPending)}</b> 杯` : '';
+  const top=`<div class="xj-top">牌堆剩 <b>${X.deck.length}</b> 张${pend}</div>`;
   if(X.view==='draw'){
     v.innerHTML=`<div class="xj-view">
       ${top}
@@ -1645,6 +1649,27 @@ function xjRender(){
     return;
   }
   // reveal
+  if(X.info.isK){
+    v.innerHTML=`<div class="xj-view">
+      ${top}
+      <div class="xj-card-lg" style="--cw:130px">${cardFace(X.card)}</div>
+      <div class="xj-rule">
+        <div class="xj-rule-tag">${X.info.tag}</div>
+        <div class="xj-rule-desc">${X.info.desc}</div>
+        <div class="count-row" style="margin:12px 0 2px">
+          <button class="btn stepper" id="xjKM">−</button>
+          <div class="num" style="font-size:38px">${cup(X.kPick)}</div>
+          <button class="btn stepper" id="xjKP">+</button>
+        </div>
+        <div style="font-size:12px;color:var(--muted)">指定「下一个抽到 K 的人」喝几杯</div>
+      </div>
+      <button class="btn gold" id="xjKConfirm" style="width:min(92vw,460px)">指定并继续 →</button>
+    </div>`;
+    $('xjKM').onclick=()=>{ X.kPick=Math.max(0.5,X.kPick-0.5); xjRender(); };
+    $('xjKP').onclick=()=>{ X.kPick=Math.min(5,X.kPick+0.5); xjRender(); };
+    $('xjKConfirm').onclick=()=>{ X.kPending=X.kPick; xjNext(); };
+    return;
+  }
   v.innerHTML=`<div class="xj-view">
     ${top}
     <div class="xj-card-lg" style="--cw:130px">${cardFace(X.card)}</div>
