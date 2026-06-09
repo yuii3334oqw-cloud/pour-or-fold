@@ -428,6 +428,25 @@ body.table-mode #screen-bj-table .foot{flex:none;}
 .pwr-sweet{position:absolute;left:42%;width:16%;top:0;bottom:0;background:repeating-linear-gradient(45deg,rgba(95,207,134,.55) 0 6px,rgba(95,207,134,.28) 6px 12px);}
 .pwr-marker{position:absolute;top:-3px;bottom:-3px;width:5px;background:#fff;left:0;box-shadow:0 0 8px #fff;}
 .pwr-tip{font-size:11.5px;color:var(--muted);margin-top:2px;}
+
+/* ============ 小姐牌 ============ */
+.xj-view{display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;padding:8px 0 16px;}
+.xj-top{font-family:var(--pix);font-size:13px;color:var(--gold-soft);letter-spacing:.04em;
+  background:var(--panel);border:1px solid var(--panel-border);border-radius:999px;padding:6px 14px;}
+.xj-top b{color:var(--orange);}
+.xj-card-lg{--cw:128px;}
+.xj-card-lg .card{animation:xjflip .4s ease;}
+@keyframes xjflip{0%{transform:rotateY(90deg) scale(.9);opacity:0}100%{transform:none;opacity:1}}
+.xj-rule{background:linear-gradient(160deg,#1a212c,#11161e);border:2px solid rgba(0,0,0,.55);border-radius:10px;
+  padding:14px 16px;width:min(92vw,460px);box-shadow:0 3px 0 rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.05);}
+.xj-rule-tag{font-family:var(--pix);font-size:21px;color:var(--orange);letter-spacing:.02em;}
+.xj-rule-desc{font-size:14px;color:var(--text);line-height:1.75;margin-top:8px;}
+.xj-rule-desc b{color:var(--gold-soft);}
+.xj-list{display:grid;gap:8px;width:min(94vw,520px);text-align:left;margin-top:4px;}
+.xj-li{display:flex;gap:12px;background:var(--panel);border:1px solid var(--panel-border);border-radius:8px;padding:9px 12px;}
+.xj-li .k{font-family:var(--pix);color:var(--orange);min-width:34px;font-size:18px;}
+.xj-li .v{font-size:13px;color:var(--muted);line-height:1.5;flex:1;}
+.xj-li .v b{color:var(--text);}
 </style>
 </head>
 <body class="theme-blue">
@@ -472,6 +491,13 @@ body.table-mode #screen-bj-table .foot{flex:none;}
         <div class="gc-body">
           <div class="gc-title">点球大战</div>
           <div class="gc-desc">瞄准 + 蓄力射门 vs 门将扑救的博弈<br><span class="gc-pill">2 P · 对战</span></div>
+        </div>
+      </button>
+      <button class="game-card" id="startXJ" style="--gi:#d98fd0;--gib:#2c1230">
+        <div class="g-icon">👑</div>
+        <div class="gc-body">
+          <div class="gc-title">小姐牌</div>
+          <div class="gc-desc">抽牌触发整蛊规则 · A点杀/2小姐/K定酒…<br><span class="gc-pill">3-12 P</span></div>
         </div>
       </button>
     </div>
@@ -612,6 +638,11 @@ body.table-mode #screen-bj-table .foot{flex:none;}
   <!-- ============ 点球大战(全部由 JS 渲染) ============ -->
   <section id="screen-soccer" class="hidden">
     <div id="soccerView"></div>
+  </section>
+
+  <!-- ============ 小姐牌(全部由 JS 渲染) ============ -->
+  <section id="screen-xj" class="hidden">
+    <div id="xjView"></div>
   </section>
 
 </div>
@@ -1507,6 +1538,126 @@ function scNext(){
 }
 
 /* =========================================================
+   小姐牌 · 抽牌整蛊
+========================================================= */
+const X = { names:['玩家1','玩家2','玩家3','玩家4','玩家5','玩家6'], n:6,
+  deck:[], drawer:0, kCount:0, view:'setup', card:null, info:null };
+
+function xjRule(card){
+  const me=X.names[X.drawer], prev=X.names[(X.drawer-1+X.n)%X.n], next=X.names[(X.drawer+1)%X.n];
+  const r=card.r;
+  if(r===14) return {tag:'A · 点杀', desc:`蒙住一人的眼睛,<b>${escapeHtml(me)}</b> 依次指向其他人,问被蒙的人「这个人喝不喝?」——被判「喝」的人干半杯。`};
+  if(r===2)  return {tag:'2 · 小姐 👑', desc:`<b>${escapeHtml(me)}</b> 成为本局「小姐」,要立刻亮明身份。之后谁喝酒都能点小姐陪喝半杯,小姐陪喝后要说「谢谢老板」,直到下一张 A 解除。`};
+  if(r===3)  return {tag:'3 · 逛三园', desc:`从 <b>${escapeHtml(me)}</b> 开始「逛三园」:轮流说 动物园 / 植物园 / 水果园 里的东西,不能重复、不能卡壳,出错者喝半杯。`};
+  if(r===4)  return {tag:'4 · 找人决斗', desc:`<b>${escapeHtml(me)}</b> 点名一人决斗:猜拳三局两胜,输的人喝一杯!`};
+  if(r===5)  return {tag:'5 · 石头剪刀布', desc:`<b>${escapeHtml(me)}</b> 和大家一起出拳,每输一轮 +半杯,可连续淘汰到只剩一人。`};
+  if(r===6)  return {tag:'6 · 摸鼻子', desc:`<b>${escapeHtml(me)}</b> 喊停并最后一个摸鼻子,全场跟着摸——最慢的那个喝半杯。`};
+  if(r===7)  return {tag:'7 · 七的倍数', desc:`从 <b>${escapeHtml(me)}</b> 开始报数,遇到 7、含 7、或 7 的倍数 要拍桌说「过」并反向,出错者喝一杯。`};
+  if(r===8)  return {tag:'8 · 尿牌 🎫', desc:`<b>${escapeHtml(me)}</b> 获得一张「尿牌」收好:任何时候可打出,指定一人喝一杯,或抵消一次自己的罚酒。`};
+  if(r===9)  return {tag:'9 · 自己喝', desc:`<b>${escapeHtml(me)}</b> 自己喝一杯,认栽 🍶。`};
+  if(r===10) return {tag:'10 · 神经病 🤪', desc:`<b>${escapeHtml(me)}</b> 变身神经病:做个夸张动作或喊句口号,全场必须跟着模仿,没跟上的喝半杯。`};
+  if(r===11) return {tag:'J · 上家喝', desc:`<b>${escapeHtml(me)}</b> 的上家「<b>${escapeHtml(prev)}</b>」喝一杯。`};
+  if(r===12) return {tag:'Q · 下家喝', desc:`<b>${escapeHtml(me)}</b> 的下家「<b>${escapeHtml(next)}</b>」喝一杯。`};
+  // K
+  if(X.kCount>=4){ const t={tag:'K · 定酒 💀', desc:`第 4 张 K!<b>${escapeHtml(me)}</b> 把「定酒杯」里的酒一口闷掉!定酒杯清空,重新累积。`}; X.kCount=0; return t; }
+  return {tag:'K · 定酒', desc:`第 ${X.kCount} 张 K:<b>${escapeHtml(me)}</b> 往「定酒杯」里倒一些酒。集满第 4 张 K 的人要一口闷掉整杯!(${X.kCount}/4)`};
+}
+const XJ_REF = [
+  ['A','点杀:蒙眼指人问喝不喝'],['2','小姐:当小姐,被点要陪喝'],['3','逛三园:接龙说不出喝'],
+  ['4','找人决斗:猜拳输了喝'],['5','石头剪刀布:每输+半杯'],['6','摸鼻子:最慢喝'],
+  ['7','七的倍数:报错喝'],['8','尿牌:保命/罚人牌'],['9','自己喝'],['10','神经病:全场模仿'],
+  ['J','上家喝'],['Q','下家喝'],['K','定酒:第4张K闷整杯']
+];
+function xjRenderNames(){
+  let html='';
+  for(let i=0;i<X.n;i++){
+    const v=X.names[i]||`玩家${i+1}`;
+    html+=`<div class="name-input"><span class="seat-num">${i+1}</span>
+      <input type="text" maxlength="8" value="${escapeHtml(v)}" data-i="${i}" placeholder="玩家${i+1}"></div>`;
+  }
+  return html;
+}
+function xjCollectNames(){ for(let i=0;i<X.n;i++){ X.names[i]=(X.names[i]&&X.names[i].trim())?X.names[i].trim():`玩家${i+1}`; } X.names=X.names.slice(0,X.n); }
+function xjStart(){ xjCollectNames(); X.deck=freshDeck(); X.drawer=0; X.kCount=0; X.view='draw'; xjRender(); }
+function xjDraw(){
+  if(X.deck.length===0) X.deck=freshDeck();
+  X.card=X.deck.pop();
+  if(X.card.r===13) X.kCount++;
+  X.info=xjRule(X.card);
+  X.view='reveal'; xjRender();
+}
+function xjNext(){ X.drawer=(X.drawer+1)%X.n; X.view='draw'; xjRender(); }
+function xjRender(){
+  const v=$('xjView');
+  if(X.view==='setup'){
+    v.innerHTML=`<div style="padding:2px;">
+      <div class="section-title">人数(3–12)</div>
+      <div class="card-panel">
+        <div class="count-row">
+          <button class="btn stepper" id="xjMinus">−</button>
+          <div class="num" id="xjCount">${X.n}</div>
+          <button class="btn stepper" id="xjPlus">+</button>
+        </div>
+        <div class="section-title" style="margin-top:14px">玩家昵称(按座位顺序)</div>
+        <div class="names" id="xjNames">${xjRenderNames()}</div>
+      </div>
+      <div class="card-panel rules" style="margin-top:14px">
+        • 洗好一副牌,围一圈坐,<b>轮流抽牌</b>,按牌面执行整蛊规则。<br>
+        • <b>上家 / 下家</b> 按座位昵称自动判定;<b>定酒杯</b> 自动累计,集满第 4 张 K 闷整杯。<br>
+        • 抽完自动重新洗牌,玩到尽兴为止 🍻。
+      </div>
+      <div style="margin-top:18px;display:grid;gap:10px;">
+        <button class="btn gold full btn-lg" id="xjStartBtn" data-sfx="deal">开 始 抽 牌</button>
+        <button class="btn ghost full" id="xjBack">返回</button>
+      </div></div>`;
+    $('xjNames').querySelectorAll('input').forEach(inp=>{ inp.oninput=()=>{ X.names[parseInt(inp.dataset.i,10)]=inp.value; }; });
+    $('xjMinus').onclick=()=>{ if(X.n>3){ X.n--; xjRender(); } };
+    $('xjPlus').onclick=()=>{ if(X.n<12){ X.n++; xjRender(); } };
+    $('xjStartBtn').onclick=xjStart;
+    $('xjBack').onclick=()=>show('home');
+    return;
+  }
+  if(X.view==='rules'){
+    v.innerHTML=`<div class="xj-view">
+      <div class="xj-rule-tag" style="font-size:24px">小姐牌 · 规则总览</div>
+      <div class="xj-list">${XJ_REF.map(r=>`<div class="xj-li"><div class="k">${r[0]}</div><div class="v">${r[1]}</div></div>`).join('')}</div>
+      <button class="btn gold" id="xjRulesBack" style="width:min(92vw,460px)">返回牌桌</button>
+    </div>`;
+    $('xjRulesBack').onclick=()=>{ X.view='draw'; xjRender(); };
+    return;
+  }
+  const me=X.names[X.drawer];
+  const top=`<div class="xj-top">定酒杯 🍶 <b>${X.kCount}/4</b> · 牌堆剩 <b>${X.deck.length}</b> 张</div>`;
+  if(X.view==='draw'){
+    v.innerHTML=`<div class="xj-view">
+      ${top}
+      <div class="xj-card-lg" style="--cw:128px">${cardBack()}</div>
+      <div class="sc-prompt">轮到 <b>${escapeHtml(me)}</b> 抽牌 · 请把手机递给 TA</div>
+      <button class="btn gold" id="xjDrawBtn" data-sfx="deal" style="width:min(92vw,460px)">抽 牌</button>
+      <div style="display:flex;gap:10px;width:min(92vw,460px)">
+        <button class="btn ghost" id="xjRulesBtn" style="flex:1">规则</button>
+        <button class="btn ghost" id="xjQuit" style="flex:1">结束</button>
+      </div>
+    </div>`;
+    $('xjDrawBtn').onclick=xjDraw;
+    $('xjRulesBtn').onclick=()=>{ X.view='rules'; xjRender(); };
+    $('xjQuit').onclick=()=>show('home');
+    return;
+  }
+  // reveal
+  v.innerHTML=`<div class="xj-view">
+    ${top}
+    <div class="xj-card-lg" style="--cw:130px">${cardFace(X.card)}</div>
+    <div class="xj-rule">
+      <div class="xj-rule-tag">${X.info.tag}</div>
+      <div class="xj-rule-desc">${X.info.desc}</div>
+    </div>
+    <button class="btn gold" id="xjNextBtn" style="width:min(92vw,460px)">下 一 位 →</button>
+  </div>`;
+  $('xjNextBtn').onclick=xjNext;
+}
+
+/* =========================================================
    事件绑定
 ========================================================= */
 $('startTexas').onclick=()=>{ show('setup'); renderNames(); };
@@ -1542,6 +1693,9 @@ $('bjNext').onclick=()=>{ B.dealer=(B.dealer+1)%B.n; bjDeal(); };
 
 // 点球大战
 $('startSoccer').onclick=()=>{ SC.view='setup'; show('soccer'); scRender(); };
+
+// 小姐牌
+$('startXJ').onclick=()=>{ X.view='setup'; show('xj'); xjRender(); };
 
 // 音效开关
 $('soundBtn').onclick=()=>{
