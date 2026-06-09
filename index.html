@@ -37,7 +37,7 @@
   --felt1:#0f3d5c;
   --felt2:#0a2740;
   --felt-rim:#06182a;
-  --glow:rgba(212,175,55,.55);
+  --glow:rgba(217,119,87,.6);
 }
 body.theme-green{
   --felt1:#11543f;
@@ -75,7 +75,7 @@ h1,h2,h3,.brand,.bignum,.btn-lg{font-family:var(--pix),'Noto Sans SC',sans-serif
   display:flex;align-items:center;justify-content:space-between;
   padding:14px 2px 8px;min-height:48px;
 }
-.brand{font-size:clamp(22px,6vw,30px);line-height:1;color:var(--gold);text-shadow:0 1px 0 #000,0 0 18px rgba(212,175,55,.25);}
+.brand{font-size:clamp(22px,6vw,30px);line-height:1;color:var(--orange);text-shadow:2px 2px 0 #000;}
 .menu-btn{
   display:inline-flex;align-items:center;gap:7px;flex:none;
   background:var(--panel);border:1px solid var(--panel-border);
@@ -84,8 +84,8 @@ h1,h2,h3,.brand,.bignum,.btn-lg{font-family:var(--pix),'Noto Sans SC',sans-serif
   transition:border-color .15s,background .15s,transform .06s;
 }
 .menu-btn:active{transform:scale(.95);}
-.menu-btn:hover{border-color:rgba(212,175,55,.5);background:rgba(212,175,55,.06);}
-.menu-btn svg{width:15px;height:15px;stroke:var(--gold);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+.menu-btn:hover{border-color:rgba(217,119,87,.5);background:rgba(217,119,87,.08);}
+.menu-btn svg{width:15px;height:15px;stroke:var(--orange);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
 .top-actions{display:flex;align-items:center;gap:8px;flex:none;}
 .icon-btn{
   width:40px;height:40px;border-radius:999px;flex:none;
@@ -131,8 +131,9 @@ h1,h2,h3,.brand,.bignum,.btn-lg{font-family:var(--pix),'Noto Sans SC',sans-serif
 
 /* ============ 卡片容器 ============ */
 .card-panel{
-  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
-  border:1px solid var(--panel-border);border-radius:20px;padding:18px;
+  background:linear-gradient(160deg,#1a212c,#11161e);
+  border:2px solid rgba(0,0,0,.5);border-radius:10px;padding:16px;
+  box-shadow:0 3px 0 rgba(0,0,0,.45),inset 0 0 0 1px rgba(255,255,255,.04);
 }
 
 /* ============ 首页/选择游戏(像素·暗黑可爱) ============ */
@@ -238,17 +239,19 @@ h1,h2,h3,.brand,.bignum,.btn-lg{font-family:var(--pix),'Noto Sans SC',sans-serif
 .card.back .r9.br{display:none;}
 .card.empty{background:rgba(20,16,12,.35);border:1.5px dashed rgba(233,226,207,.2);box-shadow:none;}
 
-/* ============ 牌桌 ============ */
+/* ============ 牌桌(像素) ============ */
 .felt{
   background:
-    radial-gradient(120% 90% at 50% 38%, var(--felt1), var(--felt2) 70%);
-  border:6px solid var(--felt-rim);
-  border-radius:120px/80px;
-  padding:24px 16px 22px;margin-top:6px;
-  box-shadow:0 14px 40px rgba(0,0,0,.5),inset 0 0 60px rgba(0,0,0,.45),inset 0 0 0 2px rgba(212,175,55,.18);
+    repeating-linear-gradient(0deg, rgba(0,0,0,.10) 0 2px, transparent 2px 16px),
+    repeating-linear-gradient(90deg, rgba(0,0,0,.10) 0 2px, transparent 2px 16px),
+    radial-gradient(120% 90% at 50% 38%, var(--felt1), var(--felt2) 72%);
+  border:3px solid #000;
+  border-radius:14px;
+  padding:20px 16px 18px;margin-top:6px;
+  box-shadow:0 5px 0 #000,inset 0 0 0 2px rgba(233,226,207,.18),inset 0 0 50px rgba(0,0,0,.5);
   text-align:center;
 }
-.street-label{font-family:var(--pix);letter-spacing:.2em;color:var(--gold-soft);font-size:15px;opacity:.85;}
+.street-label{font-family:var(--pix);letter-spacing:.2em;color:var(--orange-soft);font-size:16px;opacity:.95;}
 .community{display:flex;gap:6px;justify-content:center;margin:12px 0 14px;min-height:84px;align-items:center;--cw:clamp(42px,12.5vw,60px);}
 .pot{display:inline-flex;flex-direction:column;align-items:center;gap:2px;}
 .pot .plabel{font-size:11px;letter-spacing:.25em;color:var(--gold-soft);opacity:.8;}
@@ -259,17 +262,18 @@ h1,h2,h3,.brand,.bignum,.btn-lg{font-family:var(--pix),'Noto Sans SC',sans-serif
 .seats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:14px;}
 .seat{
   min-width:0;
-  background:var(--panel);border:1px solid var(--panel-border);border-radius:14px;
+  background:#161d27;border:2px solid rgba(0,0,0,.55);border-radius:8px;
   padding:10px 12px;display:flex;flex-direction:column;gap:7px;position:relative;
+  box-shadow:0 3px 0 rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.04);
   transition:border-color .2s,box-shadow .2s,background .2s;
 }
-.seat.active{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold),0 0 22px var(--glow);background:rgba(212,175,55,.06);}
-.seat.folded{opacity:.45;}
-.seat.winner{border-color:var(--gold);box-shadow:0 0 26px var(--glow);background:rgba(212,175,55,.1);}
+.seat.active{border-color:var(--orange);box-shadow:0 3px 0 rgba(0,0,0,.5),0 0 18px var(--glow);background:#241a16;}
+.seat.folded{opacity:.42;}
+.seat.winner{border-color:var(--orange);box-shadow:0 3px 0 rgba(0,0,0,.5),0 0 22px var(--glow);background:#241a16;}
 .seat-top{display:flex;align-items:center;justify-content:space-between;gap:6px;min-width:0;}
 .seat-name{font-weight:700;font-size:15px;display:flex;align-items:center;gap:6px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.pos-badge{font-family:var(--pix);font-size:11px;padding:1px 6px;border-radius:8px;border:1px solid var(--gold-deep);color:var(--gold);line-height:1.4;}
-.pos-D{background:rgba(212,175,55,.15);}
+.pos-badge{font-family:var(--pix);font-size:12px;padding:1px 6px;border-radius:5px;border:1px solid #5e2b18;color:var(--orange-soft);background:#2a1610;line-height:1.4;}
+.pos-D{background:var(--orange);color:#241006;border-color:#5e2b18;}
 .seat-stat{font-size:11.5px;color:var(--muted);}
 .seat-stat .in{color:var(--gold-soft);}
 .seat-bot{display:flex;align-items:center;justify-content:space-between;gap:8px;}
@@ -283,7 +287,7 @@ h1,h2,h3,.brand,.bignum,.btn-lg{font-family:var(--pix),'Noto Sans SC',sans-serif
   flex:none;margin-top:14px;padding-top:10px;
 }
 .turn-of{text-align:center;font-size:14px;color:var(--muted);margin-bottom:8px;}
-.turn-of b{color:var(--gold);font-size:17px;}
+.turn-of b{color:var(--orange-soft);font-size:17px;}
 .actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;}
 .actions .wide{grid-column:span 2;}
 .actions .bet-go{grid-column:1/-1;}
@@ -336,7 +340,7 @@ body.table-mode #screen-bj-table .foot{flex:none;}
 
 /* ============ 摊牌结果 ============ */
 .result-banner{text-align:center;margin:4px 0 14px;}
-.result-banner .rt{font-family:var(--pix);font-size:38px;color:var(--gold);letter-spacing:.08em;}
+.result-banner .rt{font-family:var(--pix);font-size:38px;color:var(--orange);letter-spacing:.08em;text-shadow:2px 2px 0 #000;}
 .result-banner .rs{color:var(--gold-soft);font-size:15px;margin-top:2px;}
 .drink-list{display:grid;gap:9px;margin-top:6px;}
 .drink-row{
@@ -385,15 +389,15 @@ body.table-mode #screen-bj-table .foot{flex:none;}
 .tag-bust{color:var(--blood);}
 .tag-stand{color:var(--muted);}
 .tag-win{color:#5ad17a;}
-.bj-badge{font-family:var(--pix);font-size:11px;padding:1px 6px;border-radius:8px;border:1px solid var(--blood);color:#e88;}
+.bj-badge{font-family:var(--pix);font-size:12px;padding:1px 6px;border-radius:5px;border:1px solid #5e2b18;background:var(--orange);color:#241006;}
 
 /* ============ 点球大战 ============ */
 .soccer-wrap{display:flex;flex-direction:column;height:100%;min-height:0;text-align:center;}
 .sc-score{display:flex;justify-content:center;align-items:stretch;gap:10px;margin:6px 0 4px;}
-.sc-side{flex:1;background:var(--panel);border:1px solid var(--panel-border);border-radius:16px;padding:12px 8px;}
-.sc-side.active{border-color:var(--gold);box-shadow:0 0 18px var(--glow);}
+.sc-side{flex:1;background:#161d27;border:2px solid rgba(0,0,0,.55);border-radius:9px;padding:12px 8px;box-shadow:0 3px 0 rgba(0,0,0,.5);}
+.sc-side.active{border-color:var(--orange);box-shadow:0 3px 0 rgba(0,0,0,.5),0 0 16px var(--glow);background:#241a16;}
 .sc-side .nm{font-weight:700;font-size:15px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.sc-side .gg{font-family:var(--pix);font-size:40px;color:var(--gold);line-height:1;}
+.sc-side .gg{font-family:var(--pix);font-size:40px;color:var(--orange);line-height:1;}
 .sc-side .role{font-size:11px;color:var(--muted);}
 .sc-vs{display:flex;align-items:center;font-family:var(--pix);color:var(--muted);}
 .sc-pitch{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;}
