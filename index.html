@@ -1546,14 +1546,14 @@ const X = { names:['玩家1','玩家2','玩家3','玩家4','玩家5','玩家6'],
 function xjRule(card){
   const me=X.names[X.drawer], prev=X.names[(X.drawer-1+X.n)%X.n], next=X.names[(X.drawer+1)%X.n];
   const r=card.r;
-  if(r===14) return {tag:'A · 点杀', desc:`蒙住一人的眼睛,<b>${escapeHtml(me)}</b> 依次指向其他人,问被蒙的人「这个人喝不喝?」——被判「喝」的人干半杯。`};
+  if(r===14) return {tag:'A · 点杀', desc:`<b>${escapeHtml(me)}</b> 点杀任意一人,并<b>自己决定 TA 喝几杯</b>!(也可玩蒙眼版:蒙一人眼,指人问 TA 喝不喝)`};
   if(r===2)  return {tag:'2 · 小姐 👑', desc:`<b>${escapeHtml(me)}</b> 成为「小姐」,要立刻亮明身份。之后谁喝酒都能点小姐陪喝半杯,陪喝后要说「谢谢老板」——<b>直到下一张 2 出现才换人/解除</b>。`};
   if(r===3)  return {tag:'3 · 逛三园', desc:`从 <b>${escapeHtml(me)}</b> 开始「逛三园」:轮流说 动物园 / 植物园 / 水果园 里的东西,不能重复、不能卡壳,出错者喝半杯。`};
   if(r===4)  return {tag:'4 · 找人决斗', desc:`<b>${escapeHtml(me)}</b> 点名一人决斗,<b>玩什么自己定</b>(猜拳、划拳、闷酒……),输的人喝一杯!`};
   if(r===5)  return {tag:'5 · 石头剪刀布', desc:`<b>${escapeHtml(me)}</b> 和大家一起出拳,每输一轮 +半杯,可连续淘汰到只剩一人。`};
   if(r===6)  return {tag:'6 · 摸鼻子', desc:`<b>${escapeHtml(me)}</b> 不要出声,悄悄开始摸鼻子;其他人察觉后也跟着偷偷摸——<b>最后一个摸的人喝半杯</b>。`};
   if(r===7)  return {tag:'7 · 七的倍数', desc:`从 <b>${escapeHtml(me)}</b> 开始报数,遇到 7、含 7、或 7 的倍数 要拍桌说「过」并反向,出错者喝一杯。`};
-  if(r===8)  return {tag:'8 · 尿牌 🎫', desc:`<b>${escapeHtml(me)}</b> 获得一张「尿牌」收好:任何时候可打出,指定一人喝一杯,或抵消一次自己的罚酒。`};
+  if(r===8)  return {tag:'8 · 尿牌 🎫', desc:`<b>${escapeHtml(me)}</b> 获得一张「尿牌」收好——<b>有尿牌才能去撒尿!</b>没有尿牌的人中途不许离桌上厕所。想去时点底部「出尿牌」打出(作废)。`};
   if(r===9)  return {tag:'9 · 自己喝', desc:`<b>${escapeHtml(me)}</b> 自己喝一杯,认栽 🍶。`};
   if(r===10) return {tag:'10 · 神经病 🤪', desc:`<b>${escapeHtml(me)}</b> 先大喊一声「<b>我是神经病!</b>」,此后<b>谁搭理 TA(回应/对话)谁喝</b>——<b>直到下一张 10 出现才换人</b>。`};
   if(r===11) return {tag:'J · 上家喝', desc:`<b>${escapeHtml(me)}</b> 的上家「<b>${escapeHtml(prev)}</b>」喝一杯。`};
@@ -1566,9 +1566,9 @@ function xjRule(card){
   }
 }
 const XJ_REF = [
-  ['A','点杀:蒙眼指人问喝不喝'],['2','小姐:当小姐被点陪喝,下张2换人'],['3','逛三园:接龙说不出喝'],
-  ['4','找人决斗:玩啥自己定,输了喝'],['5','石头剪刀布:每输+半杯'],['6','摸鼻子:最慢喝'],
-  ['7','七的倍数:报错喝'],['8','尿牌:保命/罚人牌'],['9','自己喝'],['10','神经病:喊我是神经病,搭理者喝,下张10换人'],
+  ['A','点杀:指定一人,自己定喝几杯'],['2','小姐:当小姐被点陪喝,下张2换人'],['3','逛三园:接龙说不出喝'],
+  ['4','找人决斗:玩啥自己定,输了喝'],['5','石头剪刀布:每输+半杯'],['6','摸鼻子:偷偷摸,最后一个喝'],
+  ['7','七的倍数:报错喝'],['8','尿牌:有它才能去厕所,出牌放行'],['9','自己喝'],['10','神经病:喊我是神经病,搭理者喝,下张10换人'],
   ['J','上家喝'],['Q','下家喝'],['K','定酒:首张喝半杯并指定下张K喝几杯']
 ];
 function xjRenderNames(){
@@ -1595,18 +1595,7 @@ function xjNext(){ X.drawer=(X.drawer+1)%X.n; X.view='draw'; xjRender(); }
 const XJ_RPS=['✊','✋','✌️'];
 function xjRpsBeat(a,b){ return (a===0&&b===2)||(a===2&&b===1)||(a===1&&b===0); }
 function xjStartRPS(stake){ X.rpsStake=stake; X.rpsOpp=null; X.rpsA=null; X.rpsB=null; X.view='rpsPick'; xjRender(); }
-function xjStartDS(){ X.dsVictim=null; X.view='dsRoll'; xjRender(); xjRunDS(); }
-function xjRunDS(){
-  const others=[]; for(let i=0;i<X.n;i++) if(i!==X.drawer) others.push(i);
-  const victim=others[Math.floor(Math.random()*others.length)];
-  let t=0; const total=18+Math.floor(Math.random()*6);
-  const tick=()=>{
-    const el=document.getElementById('dsName'); if(!el) return;
-    if(t<total){ el.textContent=X.names[others[t%others.length]]; t++; setTimeout(tick, 55+t*t*0.7); }
-    else { el.textContent=X.names[victim]; X.dsVictim=victim; setTimeout(()=>{ X.view='dsDone'; xjRender(); feedback('win'); }, 450); }
-  };
-  tick();
-}
+function xjStartDS(){ X.dsVictim=null; X.dsCups=1; X.view='dsPick'; xjRender(); }
 function xjRender(){
   const v=$('xjView');
   if(X.view==='setup'){
@@ -1668,17 +1657,37 @@ function xjRender(){
     return;
   }
   /* —— 互动小工具视图 —— */
-  if(X.view==='dsRoll'){
+  if(X.view==='dsPick'){
+    let btns=''; for(let i=0;i<X.n;i++){ if(i===X.drawer) continue; btns+=`<button class="btn" data-dv="${i}" style="margin:3px 0;width:min(92vw,460px)">${escapeHtml(X.names[i])}</button>`; }
     v.innerHTML=`<div class="xj-view">${top}
-      <div class="xj-rule-tag" style="font-size:22px">🎯 点杀转盘</div>
-      <div class="num" id="dsName" style="font-size:40px;min-height:54px;line-height:54px">…</div>
-      <div class="sc-hint">命运正在选倒霉蛋…</div></div>`;
+      <div class="xj-rule-tag" style="font-size:22px">🎯 点杀</div>
+      <div class="sc-prompt"><b>${escapeHtml(me)}</b> 指定一个倒霉蛋</div>${btns}
+      <button class="btn ghost" id="xjRand" style="width:min(92vw,460px)">🎲 随机抽一个</button>
+      <button class="btn ghost" id="xjCancel" style="width:min(92vw,460px)">取消</button></div>`;
+    v.querySelectorAll('[data-dv]').forEach(b=> b.onclick=()=>{ X.dsVictim=parseInt(b.dataset.dv,10); X.dsCups=1; X.view='dsCups'; xjRender(); });
+    $('xjRand').onclick=()=>{ const o=[]; for(let i=0;i<X.n;i++) if(i!==X.drawer)o.push(i); X.dsVictim=o[Math.floor(Math.random()*o.length)]; X.dsCups=1; X.view='dsCups'; xjRender(); };
+    $('xjCancel').onclick=()=>{ X.view='reveal'; xjRender(); };
+    return;
+  }
+  if(X.view==='dsCups'){
+    v.innerHTML=`<div class="xj-view">${top}
+      <div class="sc-big save-txt">💀 ${escapeHtml(X.names[X.dsVictim])}</div>
+      <div class="xj-rule"><div class="xj-rule-desc"><b>${escapeHtml(me)}</b> 判 <b>${escapeHtml(X.names[X.dsVictim])}</b> 喝几杯:</div>
+        <div class="count-row" style="margin:12px 0 2px">
+          <button class="btn stepper" id="dsM">−</button>
+          <div class="num" style="font-size:38px">${cup(X.dsCups)}</div>
+          <button class="btn stepper" id="dsP">+</button>
+        </div></div>
+      <button class="btn gold" id="dsConfirm" style="width:min(92vw,460px)">就 这 么 定!</button></div>`;
+    $('dsM').onclick=()=>{ X.dsCups=Math.max(0.5,X.dsCups-0.5); xjRender(); };
+    $('dsP').onclick=()=>{ X.dsCups=Math.min(5,X.dsCups+0.5); xjRender(); };
+    $('dsConfirm').onclick=()=>{ X.view='dsDone'; xjRender(); feedback('win'); };
     return;
   }
   if(X.view==='dsDone'){
     v.innerHTML=`<div class="xj-view">${top}
       <div class="sc-big save-txt">💀 ${escapeHtml(X.names[X.dsVictim])}</div>
-      <div class="xj-rule"><div class="xj-rule-desc">被点杀!<b>${escapeHtml(X.names[X.dsVictim])}</b> 喝半杯 🍶</div></div>
+      <div class="xj-rule"><div class="xj-rule-desc">被点杀!<b>${escapeHtml(X.names[X.dsVictim])}</b> 喝 ${cup(X.dsCups)} 杯 🍶</div></div>
       <button class="btn gold" id="xjNextBtn" style="width:min(92vw,460px)">下 一 位 →</button></div>`;
     $('xjNextBtn').onclick=xjNext; return;
   }
@@ -1725,19 +1734,19 @@ function xjRender(){
     return;
   }
   if(X.view==='piao'){
-    let btns=''; for(let i=0;i<X.n;i++){ btns+=`<button class="btn" data-pt="${i}" style="margin:3px 0;width:min(92vw,460px)">${escapeHtml(X.names[i])}</button>`; }
     v.innerHTML=`<div class="xj-view">${top}
       <div class="xj-rule-tag" style="font-size:22px">🎫 打出尿牌</div>
-      <div class="sc-prompt">指定一人喝一杯</div>${btns}
+      <div class="xj-rule"><div class="xj-rule-desc">打出一张「尿牌」= <b>准许本人去撒尿</b> 🚽,此牌用掉作废。<br>没有尿牌的人,中途<b>不许离桌上厕所</b>!</div></div>
+      <button class="btn gold" id="xjPiaoGo" style="width:min(92vw,460px)">出 牌 · 去 撒 尿!</button>
       <button class="btn ghost" id="xjCancel" style="width:min(92vw,460px)">取消</button></div>`;
-    v.querySelectorAll('[data-pt]').forEach(b=> b.onclick=()=>{ X.piaoTarget=parseInt(b.dataset.pt,10); X.view='piaoDone'; xjRender(); });
+    $('xjPiaoGo').onclick=()=>{ X.view='piaoDone'; xjRender(); feedback('peek'); };
     $('xjCancel').onclick=()=>{ X.view='draw'; xjRender(); };
     return;
   }
   if(X.view==='piaoDone'){
     v.innerHTML=`<div class="xj-view">${top}
-      <div class="sc-big save-txt">🎫 ${escapeHtml(X.names[X.piaoTarget])}</div>
-      <div class="xj-rule"><div class="xj-rule-desc"><b>${escapeHtml(X.names[X.piaoTarget])}</b> 被尿牌点中,喝一杯 🍶</div></div>
+      <div class="sc-big goal-txt">🚽 放 行!</div>
+      <div class="xj-rule"><div class="xj-rule-desc">尿牌已用掉,尽情去吧~ 没尿牌的继续憋着 😆</div></div>
       <button class="btn gold" id="xjBackDraw" style="width:min(92vw,460px)">返回</button></div>`;
     $('xjBackDraw').onclick=()=>{ X.view='draw'; xjRender(); };
     return;
@@ -1766,7 +1775,7 @@ function xjRender(){
   }
   const rr=X.card.r;
   let go='';
-  if(rr===14) go=`<button class="btn gold" id="xjGo" style="width:min(92vw,460px)">🎯 开始点杀转盘</button>`;
+  if(rr===14) go=`<button class="btn gold" id="xjGo" style="width:min(92vw,460px)">🎯 点杀 · 指定一人</button>`;
   else if(rr===5) go=`<button class="btn gold" id="xjGo" style="width:min(92vw,460px)">✊ 开始猜拳(输喝半杯)</button>`;
   else if(rr===4) go=`<button class="btn gold" id="xjGo" style="width:min(92vw,460px)">✊ 用猜拳决斗(输喝 1 杯)</button>`;
   const nextLabel = (rr===4)?'他们自己玩 · 下一位 →':'下 一 位 →';
