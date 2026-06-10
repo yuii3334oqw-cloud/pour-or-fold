@@ -1,0 +1,18 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/texas/texas",
+    "pages/blackjack/blackjack",
+    "pages/soccer/soccer",
+    "pages/xiaojie/xiaojie"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#0a0d12",
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "Pour or Fold",
+    "backgroundColor": "#0a0d12",
+    "backgroundTextStyle": "dark"
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

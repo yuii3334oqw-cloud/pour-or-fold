@@ -1,0 +1,14 @@
+{
+  "compileType": "miniprogram",
+  "appid": "touristappid",
+  "projectname": "pour-or-fold",
+  "libVersion": "3.4.3",
+  "setting": {
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "urlCheck": false
+  },
+  "condition": {}
+}

@@ -1,0 +1,27 @@
+.home-wrap { padding-bottom: 40rpx; }
+.hero { text-align: center; padding: 50rpx 10rpx 30rpx; }
+.logo {
+  font-size: 76rpx; font-weight: 800; color: var(--orange);
+  text-shadow: 5rpx 5rpx 0 #000; letter-spacing: .02em;
+}
+.tag { color: var(--muted); letter-spacing: .34em; font-size: 20rpx; margin-top: 16rpx; }
+.gcard {
+  display: flex; align-items: center; gap: 24rpx; position: relative;
+  background: linear-gradient(160deg, #1a212c, #11161e);
+  border: 4rpx solid rgba(0,0,0,.55); border-radius: 14rpx;
+  box-shadow: 0 8rpx 0 rgba(0,0,0,.5);
+  padding: 26rpx; margin-top: 22rpx;
+}
+.gicon {
+  width: 100rpx; height: 100rpx; flex: none; border-radius: 12rpx;
+  display: flex; align-items: center; justify-content: center; font-size: 54rpx;
+  border: 4rpx solid #3a4658; box-shadow: 0 6rpx 0 rgba(0,0,0,.5), inset 0 0 24rpx rgba(0,0,0,.5);
+}
+.gbody { flex: 1; min-width: 0; }
+.gtitle { font-size: 36rpx; font-weight: 800; }
+.gdesc { font-size: 22rpx; color: var(--muted); margin-top: 6rpx; line-height: 1.5; }
+.gpill {
+  display: inline-block; margin-top: 10rpx; font-size: 18rpx; font-weight: 700;
+  border: 2rpx solid #3a4658; border-radius: 8rpx; padding: 2rpx 12rpx;
+}
+.garrow { color: var(--orange); font-size: 24rpx; opacity: .7; }

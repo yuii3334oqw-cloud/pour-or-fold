@@ -1,0 +1,97 @@
+<view class="wrap sc-wrap">
+
+  <!-- 设置 -->
+  <block wx:if="{{view === 'setup'}}">
+    <view class="sec-title">点球大战 · 2 人对决</view>
+    <view class="panel">
+      <view class="name-row"><view class="seat-num">A</view><input class="name-ipt" value="{{a}}" maxlength="6" bindinput="onA"/></view>
+      <view class="name-row"><view class="seat-num">B</view><input class="name-ipt" value="{{b}}" maxlength="6" bindinput="onB"/></view>
+      <view class="sec-title">输家罚酒(杯)</view>
+      <view class="count-row">
+        <view class="pbtn stepper" hover-class="pbtn-press" bindtap="onPenM">−</view>
+        <view class="num">{{penStr}}</view>
+        <view class="pbtn stepper" hover-class="pbtn-press" bindtap="onPenP">+</view>
+      </view>
+    </view>
+    <view class="sec-title">玩法规则</view>
+    <view class="panel rules">
+      <view class="rule-line">· 双方轮流主罚,各 5 球;平局进入突然死亡。</view>
+      <view class="rule-line">· 射手秘密选方向 + 蓄力;门将秘密选扑救方向。</view>
+      <view class="rule-line">· 蓄力停在绿色刁钻区 = 必进;两端红色 = 射偏。</view>
+      <view class="rule-line">· 最终输家罚酒 🍶。</view>
+    </view>
+    <view class="pbtn gold big" hover-class="pbtn-press" bindtap="onStart">开 始 对 决</view>
+    <view class="foot">请理性饮酒 · 切勿酒驾</view>
+  </block>
+
+  <!-- 终局 -->
+  <block wx:elif="{{view === 'end'}}">
+    <view class="banner">
+      <view class="rt">FULL TIME</view>
+      <view class="rs">{{a}} {{scoreA}} : {{scoreB}} {{b}}</view>
+    </view>
+    <view class="sec-title">谁该喝酒 🍻</view>
+    <view class="drink safe"><view class="dn">🏆 {{vm.winner}}</view><view class="da ok">免喝</view></view>
+    <view class="drink"><view class="dn">{{vm.loser}}</view><view class="da no">喝 {{vm.pen}} 杯 🍶</view></view>
+    <view class="pbtn gold big" hover-class="pbtn-press" bindtap="onAgain">再 来 一 局</view>
+    <view class="pbtn ghost" hover-class="pbtn-press" bindtap="onBackSetup">返回设置</view>
+  </block>
+
+  <!-- 进行中(shoot / power / save / reveal) -->
+  <block wx:else>
+    <view class="sc-score">
+      <view class="sc-side {{vm.aShoot ? 'on' : ''}}">
+        <view class="nm">{{a}}</view><view class="gg">{{scoreA}}</view>
+        <view class="role">{{vm.aShoot ? '主罚 ⚽️' : '扑救 🧤'}}</view>
+      </view>
+      <view class="sc-vs">VS</view>
+      <view class="sc-side {{!vm.aShoot ? 'on' : ''}}">
+        <view class="nm">{{b}}</view><view class="gg">{{scoreB}}</view>
+        <view class="role">{{!vm.aShoot ? '主罚 ⚽️' : '扑救 🧤'}}</view>
+      </view>
+    </view>
+
+    <block wx:if="{{view === 'shoot'}}">
+      <view class="sc-prompt">把手机交给 <text class="hl">{{vm.shooter}}</text></view>
+      <view class="sc-hint">{{vm.roundLabel}} · 秘密选择射门方向(别让对方看到)</view>
+      <view class="goal"><view class="sball" style="left:50%;bottom:-60rpx">⚽️</view></view>
+      <view class="sc-dirs">
+        <view class="pbtn" hover-class="pbtn-press" data-d="left" bindtap="onDir">← 左</view>
+        <view class="pbtn" hover-class="pbtn-press" data-d="center" bindtap="onDir">↑ 中</view>
+        <view class="pbtn" hover-class="pbtn-press" data-d="right" bindtap="onDir">右 →</view>
+      </view>
+    </block>
+
+    <block wx:elif="{{view === 'power'}}">
+      <view class="sc-prompt"><text class="hl">{{vm.shooter}}</text> 蓄力射门</view>
+      <view class="sc-hint">停在绿色刁钻区 = 必进!两端红色 = 射偏</view>
+      <view class="goal"><view class="sball" style="left:{{vm.ballLeft}};bottom:-60rpx">⚽️</view></view>
+      <view class="pwr">
+        <view class="pwr-sweet"></view>
+        <view class="pwr-marker" style="left:{{marker}}%"></view>
+      </view>
+      <view class="pbtn gold big" hover-class="pbtn-press" bindtap="onKick">射 门!</view>
+    </block>
+
+    <block wx:elif="{{view === 'save'}}">
+      <view class="sc-prompt">把手机交给 <text class="hl">{{vm.keeper}}</text></view>
+      <view class="sc-hint">{{vm.roundLabel}} · 秘密选择扑救方向</view>
+      <view class="goal"><view class="skeeper" style="left:50%">🧤</view></view>
+      <view class="sc-dirs">
+        <view class="pbtn" hover-class="pbtn-press" data-d="left" bindtap="onDir">← 左扑</view>
+        <view class="pbtn" hover-class="pbtn-press" data-d="center" bindtap="onDir">↑ 中路</view>
+        <view class="pbtn" hover-class="pbtn-press" data-d="right" bindtap="onDir">右扑 →</view>
+      </view>
+    </block>
+
+    <block wx:elif="{{view === 'reveal'}}">
+      <view class="goal">
+        <view class="skeeper" style="left:{{vm.keeperLeft}};transform:translateX(-50%) rotate({{vm.keeperDeg}}deg)">🧤</view>
+        <view class="sball" style="left:{{vm.ballLeft}};bottom:{{vm.ballBottom}};transform:translateX(-50%) rotate({{vm.ballDeg}}deg)">⚽️</view>
+      </view>
+      <view class="sc-big {{vm.cls}}">{{vm.txt}}</view>
+      <view class="sc-hint">{{vm.line}}</view>
+      <view class="pbtn gold big" hover-class="pbtn-press" bindtap="onNextKick">{{vm.btn}}</view>
+    </block>
+  </block>
+</view>

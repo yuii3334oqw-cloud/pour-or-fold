@@ -1,0 +1,14 @@
+<template name="pcard">
+  <view class="pc {{size}}">
+    <text class="pc-r {{red ? 'red' : ''}}">{{rs}}</text>
+    <text class="pc-s {{red ? 'red' : ''}}">{{sc}}</text>
+  </view>
+</template>
+
+<template name="pback">
+  <view class="pc back {{size}}"><text class="pc-9">9</text></view>
+</template>
+
+<template name="pempty">
+  <view class="pc empty {{size}}"></view>
+</template>
