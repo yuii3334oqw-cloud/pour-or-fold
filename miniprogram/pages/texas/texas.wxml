@@ -1,0 +1,145 @@
+<import src="/tpl/cards.wxml"/>
+<view class="wrap">
+
+  <!-- 设置 -->
+  <block wx:if="{{view === 'setup'}}">
+    <view class="sec-title">人数</view>
+    <view class="panel">
+      <view class="count-row">
+        <view class="pbtn stepper" hover-class="pbtn-press" bindtap="onMinus">−</view>
+        <view class="num">{{numPlayers}}</view>
+        <view class="pbtn stepper" hover-class="pbtn-press" bindtap="onPlus">+</view>
+      </view>
+      <view class="sec-title">玩家昵称</view>
+      <view class="name-row" wx:for="{{nameList}}" wx:key="index">
+        <view class="seat-num">{{index + 1}}</view>
+        <input class="name-ipt" value="{{item}}" maxlength="8" data-i="{{index}}" bindinput="onName"/>
+      </view>
+    </view>
+    <view class="sec-title">玩法规则</view>
+    <view class="panel rules">
+      <view class="rule-line">· 小盲 = 半杯,大盲 = 一杯;下注 / 跟注 / 加注 = 往池子倒酒。</view>
+      <view class="rule-line">· 先轮流传手机,每人按住看自己的底牌,看完盖上。</view>
+      <view class="rule-line">· 依次行动:弃牌 / 过牌 / 跟注 / 加注(0.5–5 杯可调)。</view>
+      <view class="rule-line">· 自动发翻牌 / 转牌 / 河牌,摊牌自动比牌型。</view>
+      <view class="rule-line">· 赢家免喝,其余每人喝掉自己倒进池子的酒 🍶。</view>
+    </view>
+    <view class="pbtn gold big" hover-class="pbtn-press" bindtap="onStart">开 始 发 牌</view>
+    <view class="foot">请理性饮酒 · 切勿酒驾</view>
+  </block>
+
+  <!-- 牌桌 -->
+  <block wx:elif="{{view === 'table'}}">
+    <view class="felt {{feltGreen ? 'green' : ''}}">
+      <view class="street">{{t.street}}</view>
+      <view class="comm">
+        <block wx:for="{{t.comm}}" wx:key="index">
+          <template wx:if="{{item.face}}" is="pcard" data="{{rs: item.rs, sc: item.sc, red: item.red, size: 'sz-md'}}"/>
+          <template wx:else is="pempty" data="{{size: 'sz-md'}}"/>
+        </block>
+      </view>
+      <view class="pot-label">P O T · 池底</view>
+      <view class="pot-val">{{t.pot}}<text class="pot-unit">杯</text></view>
+    </view>
+
+    <view class="seats">
+      <view class="seat {{p.active ? 'active' : ''}} {{p.folded ? 'folded' : ''}}"
+            wx:for="{{t.players}}" wx:for-item="p" wx:key="index">
+        <view class="seat-top">
+          <view class="seat-name">{{p.name}}<text class="badge" wx:if="{{p.d}}">D</text><text class="badge" wx:if="{{p.sb}}">SB</text><text class="badge" wx:if="{{p.bb}}">BB</text></view>
+          <view class="seat-cards">
+            <template is="pback" data="{{size: 'sz-sm'}}"/>
+            <template is="pback" data="{{size: 'sz-sm'}}"/>
+          </view>
+        </view>
+        <view class="seat-stat {{p.folded ? 'fold-txt' : ''}}">{{p.stat}}</view>
+        <view class="seat-bot">
+          <view class="chip">{{p.bet}}</view>
+          <view class="pbtn peek {{p.folded ? 'disabled' : ''}}" hover-class="pbtn-press" data-i="{{index}}" bindtap="onPeekTap">看牌</view>
+        </view>
+      </view>
+    </view>
+
+    <view class="action-bar">
+      <view class="turn-of">轮到 <text class="hl">{{t.turnName}}</text> 行动 · 请把手机递给 TA</view>
+      <view class="acts">
+        <view class="pbtn danger" hover-class="pbtn-press" bindtap="onFold">弃牌</view>
+        <view class="pbtn" wx:if="{{t.canCheck}}" hover-class="pbtn-press" bindtap="onCheck">过牌</view>
+        <view class="pbtn" wx:else hover-class="pbtn-press" bindtap="onCall">{{t.callLabel}}</view>
+      </view>
+      <view class="pbtn gold" hover-class="pbtn-press" bindtap="onRaise">{{t.raiseLabel}}</view>
+      <view class="raise-row">
+        <view class="pbtn stepper" hover-class="pbtn-press" bindtap="onRaiseMinus">−</view>
+        <view class="raise-amt">{{t.raiseStr}}<text class="unit">杯</text></view>
+        <view class="pbtn stepper" hover-class="pbtn-press" bindtap="onRaisePlus">+</view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 结算 -->
+  <block wx:elif="{{view === 'result'}}">
+    <view class="banner">
+      <view class="rt">{{result.title}}</view>
+      <view class="rs">{{result.sub}}</view>
+    </view>
+    <view class="sec-title">谁该喝酒 🍻</view>
+    <view class="drink {{d.safe ? 'safe' : ''}}" wx:for="{{result.drinks}}" wx:for-item="d" wx:key="index">
+      <view class="dn">{{d.name}}<text class="tag" wx:if="{{d.tag}}">{{d.tag}}</text></view>
+      <view class="da {{d.safe ? 'ok' : 'no'}}">{{d.amt}}</view>
+    </view>
+    <block wx:if="{{result.showCards}}">
+      <view class="sec-title">亮牌</view>
+      <view class="sd {{r.win ? 'win' : ''}}" wx:for="{{result.rows}}" wx:for-item="r" wx:key="index">
+        <view class="sd-cards">
+          <template is="pcard" wx:for="{{r.cards}}" wx:for-item="c" wx:key="index"
+                    data="{{rs: c.rs, sc: c.sc, red: c.red, size: 'sz-sm'}}"/>
+        </view>
+        <view class="sd-info">{{r.name}} {{r.win ? '🏆' : ''}} · {{r.hand}}</view>
+      </view>
+      <view class="sec-title">公共牌</view>
+      <view class="sd">
+        <view class="sd-cards">
+          <template is="pcard" wx:for="{{result.commRow}}" wx:for-item="c" wx:key="index"
+                    data="{{rs: c.rs, sc: c.sc, red: c.red, size: 'sz-sm'}}"/>
+        </view>
+      </view>
+    </block>
+    <view class="pbtn gold big" hover-class="pbtn-press" bindtap="onNextHand">下 一 局</view>
+    <view class="pbtn ghost" hover-class="pbtn-press" bindtap="onBackSetup">结束 · 重新设置</view>
+    <view class="foot">请理性饮酒 · 切勿酒驾</view>
+  </block>
+</view>
+
+<!-- 看牌覆盖层 -->
+<view class="overlay" wx:if="{{ov}}">
+  <block wx:if="{{ov.type === 'deal' || ov.type === 'hold'}}">
+    <view class="ov-title" wx:if="{{ov.type === 'deal'}}">请把手机交给</view>
+    <view class="ov-name">{{ov.name}}</view>
+    <view class="ov-sub" wx:if="{{ov.type === 'deal'}}">第 {{ov.step}} 位 · 看完盖上再传给下一位</view>
+    <view class="ov-sub" wx:else>按住查看 · 松手立即盖回</view>
+    <view class="hold-pad {{ov.holding ? 'holding' : ''}}"
+          bindtouchstart="onHoldStart" bindtouchend="onHoldEnd" bindtouchcancel="onHoldEnd">
+      <view class="hold-cards">
+        <block wx:if="{{ov.holding}}">
+          <template is="pcard" data="{{rs: ov.c0.rs, sc: ov.c0.sc, red: ov.c0.red, size: 'sz-lg'}}"/>
+          <template is="pcard" data="{{rs: ov.c1.rs, sc: ov.c1.sc, red: ov.c1.red, size: 'sz-lg'}}"/>
+        </block>
+        <block wx:else>
+          <template is="pback" data="{{size: 'sz-lg'}}"/>
+          <template is="pback" data="{{size: 'sz-lg'}}"/>
+        </block>
+      </view>
+      <view class="hold-hand" wx:if="{{ov.holding}}">当前牌型 · {{ov.hand}}</view>
+      <view class="hold-hint">👇 按住查看底牌 · 松手盖回</view>
+    </view>
+    <view class="pbtn gold big ov-btn" hover-class="pbtn-press" bindtap="onPeekDone">{{ov.type === 'deal' ? '看好了 · 下一位 →' : '盖上 · 完成'}}</view>
+  </block>
+  <block wx:elif="{{ov.type === 'confirm'}}">
+    <view class="ov-title">确认身份</view>
+    <view class="ov-sub">只有 {{ov.name}} 本人可以查看这副底牌</view>
+    <view class="ov-row">
+      <view class="pbtn ghost" hover-class="pbtn-press" bindtap="onPeekCancel">不是我</view>
+      <view class="pbtn gold" hover-class="pbtn-press" bindtap="onPeekConfirm">我是 {{ov.name}}</view>
+    </view>
+  </block>
+</view>

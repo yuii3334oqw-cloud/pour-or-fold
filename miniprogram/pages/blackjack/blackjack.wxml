@@ -1,0 +1,97 @@
+<import src="/tpl/cards.wxml"/>
+<view class="wrap">
+
+  <!-- 设置 -->
+  <block wx:if="{{view === 'setup'}}">
+    <view class="sec-title">人数(含庄家)</view>
+    <view class="panel">
+      <view class="count-row">
+        <view class="pbtn stepper" hover-class="pbtn-press" bindtap="onMinus">−</view>
+        <view class="num">{{n}}</view>
+        <view class="pbtn stepper" hover-class="pbtn-press" bindtap="onPlus">+</view>
+      </view>
+      <view class="sec-title">玩家昵称</view>
+      <view class="name-row" wx:for="{{nameList}}" wx:key="index">
+        <view class="seat-num">{{index + 1}}</view>
+        <input class="name-ipt" value="{{item}}" maxlength="8" data-i="{{index}}" bindinput="onName"/>
+      </view>
+      <view class="sec-title">每局底注(杯)</view>
+      <view class="count-row">
+        <view class="pbtn stepper" hover-class="pbtn-press" bindtap="onBetMinus">−</view>
+        <view class="num">{{betStr}}</view>
+        <view class="pbtn stepper" hover-class="pbtn-press" bindtap="onBetPlus">+</view>
+      </view>
+    </view>
+    <view class="sec-title">玩法规则</view>
+    <view class="panel rules">
+      <view class="rule-line">· 每局一人坐庄,其余为闲家,下一局轮流换庄。</view>
+      <view class="rule-line">· 各自 2 张明牌,最接近 21 不爆为目标(A=1/11,JQK=10)。</view>
+      <view class="rule-line">· 闲家依次要牌 / 停牌,庄家最后行动。</view>
+      <view class="rule-line">· 爆牌 / 输给庄家 → 自己喝底注;赢庄家 → 庄家喝。</view>
+      <view class="rule-line">· 庄家爆牌 → 没爆的闲家都赢,庄家照单全喝 🍶。</view>
+    </view>
+    <view class="pbtn gold big" hover-class="pbtn-press" bindtap="onStart">开 始 发 牌</view>
+    <view class="foot">请理性饮酒 · 切勿酒驾</view>
+  </block>
+
+  <!-- 牌桌 -->
+  <block wx:elif="{{view === 'table'}}">
+    <view class="felt green">
+      <view class="street">{{t.phase}}</view>
+      <view class="bj-dealer-name">庄家 · {{t.dealerName}}<text class="badge">D</text></view>
+      <view class="comm">
+        <block wx:for="{{t.dCards}}" wx:for-item="c" wx:key="index">
+          <template wx:if="{{c.back}}" is="pback" data="{{size: 'sz-md'}}"/>
+          <template wx:else is="pcard" data="{{rs: c.rs, sc: c.sc, red: c.red, size: 'sz-md'}}"/>
+        </block>
+      </view>
+      <view class="pot-val {{t.dBust ? 'bust' : ''}}" style="font-size:52rpx">{{t.dVal}}</view>
+    </view>
+
+    <view class="seats">
+      <view class="seat {{s.active ? 'active' : ''}} {{s.bust ? 'folded' : ''}}"
+            wx:for="{{t.seats}}" wx:for-item="s" wx:key="index">
+        <view class="seat-top">
+          <view class="seat-name">{{s.name}}</view>
+          <view class="seat-stat" style="font-size:26rpx;font-weight:700;color:#e7cd72">{{s.status}}</view>
+        </view>
+        <view class="sd-cards">
+          <template is="pcard" wx:for="{{s.cards}}" wx:for-item="c" wx:key="index"
+                    data="{{rs: c.rs, sc: c.sc, red: c.red, size: 'sz-sm'}}"/>
+        </view>
+      </view>
+    </view>
+
+    <view class="action-bar">
+      <view class="turn-of">轮到 <text class="hl">{{t.actor}}</text>({{t.role}})· 请把手机递给 TA</view>
+      <view class="acts">
+        <view class="pbtn" hover-class="pbtn-press" bindtap="onHit">要 牌</view>
+        <view class="pbtn gold" hover-class="pbtn-press" bindtap="onStand">停 牌</view>
+      </view>
+    </view>
+  </block>
+
+  <!-- 结算 -->
+  <block wx:elif="{{view === 'result'}}">
+    <view class="banner">
+      <view class="rt">{{result.title}}</view>
+      <view class="rs">{{result.sub}}</view>
+    </view>
+    <view class="sec-title">谁该喝酒 🍻</view>
+    <view class="drink {{d.safe ? 'safe' : ''}}" wx:for="{{result.drinks}}" wx:for-item="d" wx:key="index">
+      <view class="dn">{{d.name}}<text class="tag" wx:if="{{d.tag}}">{{d.tag}}</text></view>
+      <view class="da {{d.safe ? 'ok' : 'no'}}">{{d.amt}}</view>
+    </view>
+    <view class="sec-title">本局明牌</view>
+    <view class="sd {{r.win ? 'win' : ''}}" wx:for="{{result.rows}}" wx:for-item="r" wx:key="index">
+      <view class="sd-cards">
+        <template is="pcard" wx:for="{{r.cards}}" wx:for-item="c" wx:key="index"
+                  data="{{rs: c.rs, sc: c.sc, red: c.red, size: 'sz-sm'}}"/>
+      </view>
+      <view class="sd-info">{{r.name}}</view>
+    </view>
+    <view class="pbtn gold big" hover-class="pbtn-press" bindtap="onNext">下一局 · 轮流换庄</view>
+    <view class="pbtn ghost" hover-class="pbtn-press" bindtap="onBackSetup">结束 · 重新设置</view>
+    <view class="foot">请理性饮酒 · 切勿酒驾</view>
+  </block>
+</view>

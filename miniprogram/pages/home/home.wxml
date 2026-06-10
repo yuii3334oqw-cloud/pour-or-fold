@@ -1,0 +1,49 @@
+<view class="wrap home-wrap">
+  <view class="hero">
+    <view class="logo">POUR OR FOLD</view>
+    <view class="tag">▚  P I X E L  P A R T Y  ▞</view>
+  </view>
+  <view class="sec-title">▶ 选 择 关 卡</view>
+
+  <view class="gcard" hover-class="pbtn-press" bindtap="goTexas">
+    <view class="gicon" style="border-color:#5fa6e0;background:#10243a">🃏</view>
+    <view class="gbody">
+      <view class="gtitle">德州扑克</view>
+      <view class="gdesc">2–8 人 · 一台手机传着玩,倒酒下注</view>
+      <view class="gpill" style="color:#5fa6e0;border-color:#5fa6e0">2-8 P</view>
+    </view>
+    <view class="garrow">▶</view>
+  </view>
+
+  <view class="gcard" hover-class="pbtn-press" bindtap="goBJ">
+    <view class="gicon" style="border-color:#e08a5f;background:#3a1c10">🂡</view>
+    <view class="gbody">
+      <view class="gtitle">21 点</view>
+      <view class="gdesc">轮流坐庄 · 爆牌或输庄就喝,赢庄换庄喝</view>
+      <view class="gpill" style="color:#e08a5f;border-color:#e08a5f">2-8 P</view>
+    </view>
+    <view class="garrow">▶</view>
+  </view>
+
+  <view class="gcard" hover-class="pbtn-press" bindtap="goSoccer">
+    <view class="gicon" style="border-color:#5fcf86;background:#0e2c1a">⚽️</view>
+    <view class="gbody">
+      <view class="gtitle">点球大战</view>
+      <view class="gdesc">瞄准 + 蓄力射门 vs 门将扑救的博弈</view>
+      <view class="gpill" style="color:#5fcf86;border-color:#5fcf86">2 P · 对战</view>
+    </view>
+    <view class="garrow">▶</view>
+  </view>
+
+  <view class="gcard" hover-class="pbtn-press" bindtap="goXJ">
+    <view class="gicon" style="border-color:#d98fd0;background:#2c1230">👑</view>
+    <view class="gbody">
+      <view class="gtitle">小姐牌</view>
+      <view class="gdesc">抽牌触发整蛊规则 · A点杀/2小姐/K定酒…</view>
+      <view class="gpill" style="color:#d98fd0;border-color:#d98fd0">3-12 P</view>
+    </view>
+    <view class="garrow">▶</view>
+  </view>
+
+  <view class="foot">请理性饮酒 · 切勿酒驾 · 未成年人请勿饮酒</view>
+</view>
