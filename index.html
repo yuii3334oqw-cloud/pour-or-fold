@@ -460,7 +460,8 @@ body.table-mode #screen-bj-table .foot{flex:none;}
   <div class="topbar" id="topbar">
     <div class="brand">POUR <span style="color:var(--muted)">or</span> FOLD</div>
     <div class="top-actions">
-      <button class="icon-btn" id="soundBtn" aria-label="音效开关">🔊</button>
+      <button class="icon-btn no-tr" id="langBtn" aria-label="语言/Language">EN</button>
+      <button class="icon-btn no-tr" id="soundBtn" aria-label="音效开关">🔊</button>
       <button class="menu-btn" id="homeBtn" aria-label="返回主菜单">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v9h5v-5h4v5h5v-9"/></svg>
         <span>主菜单</span>
@@ -1799,6 +1800,217 @@ function xjRender(){
 }
 
 /* =========================================================
+   一键翻译(中 / EN)
+   原理:把每个文本节点里的中文片段按词典替换;MutationObserver
+   监听重渲染自动翻译;切回中文时从已存原文无损还原。
+========================================================= */
+let LANG = 'zh';
+const I18N_ORIG = new WeakMap();
+let I18N_MO = null;
+const EN_DICT = [
+  /* —— 游戏 / 首页 —— */
+  ['德州扑克','Texas Hold’em'],['21 点','Blackjack'],['21点','Blackjack'],
+  ['点球大战','Penalty Shootout'],['小姐牌','Miss Card'],
+  ['选 择 关 卡','SELECT GAME'],['主菜单','Menu'],
+  ['2–8 人 · 一台手机传着玩,倒酒下注','2–8 players · pass one phone, pour to bet'],
+  ['轮流坐庄 · 爆牌或输庄就喝,赢庄换庄喝','Take turns as dealer · bust or lose = drink; beat dealer & dealer drinks'],
+  ['瞄准 + 蓄力射门 vs 门将扑救的博弈','Aim + power shot vs the keeper’s dive'],
+  ['抽牌触发整蛊规则 · A点杀/2小姐/K定酒…','Draw cards for dares · A/2/K rules…'],
+  ['对战','Duel'],
+  ['请理性饮酒 · 切勿酒驾 · 未成年人请勿饮酒','Drink responsibly · No drunk driving · 18+ only'],
+  ['请理性饮酒 · 切勿酒驾','Drink responsibly · No drunk driving'],
+  /* —— 设置 —— */
+  ['人数(含庄家)','Players (incl. dealer)'],['人数(3–12)','Players (3–12)'],['人数','Players'],
+  ['玩家昵称(按座位顺序)','Player names (seat order)'],['玩家昵称','Player names'],
+  ['每局底注(杯)','Ante per round (cups)'],['玩法规则','Rules'],['玩法','How to play'],
+  ['玩家','Player '],
+  ['开 始 发 牌','DEAL'],['开 始 抽 牌','START'],['开 始 对 决','START'],
+  ['开始 · 重新设置','Restart'],['返回主菜单','Back to menu'],['返回设置','Back to setup'],
+  ['返回牌桌','Back to game'],['返回','Back'],['取消','Cancel'],['结束','Quit'],
+  /* —— 通用动作 / 牌桌 —— */
+  [' 行动 · 请把手机递给 TA',' acts · pass the phone over'],
+  ['(庄家)· 请把手机递给 TA',' (Dealer) · pass the phone over'],
+  ['(闲家)· 请把手机递给 TA',' (Player) · pass the phone over'],
+  [' 抽牌 · 请把手机递给 TA',' draws · pass the phone over'],
+  ['轮到 ','Turn: '],
+  ['弃牌','Fold'],['过牌','Check'],['跟注 ','Call '],['加注 ','Raise '],['下注 ','Bet '],
+  ['要 牌','Hit'],['停 牌','Stand'],['要牌','Hit'],['停牌','Stand'],
+  ['看牌','Cards'],['已倒入 ','In: '],['本轮 ','Bet: '],['已弃牌','Folded'],
+  ['半杯','half a cup'],[' 杯',' cup'],[' · 池底',''],
+  /* —— 看牌覆盖层 —— */
+  ['请把手机交给','Pass the phone to'],
+  [' 位 · 看完盖上再传给下一位',' · cover it, then pass on'],['第 ','#'],
+  ['按住查看 · 松手立即盖回','Hold to view · release to cover'],
+  ['按住查看底牌 · 松手盖回','Hold to view · release to cover'],
+  ['按住查看底牌','Hold to view your cards'],
+  ['当前牌型 · ','Hand · '],['看好了 · 下一位 →','Done · Next →'],['盖上 · 完成','Cover · Done'],
+  ['确认身份','Confirm identity'],[' 本人可以查看这副底牌',' may view these cards'],['只有 ','Only '],
+  ['不是我','Not me'],['我是 ','I’m '],
+  /* —— 结算 / 牌型 —— */
+  ['谁该喝酒 🍻','Who drinks 🍻'],['免喝 🎉','Safe 🎉'],['没下注 · 免喝','No bet · safe'],
+  ['免喝','Safe'],['赢家','Winner'],
+  [' 赢得这一池 ',' wins the pot of '],[' · 牌型:',' · Hand: '],[' · 其余玩家全部弃牌',' · everyone else folded'],
+  ['🏆 平局:','🏆 Tie: '],[' · 共 ',' · total '],
+  ['亮牌','Showdown'],['公共牌','Community'],['本局明牌','Hands this round'],
+  ['下一局 · 轮流换庄','Next · rotate dealer'],['下 一 局','Next Hand'],
+  ['皇家同花顺','Royal Flush'],['同花顺','Straight Flush'],['四条','Quads'],['葫芦','Full House'],
+  ['同花','Flush'],['顺子','Straight'],['三条','Trips'],['两对','Two Pair'],['一对','Pair'],['高牌','High Card'],
+  /* —— 21 点 —— */
+  ['庄家爆牌!','Dealer busts!'],['本 局 结 算','RESULT'],['庄家 · ','Dealer · '],
+  ['庄家','Dealer'],['闲家','Player'],['赢庄','Beat dealer'],['平 · 免喝','Push · safe'],
+  ['21点!','21!'],['爆 ','Bust '],['停 ','Stand '],['爆牌','Bust'],[' 点',' pts'],
+  /* —— 点球大战 —— */
+  ['点球大战 · 2 人对决','Penalty Shootout · 1 v 1'],['输家罚酒(杯)','Loser drinks (cups)'],
+  ['主罚 ⚽️','Shooter ⚽️'],['扑救 🧤','Keeper 🧤'],
+  [' 轮 / 共 5 轮',' / 5 rounds'],['突然死亡 · 第 ','Sudden Death #'],[' 轮',''],
+  ['秘密选择射门方向(别让对方看到)','Secretly pick your shot (hide it)'],
+  ['秘密选择扑救方向','Secretly pick your dive'],
+  ['把手机交给 ','Pass the phone to '],[' 蓄力射门',' — power up'],
+  ['停在绿色刁钻区 = 必进!两端红色 = 射偏','Stop in the green zone = sure goal! Red ends = miss'],
+  ['射 门!','SHOOT!'],
+  ['← 左扑','← Dive L'],['↑ 中路','↑ Mid'],['右扑 →','Dive R →'],['← 左','← L'],['↑ 中','↑ Mid'],['右 →','R →'],
+  ['⚽️ 进 球!','⚽️ GOAL!'],['🧤 扑 出!','🧤 SAVED!'],['😵 射 偏!','😵 MISS!'],
+  ['下 一 球','Next Kick'],['查看战况','See result'],['再 来 一 局','Play Again'],
+  ['(刁钻)',' (top corner)'],['射左','shot L'],['射中','shot M'],['射右','shot R'],
+  ['扑左','dove L'],['扑中','dove M'],['扑右','dove R'],
+  /* —— 小姐牌 —— */
+  ['小姐牌 · 规则总览','Miss Card · All Rules'],
+  ['牌堆剩 ','Deck: '],[' 张',' left'],[' · 下张 K 喝 ',' · next K drinks '],
+  ['抽 牌','DRAW'],['🎫 出尿牌','🎫 Pee Card'],['规则','Rules'],
+  ['指定并继续 →','Set & continue →'],['指定「下一个抽到 K 的人」喝几杯','Set how many cups the next K-drawer gets'],
+  ['🎯 点杀 · 指定一人','🎯 Kill · pick someone'],['🎲 随机抽一个','🎲 Random'],
+  [' 指定一个倒霉蛋',' picks a victim'],['💀 ',' 💀 '],
+  [' 判 ',' makes '],[' 喝几杯:',' drink how many cups:'],['就 这 么 定!','Lock it in!'],
+  ['被点杀!','Killed! '],['完成 · 下一位 →','Done · Next →'],['下 一 位 →','Next →'],
+  [' 选择对手',' picks an opponent'],['把手机交给 ','Pass the phone to '],
+  ['秘密出拳(别让对方看到)','Throw in secret (hide it)'],
+  [' 输',' loses'],['再 出 一 次','Throw again'],['再来一局','Rematch'],
+  ['🎫 打出尿牌','🎫 Play Pee Card'],['出 牌 · 去 撒 尿!','Play it · go pee!'],['🚽 放 行!','🚽 Allowed!'],
+  ['尿牌已用掉,尽情去吧~ 没尿牌的继续憋着 😆','Pee card used — off you go! No card = hold it 😆'],
+  ['打出一张「尿牌」= 准许本人去撒尿 🚽,此牌用掉作废。没有尿牌的人,中途不许离桌上厕所!','Play a Pee Card = you may go to the toilet 🚽 (card is used up). No card = no leaving the table!'],
+  ['✊ 开始猜拳(输喝半杯)','✊ Rock-Paper-Scissors (loser: half cup)'],
+  ['✊ 用猜拳决斗(输喝 1 杯)','✊ Settle by RPS (loser: 1 cup)'],
+  ['他们自己玩 · 下一位 →','They play it out · Next →'],
+  ['✊ 猜拳决斗(输喝 ','✊ RPS duel (loser drinks '],[' 杯)',' cups)'],
+  /* —— 小姐牌 牌面规则 —— */
+  ['A · 点杀','A · Kill'],['2 · 小姐 👑','2 · Miss 👑'],['3 · 逛三园','3 · Three Gardens'],
+  ['4 · 找人决斗','4 · Duel'],['5 · 石头剪刀布','5 · Rock-Paper-Scissors'],['6 · 摸鼻子','6 · Touch Nose'],
+  ['7 · 七的倍数','7 · Multiples of 7'],['8 · 尿牌 🎫','8 · Pee Card 🎫'],['9 · 自己喝','9 · You Drink'],
+  ['10 · 神经病 🤪','10 · Madman 🤪'],['J · 上家喝','J · Left drinks'],['Q · 下家喝','Q · Right drinks'],
+  ['K · 定酒','K · Set Drink'],
+  [' 点杀任意一人,并自己决定 TA 喝几杯!(也可玩蒙眼版:蒙一人眼,指人问 TA 喝不喝)',
+   ' kills anyone and decides how many cups they drink! (Or blindfold version: cover one player’s eyes, point at people and ask if they drink.)'],
+  [' 成为「小姐」,要立刻亮明身份。之后谁喝酒都能点小姐陪喝半杯,陪喝后要说「谢谢老板」——直到下一张 2 出现才换人/解除。',
+   ' becomes the “Miss” and must announce it. Anyone drinking can make the Miss drink half a cup; she must say “thank you, boss” — until the next 2 is drawn.'],
+  [' 开始「逛三园」:轮流说 动物园/植物园/水果园 里的东西,不能重复、不能卡壳,出错者喝半杯。',
+   ' starts “Three Gardens”: take turns naming things from the zoo / garden / orchard — no repeats, no hesitating; mistakes drink half a cup.'],
+  [' 点名一人决斗,玩什么自己定(猜拳、划拳、闷酒…),输的人喝一杯!',
+   ' challenges someone to a duel — your choice of game (RPS, finger-guessing, chug-off…); loser drinks a cup!'],
+  [' 和大家一起出拳,每输一轮 +半杯,可连续淘汰到只剩一人。',
+   ' plays RPS against everyone; each loss = +half a cup, eliminate down to the last one.'],
+  [' 不要出声,悄悄开始摸鼻子;其他人察觉后也跟着偷偷摸——最后一个摸的人喝半杯。',
+   ' silently starts touching their nose; others quietly follow — the last to touch drinks half a cup.'],
+  [' 开始报数,遇到 7、含 7、或 7 的倍数 要拍桌说「过」并反向,出错者喝一杯。',
+   ' starts counting; on 7, any number with 7, or a multiple of 7, slap the table and say “pass” (reverse direction); mistakes drink a cup.'],
+  [' 获得一张「尿牌」收好——有尿牌才能去撒尿!没有尿牌的人中途不许离桌上厕所。想去时点「出尿牌」打出(作废)。',
+   ' gets a “Pee Card” — only with one may you go to the toilet! No card = no leaving the table. Tap “Pee Card” to play it.'],
+  [' 自己喝一杯,认栽 🍶。',' drinks a cup. Tough luck 🍶.'],
+  [' 先大喊一声「我是神经病!」,此后谁搭理 TA(回应/对话)谁喝——直到下一张 10 出现才换人。',
+   ' shouts “I’m the madman!” — anyone who responds to / talks to them drinks, until the next 10 is drawn.'],
+  ['从 ','From '],
+  /* —— 规则总览简述 —— */
+  ['点杀:指定一人,自己定喝几杯','Kill: pick someone & set their cups'],
+  ['小姐:当小姐被点陪喝,下张2换人','Miss: drink-along role, until next 2'],
+  ['逛三园:接龙说不出喝','Three Gardens: blank out = drink'],
+  ['找人决斗:玩啥自己定,输了喝','Duel: any game, loser drinks'],
+  ['石头剪刀布:每输+半杯','RPS: each loss +half cup'],
+  ['摸鼻子:偷偷摸,最后一个喝','Touch nose: last one drinks'],
+  ['七的倍数:报错喝','Multiples of 7: mistake drinks'],
+  ['尿牌:有它才能去厕所,出牌放行','Pee Card: required to use the toilet'],
+  ['自己喝','You drink'],
+  ['神经病:喊我是神经病,搭理者喝,下张10换人','Madman: who responds drinks, until next 10'],
+  ['上家喝','Left drinks'],['下家喝','Right drinks'],
+  ['定酒:首张喝半杯并指定下张K喝几杯','Set Drink: chain designation each K'],
+  /* —— 设置页规则段落 —— */
+  ['小盲 = 半杯,大盲 = 一杯;下注 / 跟注 / 加注 = 往池子倒酒。','Small blind = half cup, big blind = 1 cup; bet/call/raise = pour into the pot.'],
+  ['先轮流传手机,每人按住看自己的底牌,看完盖上。','Pass the phone around; each holds to view their hole cards, then covers them.'],
+  ['依次行动:弃牌 / 过牌 / 跟注 / 加注(0.5–5 杯可调)。','Act in order: fold / check / call / raise (0.5–5 cups).'],
+  ['自动发翻牌 / 转牌 / 河牌,摊牌自动比牌型。','Auto flop / turn / river; auto showdown.'],
+  ['赢家免喝,其余每人喝掉自己倒进池子的酒 🍶。','Winner is safe; everyone else drinks what they poured in 🍶.'],
+  ['每局一人坐庄,其余为闲家,下一局轮流换庄。','One dealer per round; others are players; dealer rotates each round.'],
+  ['各自 2 张明牌,最接近 21 不爆为目标(A=1/11,JQK=10)。','2 face-up cards each; get closest to 21 without busting (A=1/11, JQK=10).'],
+  ['闲家依次要牌 / 停牌,庄家最后行动。','Players hit / stand in turn; dealer acts last.'],
+  ['爆牌 / 输给庄家 → 自己喝底注;赢庄家 → 庄家喝。','Bust / lose to dealer & you drink the ante; beat dealer & dealer drinks.'],
+  ['庄家爆牌 → 没爆的闲家都赢,庄家照单全喝 🍶。','Dealer busts & all non-bust players win; dealer drinks it all 🍶.'],
+  ['双方轮流主罚,各 5 球;平局进入突然死亡。','Players alternate, 5 kicks each; a tie goes to sudden death.'],
+  ['射手秘密选方向 + 蓄力;门将秘密选扑救方向。','Shooter secretly picks direction + power; keeper secretly picks a dive.'],
+  ['蓄力停在绿色刁钻区 = 必进;两端红色 = 射偏。','Stop power in the green zone = sure goal; red ends = miss.'],
+  ['最终输家罚酒 🍶。','The loser drinks 🍶.'],
+  ['围一圈坐,轮流抽牌,按牌面执行整蛊规则。','Sit in a circle, take turns drawing, follow each card’s dare.'],
+  ['上家/下家按座位昵称自动判定;K 定酒链式累计。','Left/right auto-resolve by seat names; K “Set Drink” chains on.'],
+  ['抽完自动重新洗牌,玩到尽兴为止 🍻。','Auto-reshuffles when empty; play as long as you like 🍻.'],
+  /* —— 标语 —— */
+  ['返回主菜单?当前牌局将不会保留。','Back to menu? The current game will not be saved.']
+];
+function i18nInit() {
+  EN_DICT.sort((a, b) => b[0].length - a[0].length);
+}
+function trStr(s) {
+  for (let i = 0; i < EN_DICT.length; i++) {
+    const z = EN_DICT[i][0];
+    if (s.indexOf(z) >= 0) s = s.split(z).join(EN_DICT[i][1]);
+  }
+  return s;
+}
+const hasCJK = (s) => /[一-鿿]/.test(s);
+function trNode(n) {
+  if (!n) return;
+  if (n.nodeType === 3) {
+    const v = n.nodeValue;
+    if (v && hasCJK(v)) {
+      if (!I18N_ORIG.has(n)) I18N_ORIG.set(n, v);
+      const t = trStr(I18N_ORIG.get(n));
+      if (t !== n.nodeValue) n.nodeValue = t;
+    }
+    return;
+  }
+  if (n.nodeType === 1) {
+    const tag = n.nodeName;
+    if (tag === 'SCRIPT' || tag === 'STYLE' || n.classList.contains('no-tr')) return;
+    if (n.placeholder && hasCJK(n.placeholder)) {
+      if (!n.dataset.phZh) n.dataset.phZh = n.placeholder;
+      n.placeholder = trStr(n.dataset.phZh);
+    }
+    for (let c = n.firstChild; c; c = c.nextSibling) trNode(c);
+  }
+}
+function restoreNode(n) {
+  if (!n) return;
+  if (n.nodeType === 3) { if (I18N_ORIG.has(n)) n.nodeValue = I18N_ORIG.get(n); return; }
+  if (n.nodeType === 1) {
+    if (n.nodeName === 'SCRIPT' || n.nodeName === 'STYLE') return;
+    if (n.dataset && n.dataset.phZh) n.placeholder = n.dataset.phZh;
+    for (let c = n.firstChild; c; c = c.nextSibling) restoreNode(c);
+  }
+}
+function setLang(l) {
+  LANG = l;
+  if (l === 'en') {
+    trNode(document.body);
+    if (!I18N_MO) {
+      I18N_MO = new MutationObserver(muts => {
+        for (const m of muts) for (const nd of m.addedNodes) trNode(nd);
+      });
+      I18N_MO.observe(document.body, { childList: true, subtree: true });
+    }
+  } else {
+    if (I18N_MO) { I18N_MO.disconnect(); I18N_MO = null; }
+    restoreNode(document.body);
+  }
+  const b = $('langBtn'); if (b) b.textContent = (l === 'en') ? '中' : 'EN';
+}
+
+/* =========================================================
    事件绑定
 ========================================================= */
 $('startTexas').onclick=()=>{ show('setup'); renderNames(); };
@@ -1846,17 +2058,21 @@ $('soundBtn').onclick=()=>{
   if(soundOn){ ac(); sfx('tap'); }
 };
 
+// 一键中英切换
+$('langBtn').onclick=()=>{ sfx('tap'); buzz(HAPTIC.tap); setLang(LANG==='en'?'zh':'en'); };
+
 // 全局:所有按钮的波纹 + 声音/震动反馈(动作按钮按 data-act,发牌按 data-sfx,其余为轻点)
 document.addEventListener('pointerdown', e=>{
   const b=e.target.closest('.btn,.menu-btn,.icon-btn,.stepper,.game-card,.peek-btn');
   if(!b || b.disabled) return;
   spawnRipple(b, e.clientX, e.clientY);
-  if(b.id==='soundBtn') return;            // 开关自己处理
+  if(b.id==='soundBtn'||b.id==='langBtn') return;   // 开关自己处理
   const name=b.dataset.act || b.dataset.sfx || 'tap';
   sfx(name); buzz(HAPTIC[name]||HAPTIC.tap);
 }, true);
 
 // 初始
+i18nInit();
 G.names=['玩家1','玩家2','玩家3','玩家4'];
 show('home');
 applyTheme();
