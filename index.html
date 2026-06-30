@@ -51,8 +51,9 @@ html{height:100%;}
 body{min-height:100vh;min-height:100dvh;}
 body{
   background:
-    radial-gradient(circle at 1px 1px, rgba(212,175,55,.05) 1px, transparent 1.6px) 0 0/24px 24px,
-    radial-gradient(120% 80% at 50% -10%, #1a2230 0%, var(--bg) 60%),
+    radial-gradient(circle at 1px 1px, rgba(217,119,87,.045) 1px, transparent 1.5px) 0 0/20px 20px,
+    radial-gradient(130% 100% at 50% 0%, rgba(30,38,52,.9) 0%, transparent 55%),
+    radial-gradient(120% 90% at 50% 120%, rgba(0,0,0,.55) 0%, transparent 50%),
     var(--bg);
   background-attachment:fixed;
   color:var(--text);
@@ -96,6 +97,13 @@ h1,h2,h3,.brand,.bignum,.btn-lg{font-family:var(--pix),'Noto Sans SC',sans-serif
 }
 .icon-btn:active{transform:scale(.92);}
 .icon-btn.off{opacity:.55;}
+.icon-btn .ic{width:18px;height:18px;}
+
+/* ============ 线性图标 ============ */
+.ic{width:1.05em;height:1.05em;vertical-align:-0.16em;display:inline-block;flex:none;
+  fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;}
+.ic .f{fill:currentColor;stroke:none;}
+.icon-btn,#langBtn{font-family:var(--pix);font-size:15px;}
 
 /* ============ 通用按钮(像素厚块) ============ */
 .btn{
@@ -157,10 +165,11 @@ h1,h2,h3,.brand,.bignum,.btn-lg{font-family:var(--pix),'Noto Sans SC',sans-serif
 .game-card:active{transform:translateY(4px);box-shadow:0 0 0 rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.05);}
 .game-card::after{content:"▶";position:absolute;right:14px;color:var(--orange);font-size:13px;opacity:.7;}
 .g-icon{
-  width:56px;height:56px;flex:none;border-radius:9px;display:grid;place-items:center;font-size:30px;
-  border:2px solid var(--gi,#3a4658);background:var(--gib,#0e131b);
+  width:56px;height:56px;flex:none;border-radius:9px;display:grid;place-items:center;
+  border:2px solid var(--gi,#3a4658);background:var(--gib,#0e131b);color:var(--gi,#9fb0c6);
   box-shadow:0 3px 0 rgba(0,0,0,.5),inset 0 0 14px rgba(0,0,0,.5);
 }
+.g-icon .ic{width:30px;height:30px;stroke-width:1.3;}
 .gc-body{flex:1;min-width:0;}
 .gc-title{font-family:var(--pix);font-weight:700;font-size:19px;letter-spacing:.02em;}
 .gc-desc{font-size:12px;color:var(--muted);margin-top:4px;line-height:1.5;}
@@ -423,8 +432,10 @@ body.table-mode #screen-bj-table .foot{flex:none;}
 @keyframes scshake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
 .sc-pitch.quake{animation:scquake .35s;}
 @keyframes scquake{0%,100%{transform:translate(0,0)}25%{transform:translate(-5px,2px)}50%{transform:translate(5px,-2px)}75%{transform:translate(-3px,1px)}}
-.keeper{position:absolute;bottom:6px;font-size:44px;transition:left .4s cubic-bezier(.4,1.7,.5,1),transform .4s cubic-bezier(.4,1.7,.5,1);transform:translateX(-50%);}
-.ball{position:absolute;left:50%;bottom:-46px;font-size:30px;transition:left .45s cubic-bezier(.3,.7,.5,1),bottom .45s cubic-bezier(.4,-0.2,.6,1),transform .5s linear;transform:translateX(-50%);will-change:left,bottom,transform;}
+.keeper{position:absolute;bottom:6px;font-size:50px;color:var(--orange-soft);transition:left .4s cubic-bezier(.4,1.7,.5,1),transform .4s cubic-bezier(.4,1.7,.5,1);transform:translateX(-50%);}
+.ball{position:absolute;left:50%;bottom:-46px;font-size:40px;color:#fff;transition:left .45s cubic-bezier(.3,.7,.5,1),bottom .45s cubic-bezier(.4,-0.2,.6,1),transform .5s linear;transform:translateX(-50%);will-change:left,bottom,transform;}
+.keeper .ic{stroke-width:1.2;}
+.ball .ic{stroke-width:1.1;}
 .spot{position:absolute;left:50%;bottom:10px;width:6px;height:6px;border-radius:50%;background:rgba(233,226,207,.6);transform:translateX(-50%);}
 .pwr{position:relative;width:min(86vw,420px);height:38px;border:2px solid rgba(0,0,0,.55);border-radius:7px;overflow:hidden;
   background:linear-gradient(90deg,var(--blood) 0 14%,#2a3340 14% 86%,var(--blood) 86% 100%);
@@ -461,7 +472,7 @@ body.table-mode #screen-bj-table .foot{flex:none;}
     <div class="brand">POUR <span style="color:var(--muted)">or</span> FOLD</div>
     <div class="top-actions">
       <button class="icon-btn no-tr" id="langBtn" aria-label="语言/Language">EN</button>
-      <button class="icon-btn no-tr" id="soundBtn" aria-label="音效开关">🔊</button>
+      <button class="icon-btn no-tr" id="soundBtn" aria-label="音效开关"></button>
       <button class="menu-btn" id="homeBtn" aria-label="返回主菜单">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v9h5v-5h4v5h5v-9"/></svg>
         <span>主菜单</span>
@@ -478,28 +489,28 @@ body.table-mode #screen-bj-table .foot{flex:none;}
     <div class="section-title">▶ 选 择 关 卡</div>
     <div class="game-list">
       <button class="game-card" id="startTexas" style="--gi:#5fa6e0;--gib:#10243a">
-        <div class="g-icon">🃏</div>
+        <div class="g-icon" data-ic="spade"></div>
         <div class="gc-body">
           <div class="gc-title">德州扑克</div>
           <div class="gc-desc">2–8 人 · 一台手机传着玩,倒酒下注<br><span class="gc-pill">2-8 P</span></div>
         </div>
       </button>
       <button class="game-card" id="startBJ" style="--gi:#e08a5f;--gib:#3a1c10">
-        <div class="g-icon">🂡</div>
+        <div class="g-icon" data-ic="cardA"></div>
         <div class="gc-body">
           <div class="gc-title">21 点</div>
           <div class="gc-desc">轮流坐庄 · 爆牌或输庄就喝,赢庄换庄喝<br><span class="gc-pill">2-8 P</span></div>
         </div>
       </button>
       <button class="game-card" id="startSoccer" style="--gi:#5fcf86;--gib:#0e2c1a">
-        <div class="g-icon">⚽️</div>
+        <div class="g-icon" data-ic="ball"></div>
         <div class="gc-body">
           <div class="gc-title">点球大战</div>
           <div class="gc-desc">瞄准 + 蓄力射门 vs 门将扑救的博弈<br><span class="gc-pill">2 P · 对战</span></div>
         </div>
       </button>
       <button class="game-card" id="startXJ" style="--gi:#d98fd0;--gib:#2c1230">
-        <div class="g-icon">👑</div>
+        <div class="g-icon" data-ic="crown"></div>
         <div class="gc-body">
           <div class="gc-title">小姐牌</div>
           <div class="gc-desc">抽牌触发整蛊规则 · A点杀/2小姐/K定酒…<br><span class="gc-pill">3-12 P</span></div>
@@ -529,7 +540,7 @@ body.table-mode #screen-bj-table .foot{flex:none;}
       • 先轮流传手机,每人 <b>按住看自己的底牌</b>,看完盖上。<br>
       • 再进入牌桌依次行动:<b>弃牌 · 过牌 · 跟注 · 加注半杯 · 加注一杯</b>。<br>
       • 自动发翻牌 / 转牌 / 河牌,摊牌自动比牌型定赢家。<br>
-      • 一局结束,<b>赢家免喝,其余每人喝掉自己倒进池子的酒</b> 🍶。
+      • 一局结束,<b>赢家免喝,其余每人喝掉自己倒进池子的酒</b> 。
     </div>
 
     <div style="margin-top:18px;display:grid;gap:10px;">
@@ -565,7 +576,7 @@ body.table-mode #screen-bj-table .foot{flex:none;}
       <div class="rs" id="resultSub"></div>
     </div>
 
-    <div class="section-title">谁该喝酒 🍻</div>
+    <div class="section-title">谁该喝酒 </div>
     <div class="drink-list" id="drinkList"></div>
 
     <div class="showdown-hands" id="showdownHands"></div>
@@ -601,7 +612,7 @@ body.table-mode #screen-bj-table .foot{flex:none;}
       • 各自 2 张明牌,点数最接近 <b>21</b> 不爆为目标(A 可作 1 或 11,JQK 为 10)。<br>
       • 闲家依次 <b>要牌 / 停牌</b>,庄家最后行动。<br>
       • <b>爆牌 / 输给庄家</b> → 自己喝下底注;<b>赢庄家</b> → 庄家喝下底注。<br>
-      • 庄家爆牌 → 所有没爆的闲家都赢,庄家照单全喝 🍶。
+      • 庄家爆牌 → 所有没爆的闲家都赢,庄家照单全喝 。
     </div>
     <div style="margin-top:18px;display:grid;gap:10px;">
       <button class="btn gold full btn-lg" id="bjDealBtn" data-sfx="deal">开 始 发 牌</button>
@@ -630,7 +641,7 @@ body.table-mode #screen-bj-table .foot{flex:none;}
       <div class="rt" id="bjResultTitle">RESULT</div>
       <div class="rs" id="bjResultSub"></div>
     </div>
-    <div class="section-title">谁该喝酒 🍻</div>
+    <div class="section-title">谁该喝酒 </div>
     <div class="drink-list" id="bjDrinkList"></div>
     <div class="showdown-hands" id="bjHands"></div>
     <div style="margin-top:20px;display:grid;gap:10px;">
@@ -685,6 +696,27 @@ const SUITS = ['s','h','d','c'];
 const SUIT_CH = {s:'♠',h:'♥',d:'♦',c:'♣'};
 const cup = (x)=> (x % 1 === 0 ? String(x) : x.toFixed(1));
 function rankStr(r){ return r===14?'A':r===13?'K':r===12?'Q':r===11?'J':String(r); }
+
+/* ============ 统一线性图标(替代 emoji,更有质感) ============ */
+const ICONS = {
+  spade:'<path class="f" d="M8 2.1C6.4 4 3.1 6.2 3.1 8.9A2.5 2.5 0 0 0 7.4 10.7C7.3 11.9 6.7 12.9 5.6 13.5h4.8C9.3 12.9 8.7 11.9 8.6 10.7A2.5 2.5 0 0 0 12.9 8.9C12.9 6.2 9.6 4 8 2.1Z"/>',
+  cardA:'<rect x="3.6" y="2.4" width="8.8" height="11.2" rx="1.6"/><path class="f" d="M8 9.9 6 8a1.2 1.2 0 0 1 1.6-1.7l.4.4.4-.4A1.2 1.2 0 0 1 10 8z"/>',
+  ball:'<circle cx="8" cy="8" r="5.7"/><path d="M8 4.6 10.4 6.4 9.5 9.2 6.5 9.2 5.6 6.4Z"/><path d="M8 2.3V4.6M13.4 6.2 10.4 6.4M11.6 11.6 9.5 9.2M4.4 11.6 6.5 9.2M2.6 6.2 5.6 6.4"/>',
+  crown:'<path class="f" d="M2.6 12.4 1.8 5.2 5 7.6 8 3.3 11 7.6 14.2 5.2 13.4 12.4Z"/><path d="M2.6 12.4h10.8"/>',
+  cup:'<path d="M4 3.6h8l-1 8.4a1 1 0 0 1-1 .9H6a1 1 0 0 1-1-.9z"/><path d="M4.7 6.7h6.6"/>',
+  trophy:'<path d="M5 3.2h6v3a3 3 0 0 1-6 0z"/><path d="M5 4.2H3.2v1.1A2 2 0 0 0 5 7.2M11 4.2h1.8v1.1A2 2 0 0 1 11 7.2"/><path d="M8 9v2M6.2 13h3.6M6.6 13l.3-2h2.2l.3 2"/>',
+  target:'<circle cx="8" cy="8" r="5.8"/><circle cx="8" cy="8" r="3.2"/><circle class="f" cx="8" cy="8" r="1"/>',
+  skull:'<path d="M8 2.2A5 5 0 0 0 3 7.2v2.3c0 .9.6 1.6 1.4 1.8v1.6h7.2v-1.6c.8-.2 1.4-.9 1.4-1.8V7.2A5 5 0 0 0 8 2.2Z"/><circle class="f" cx="6.1" cy="8" r="1.1"/><circle class="f" cx="9.9" cy="8" r="1.1"/><path d="M7 13v-1.4M9 13v-1.4"/>',
+  ticket:'<path d="M2.6 5.6h10.8v1.8a1 1 0 0 0 0 2v1.8H2.6v-1.8a1 1 0 0 0 0-2z"/><path d="M9 5.6v6" stroke-dasharray="1 1.3"/>',
+  glove:'<path d="M5 13.4V8.2c0-.6-.8-.7-1-.1-.3.8-.9.6-.8-.3.2-1.6 1-3.6 2.4-4.2.9-.4 1.6 0 1.6 1.1V7h2.6v6.4Z"/>',
+  die:'<rect x="3" y="3" width="10" height="10" rx="2.2"/><circle class="f" cx="6" cy="6" r="1"/><circle class="f" cx="8" cy="8" r="1"/><circle class="f" cx="10" cy="10" r="1"/>',
+  volOn:'<path d="M3 6.3h2.4L8.8 3.4v9.2L5.4 9.7H3z"/><path d="M11 6a3 3 0 0 1 0 4M12.8 4.4a5.5 5.5 0 0 1 0 7.2"/>',
+  volOff:'<path d="M3 6.3h2.4L8.8 3.4v9.2L5.4 9.7H3z"/><path d="M11.4 6.4l3.2 3.2M14.6 6.4l-3.2 3.2"/>',
+  rock:'<circle cx="8" cy="8" r="4.4"/>',
+  paper:'<path d="M5 3h4l2.5 2.5V13H5z"/><path d="M9 3v2.5h2.5"/>',
+  scissors:'<circle cx="5" cy="11" r="1.7"/><circle cx="11" cy="11" r="1.7"/><path d="M6.3 9.7 13 4M9.7 9.7 3 4"/>'
+};
+function ic(name){ return '<svg class="ic" viewBox="0 0 16 16" aria-hidden="true">'+(ICONS[name]||'')+'</svg>'; }
 
 /* 震动反馈(Android 浏览器支持;iOS Safari 不支持会自动忽略) */
 function buzz(p){ try{ if(navigator.vibrate) navigator.vibrate(p); }catch(e){} }
@@ -947,7 +979,7 @@ function peekStep(i){
       <div class="hold-pad" id="holdPad">
         <div class="hold-cards" id="holdCards">${cardBack()}${cardBack()}</div>
         <div class="hold-hand" id="holdHand"></div>
-        <div class="hold-hint">👇 按住查看底牌 · 松手盖回</div>
+        <div class="hold-hint"> 按住查看底牌 · 松手盖回</div>
       </div>
       <div class="ov-actions">
         <button class="btn gold full" id="peekNext">看好了 · 下一位 →</button>
@@ -1133,7 +1165,7 @@ function seatPeek(i){
         <div class="hold-pad" id="holdPad">
           <div class="hold-cards" id="holdCards">${cardBack()}${cardBack()}</div>
           <div class="hold-hand" id="holdHand"></div>
-          <div class="hold-hint">👇 按住查看底牌</div>
+          <div class="hold-hint"> 按住查看底牌</div>
         </div>
         <div class="ov-actions">
           <button class="btn gold full" id="peekDone">盖上 · 完成</button>
@@ -1156,13 +1188,13 @@ function renderResult(winners, reason, bestScore){
   // 标题
   if(winners.length===1){
     $('resultTitle').textContent='WINNER';
-    let sub = `🏆 <b style="color:var(--gold)">${escapeHtml(winNames[0])}</b> 赢得这一池 ${cup(pot)} 杯`;
+    let sub = ` <b style="color:var(--gold)">${escapeHtml(winNames[0])}</b> 赢得这一池 ${cup(pot)} 杯`;
     if(reason==='showdown' && bestScore) sub+=` · 牌型:${handName(bestScore)}`;
     else sub+=` · 其余玩家全部弃牌`;
     $('resultSub').innerHTML=sub;
   } else {
     $('resultTitle').textContent='SPLIT POT';
-    $('resultSub').innerHTML=`🏆 平局:${winNames.map(escapeHtml).join(' · ')} · 共 ${cup(pot)} 杯`;
+    $('resultSub').innerHTML=` 平局:${winNames.map(escapeHtml).join(' · ')} · 共 ${cup(pot)} 杯`;
   }
 
   // 喝酒清单:谁下注多少喝多少(赢家免喝)
@@ -1172,11 +1204,11 @@ function renderResult(winners, reason, bestScore){
     if(isWin){
       dl+=`<div class="drink-row safe">
         <div class="dn">${escapeHtml(p.name)} <span style="font-size:12px;color:var(--gold)">赢家</span></div>
-        <div class="da safe">免喝 🎉</div></div>`;
+        <div class="da safe">免喝 </div></div>`;
     } else if(p.contributed>0){
       dl+=`<div class="drink-row">
         <div class="dn">${escapeHtml(p.name)}</div>
-        <div class="da drink"><span class="cup-emoji">🍶</span> 喝 ${cup(p.contributed)} 杯</div></div>`;
+        <div class="da drink"><span class="cup-emoji"></span> 喝 ${cup(p.contributed)} 杯</div></div>`;
     } else {
       dl+=`<div class="drink-row safe">
         <div class="dn">${escapeHtml(p.name)}</div>
@@ -1196,7 +1228,7 @@ function renderResult(winners, reason, bestScore){
       sh+=`<div class="sd-row ${win?'win':''}">
         <div class="sd-cards">${cardFace(p.cards[0])}${cardFace(p.cards[1])}</div>
         <div class="sd-info">
-          <div class="sd-name">${escapeHtml(p.name)} ${win?'🏆':''}</div>
+          <div class="sd-name">${escapeHtml(p.name)} ${win?'':''}</div>
           <div class="sd-hand">${sc?handName(sc):''}</div>
         </div>
       </div>`;
@@ -1340,14 +1372,14 @@ function bjRender(){
 function bjRenderResult(){
   const dv=bjHandVal(B.hands[B.dealer]), dBust=dv>21;
   $('bjResultTitle').textContent = dBust?'庄家爆牌!':'本 局 结 算';
-  $('bjResultSub').innerHTML=`庄家 ${escapeHtml(B.names[B.dealer])} · ${dv} 点${dBust?' 💥':''}` + (B.dealerDrinks>0?` · 喝 ${cup(B.dealerDrinks)} 杯`:'');
+  $('bjResultSub').innerHTML=`庄家 ${escapeHtml(B.names[B.dealer])} · ${dv} 点${dBust?' ':''}` + (B.dealerDrinks>0?` · 喝 ${cup(B.dealerDrinks)} 杯`:'');
   let dl=`<div class="drink-row ${B.dealerDrinks>0?'':'safe'}">
       <div class="dn">${escapeHtml(B.names[B.dealer])} <span style="font-size:12px;color:var(--gold)">庄</span></div>
-      <div class="da ${B.dealerDrinks>0?'drink':'safe'}">${B.dealerDrinks>0?`🍶 喝 ${cup(B.dealerDrinks)} 杯`:'免喝'}</div></div>`;
+      <div class="da ${B.dealerDrinks>0?'drink':'safe'}">${B.dealerDrinks>0?` 喝 ${cup(B.dealerDrinks)} 杯`:'免喝'}</div></div>`;
   for(let i=0;i<B.n;i++){
     if(i===B.dealer) continue;
     const r=B.results[i];
-    if(r==='lose') dl+=`<div class="drink-row"><div class="dn">${escapeHtml(B.names[i])}</div><div class="da drink">🍶 喝 ${cup(B.bet)} 杯</div></div>`;
+    if(r==='lose') dl+=`<div class="drink-row"><div class="dn">${escapeHtml(B.names[i])}</div><div class="da drink"> 喝 ${cup(B.bet)} 杯</div></div>`;
     else if(r==='win') dl+=`<div class="drink-row safe"><div class="dn">${escapeHtml(B.names[i])} <span style="font-size:12px;color:#5ad17a">赢庄</span></div><div class="da safe">免喝</div></div>`;
     else dl+=`<div class="drink-row safe"><div class="dn">${escapeHtml(B.names[i])}</div><div class="da safe">平 · 免喝</div></div>`;
   }
@@ -1381,9 +1413,9 @@ function scDirPct(d){ return d==='left'?'22%':d==='right'?'78%':'50%'; }
 function scBoard(){
   const aShoot = SC.kickIndex%2===0;
   return `<div class="sc-score">
-    <div class="sc-side ${aShoot?'active':''}"><div class="nm">${escapeHtml(SC.a)}</div><div class="gg">${SC.scoreA}</div><div class="role">${aShoot?'主罚 ⚽️':'扑救 🧤'}</div></div>
+    <div class="sc-side ${aShoot?'active':''}"><div class="nm">${escapeHtml(SC.a)}</div><div class="gg">${SC.scoreA}</div><div class="role">${aShoot?'主罚 ':'扑救 '}</div></div>
     <div class="sc-vs">VS</div>
-    <div class="sc-side ${!aShoot?'active':''}"><div class="nm">${escapeHtml(SC.b)}</div><div class="gg">${SC.scoreB}</div><div class="role">${!aShoot?'主罚 ⚽️':'扑救 🧤'}</div></div>
+    <div class="sc-side ${!aShoot?'active':''}"><div class="nm">${escapeHtml(SC.b)}</div><div class="gg">${SC.scoreB}</div><div class="role">${!aShoot?'主罚 ':'扑救 '}</div></div>
   </div>`;
 }
 function scRoundLabel(){
@@ -1413,8 +1445,8 @@ function scRender(){
       <div class="card-panel rules" style="margin-top:14px">
         • 双方轮流主罚,共各 <b>5 球</b>。<br>
         • 射手秘密选 <b>左 / 中 / 右</b> 射门,门将秘密选方向扑救。<br>
-        • 同方向 = 扑出 🧤;不同 = 进球 ⚽️。<br>
-        • 5 球战平进入 <b>突然死亡</b>。最终 <b>输家罚 ${cup(SC.penalty)} 杯</b> 🍶。
+        • 同方向 = 扑出 ;不同 = 进球 。<br>
+        • 5 球战平进入 <b>突然死亡</b>。最终 <b>输家罚 ${cup(SC.penalty)} 杯</b> 。
       </div>
       <div style="margin-top:18px;display:grid;gap:10px;">
         <button class="btn gold full btn-lg" id="scStart">开 始 对 决</button>
@@ -1432,10 +1464,10 @@ function scRender(){
     v.innerHTML=`<div style="overflow-y:auto;padding:2px;">
       <div class="result-banner"><div class="rt">FULL TIME</div>
         <div class="rs">${escapeHtml(SC.a)} ${SC.scoreA} : ${SC.scoreB} ${escapeHtml(SC.b)}</div></div>
-      <div class="section-title">谁该喝酒 🍻</div>
+      <div class="section-title">谁该喝酒 </div>
       <div class="drink-list">
-        <div class="drink-row safe"><div class="dn">🏆 ${escapeHtml(winner)}</div><div class="da safe">免喝</div></div>
-        <div class="drink-row"><div class="dn">${escapeHtml(loser)}</div><div class="da drink">🍶 喝 ${cup(SC.penalty)} 杯</div></div>
+        <div class="drink-row safe"><div class="dn"> ${escapeHtml(winner)}</div><div class="da safe">免喝</div></div>
+        <div class="drink-row"><div class="dn">${escapeHtml(loser)}</div><div class="da drink"> 喝 ${cup(SC.penalty)} 杯</div></div>
       </div>
       <div style="margin-top:20px;display:grid;gap:10px;">
         <button class="btn gold full btn-lg" id="scAgain">再 来 一 局</button>
@@ -1453,7 +1485,7 @@ function scRender(){
     pitch=`<div class="sc-pitch">
       <div class="sc-prompt">把手机交给 <b>${escapeHtml(shooter)}</b></div>
       <div class="sc-hint">${scRoundLabel()} · 秘密选择<b>射门</b>方向(别让对方看到)</div>
-      <div class="goal"><div class="ball" style="left:50%;bottom:-44px">⚽️</div></div>
+      <div class="goal"><div class="ball" style="left:50%;bottom:-44px">${ic('ball')}</div></div>
       <div class="sc-dirs">
         <button class="btn" data-dir="left">← 左</button>
         <button class="btn" data-dir="center">↑ 中</button>
@@ -1463,7 +1495,7 @@ function scRender(){
     pitch=`<div class="sc-pitch">
       <div class="sc-prompt"><b>${escapeHtml(shooter)}</b> 蓄力射门</div>
       <div class="sc-hint">瞄准 <b>${SCDL[SC.shotDir]}</b> 路 · 停在<b style="color:#5ad17a">绿色刁钻区</b>=必进!两端红色=射偏</div>
-      <div class="goal"><div class="spot"></div><div class="ball" style="left:${scDirPct(SC.shotDir)};bottom:-46px">⚽️</div></div>
+      <div class="goal"><div class="spot"></div><div class="ball" style="left:${scDirPct(SC.shotDir)};bottom:-46px">${ic('ball')}</div></div>
       <div class="pwr"><div class="pwr-sweet"></div><div class="pwr-marker" id="scMarker" style="left:0%"></div></div>
       <div class="pwr-tip">轻点「射门」锁定力度与角度</div>
       <button class="btn gold" id="scKickBtn" style="width:min(86vw,420px)">射 门!</button>
@@ -1472,7 +1504,7 @@ function scRender(){
     pitch=`<div class="sc-pitch">
       <div class="sc-prompt">把手机交给 <b>${escapeHtml(keeper)}</b></div>
       <div class="sc-hint">${scRoundLabel()} · 秘密选择<b>扑救</b>方向</div>
-      <div class="goal"><div class="keeper" style="left:50%">🧤</div></div>
+      <div class="goal"><div class="keeper" style="left:50%">${ic('glove')}</div></div>
       <div class="sc-dirs">
         <button class="btn" data-dir="left">← 左扑</button>
         <button class="btn" data-dir="center">↑ 中路</button>
@@ -1480,12 +1512,12 @@ function scRender(){
       </div></div>`;
   } else if(SC.view==='reveal'){
     const oc=SC.lastOutcome;
-    const txt = oc==='goal'?'⚽️ 进 球!':oc==='save'?'🧤 扑 出!':'😵 射 偏!';
+    const txt = oc==='goal'?' 进 球!':oc==='save'?' 扑 出!':' 射 偏!';
     const cls = oc==='goal'?'goal-txt':oc==='save'?'save-txt':'miss-txt';
     pitch=`<div class="sc-pitch" id="scPitch">
       <div class="goal" id="scGoal"><div class="spot"></div>
-        <div class="keeper" id="scKeeper" style="left:50%">🧤</div>
-        <div class="ball" id="scBall" style="left:${scDirPct(SC.shotDir)};bottom:-46px">⚽️</div>
+        <div class="keeper" id="scKeeper" style="left:50%">${ic('glove')}</div>
+        <div class="ball" id="scBall" style="left:${scDirPct(SC.shotDir)};bottom:-46px">${ic('ball')}</div>
       </div>
       <div class="sc-big pop ${cls}">${txt}</div>
       <div class="sc-prompt">${escapeHtml(shooter)} 射${SCDL[SC.shotDir]}${SC.sweet?'<span style="color:#5ad17a">(刁钻)</span>':''} · ${escapeHtml(keeper)} 扑${SCDL[SC.saveDir]}</div>
@@ -1552,22 +1584,22 @@ function xjRule(card){
   const me=X.names[X.drawer], prev=X.names[(X.drawer-1+X.n)%X.n], next=X.names[(X.drawer+1)%X.n];
   const r=card.r;
   if(r===14) return {tag:'A · 点杀', desc:`<b>${escapeHtml(me)}</b> 点杀任意一人,并<b>自己决定 TA 喝几杯</b>!(也可玩蒙眼版:蒙一人眼,指人问 TA 喝不喝)`};
-  if(r===2)  return {tag:'2 · 小姐 👑', desc:`<b>${escapeHtml(me)}</b> 成为「小姐」,要立刻亮明身份。之后谁喝酒都能点小姐陪喝半杯,陪喝后要说「谢谢老板」——<b>直到下一张 2 出现才换人/解除</b>。`};
+  if(r===2)  return {tag:'2 · 小姐 ', desc:`<b>${escapeHtml(me)}</b> 成为「小姐」,要立刻亮明身份。之后谁喝酒都能点小姐陪喝半杯,陪喝后要说「谢谢老板」——<b>直到下一张 2 出现才换人/解除</b>。`};
   if(r===3)  return {tag:'3 · 逛三园', desc:`从 <b>${escapeHtml(me)}</b> 开始「逛三园」:轮流说 动物园 / 植物园 / 水果园 里的东西,不能重复、不能卡壳,出错者喝半杯。`};
   if(r===4)  return {tag:'4 · 找人决斗', desc:`<b>${escapeHtml(me)}</b> 点名一人决斗,<b>玩什么自己定</b>(猜拳、划拳、闷酒……),输的人喝一杯!`};
   if(r===5)  return {tag:'5 · 石头剪刀布', desc:`<b>${escapeHtml(me)}</b> 和大家一起出拳,每输一轮 +半杯,可连续淘汰到只剩一人。`};
   if(r===6)  return {tag:'6 · 摸鼻子', desc:`<b>${escapeHtml(me)}</b> 不要出声,悄悄开始摸鼻子;其他人察觉后也跟着偷偷摸——<b>最后一个摸的人喝半杯</b>。`};
   if(r===7)  return {tag:'7 · 七的倍数', desc:`从 <b>${escapeHtml(me)}</b> 开始报数,遇到 7、含 7、或 7 的倍数 要拍桌说「过」并反向,出错者喝一杯。`};
-  if(r===8)  return {tag:'8 · 尿牌 🎫', desc:`<b>${escapeHtml(me)}</b> 获得一张「尿牌」收好——<b>有尿牌才能去撒尿!</b>没有尿牌的人中途不许离桌上厕所。想去时点底部「出尿牌」打出(作废)。`};
-  if(r===9)  return {tag:'9 · 自己喝', desc:`<b>${escapeHtml(me)}</b> 自己喝一杯,认栽 🍶。`};
-  if(r===10) return {tag:'10 · 神经病 🤪', desc:`<b>${escapeHtml(me)}</b> 先大喊一声「<b>我是神经病!</b>」,此后<b>谁搭理 TA(回应/对话)谁喝</b>——<b>直到下一张 10 出现才换人</b>。`};
+  if(r===8)  return {tag:'8 · 尿牌 ', desc:`<b>${escapeHtml(me)}</b> 获得一张「尿牌」收好——<b>有尿牌才能去撒尿!</b>没有尿牌的人中途不许离桌上厕所。想去时点底部「出尿牌」打出(作废)。`};
+  if(r===9)  return {tag:'9 · 自己喝', desc:`<b>${escapeHtml(me)}</b> 自己喝一杯,认栽 。`};
+  if(r===10) return {tag:'10 · 神经病 ', desc:`<b>${escapeHtml(me)}</b> 先大喊一声「<b>我是神经病!</b>」,此后<b>谁搭理 TA(回应/对话)谁喝</b>——<b>直到下一张 10 出现才换人</b>。`};
   if(r===11) return {tag:'J · 上家喝', desc:`<b>${escapeHtml(me)}</b> 的上家「<b>${escapeHtml(prev)}</b>」喝一杯。`};
   if(r===12) return {tag:'Q · 下家喝', desc:`<b>${escapeHtml(me)}</b> 的下家「<b>${escapeHtml(next)}</b>」喝一杯。`};
   // K · 定酒:首张 K 先喝半杯,之后每张 K 喝上一张 K 指定的量,再指定下一张
   if(r===13){
     const drinkNow=(X.kPending==null)?0.5:X.kPending;
     return {tag:'K · 定酒', isK:true, drinkNow,
-      desc:`<b>${escapeHtml(me)}</b> 抽到 K,先喝 <b>${cup(drinkNow)} 杯</b>;再指定「下一个抽到 K 的人」喝几杯 👇`};
+      desc:`<b>${escapeHtml(me)}</b> 抽到 K,先喝 <b>${cup(drinkNow)} 杯</b>;再指定「下一个抽到 K 的人」喝几杯 `};
   }
 }
 const XJ_REF = [
@@ -1597,7 +1629,7 @@ function xjDraw(){
 function xjNext(){ X.drawer=(X.drawer+1)%X.n; X.view='draw'; xjRender(); }
 
 /* —— 小姐牌内置互动小工具 —— */
-const XJ_RPS=['✊','✋','✌️'];
+const XJ_RPS=['石头','布','剪刀'];
 function xjRpsBeat(a,b){ return (a===0&&b===2)||(a===2&&b===1)||(a===1&&b===0); }
 function xjStartRPS(stake){ X.rpsStake=stake; X.rpsOpp=null; X.rpsA=null; X.rpsB=null; X.view='rpsPick'; xjRender(); }
 function xjStartDS(){ X.dsVictim=null; X.dsCups=1; X.view='dsPick'; xjRender(); }
@@ -1618,7 +1650,7 @@ function xjRender(){
       <div class="card-panel rules" style="margin-top:14px">
         • 洗好一副牌,围一圈坐,<b>轮流抽牌</b>,按牌面执行整蛊规则。<br>
         • <b>上家 / 下家</b> 按座位昵称自动判定;<b>定酒杯</b> 自动累计,集满第 4 张 K 闷整杯。<br>
-        • 抽完自动重新洗牌,玩到尽兴为止 🍻。
+        • 抽完自动重新洗牌,玩到尽兴为止 。
       </div>
       <div style="margin-top:18px;display:grid;gap:10px;">
         <button class="btn gold full btn-lg" id="xjStartBtn" data-sfx="deal">开 始 抽 牌</button>
@@ -1650,7 +1682,7 @@ function xjRender(){
       <div class="sc-prompt">轮到 <b>${escapeHtml(me)}</b> 抽牌 · 请把手机递给 TA</div>
       <button class="btn gold" id="xjDrawBtn" data-sfx="deal" style="width:min(92vw,460px)">抽 牌</button>
       <div style="display:flex;gap:10px;width:min(92vw,460px)">
-        <button class="btn ghost" id="xjPiao" style="flex:1">🎫 出尿牌</button>
+        <button class="btn ghost" id="xjPiao" style="flex:1"> 出尿牌</button>
         <button class="btn ghost" id="xjRulesBtn" style="flex:1">规则</button>
         <button class="btn ghost" id="xjQuit" style="flex:1">结束</button>
       </div>
@@ -1665,9 +1697,9 @@ function xjRender(){
   if(X.view==='dsPick'){
     let btns=''; for(let i=0;i<X.n;i++){ if(i===X.drawer) continue; btns+=`<button class="btn" data-dv="${i}" style="margin:3px 0;width:min(92vw,460px)">${escapeHtml(X.names[i])}</button>`; }
     v.innerHTML=`<div class="xj-view">${top}
-      <div class="xj-rule-tag" style="font-size:22px">🎯 点杀</div>
+      <div class="xj-rule-tag" style="font-size:22px"> 点杀</div>
       <div class="sc-prompt"><b>${escapeHtml(me)}</b> 指定一个倒霉蛋</div>${btns}
-      <button class="btn ghost" id="xjRand" style="width:min(92vw,460px)">🎲 随机抽一个</button>
+      <button class="btn ghost" id="xjRand" style="width:min(92vw,460px)"> 随机抽一个</button>
       <button class="btn ghost" id="xjCancel" style="width:min(92vw,460px)">取消</button></div>`;
     v.querySelectorAll('[data-dv]').forEach(b=> b.onclick=()=>{ X.dsVictim=parseInt(b.dataset.dv,10); X.dsCups=1; X.view='dsCups'; xjRender(); });
     $('xjRand').onclick=()=>{ const o=[]; for(let i=0;i<X.n;i++) if(i!==X.drawer)o.push(i); X.dsVictim=o[Math.floor(Math.random()*o.length)]; X.dsCups=1; X.view='dsCups'; xjRender(); };
@@ -1676,7 +1708,7 @@ function xjRender(){
   }
   if(X.view==='dsCups'){
     v.innerHTML=`<div class="xj-view">${top}
-      <div class="sc-big save-txt">💀 ${escapeHtml(X.names[X.dsVictim])}</div>
+      <div class="sc-big save-txt"> ${escapeHtml(X.names[X.dsVictim])}</div>
       <div class="xj-rule"><div class="xj-rule-desc"><b>${escapeHtml(me)}</b> 判 <b>${escapeHtml(X.names[X.dsVictim])}</b> 喝几杯:</div>
         <div class="count-row" style="margin:12px 0 2px">
           <button class="btn stepper" id="dsM">−</button>
@@ -1691,15 +1723,15 @@ function xjRender(){
   }
   if(X.view==='dsDone'){
     v.innerHTML=`<div class="xj-view">${top}
-      <div class="sc-big save-txt">💀 ${escapeHtml(X.names[X.dsVictim])}</div>
-      <div class="xj-rule"><div class="xj-rule-desc">被点杀!<b>${escapeHtml(X.names[X.dsVictim])}</b> 喝 ${cup(X.dsCups)} 杯 🍶</div></div>
+      <div class="sc-big save-txt"> ${escapeHtml(X.names[X.dsVictim])}</div>
+      <div class="xj-rule"><div class="xj-rule-desc">被点杀!<b>${escapeHtml(X.names[X.dsVictim])}</b> 喝 ${cup(X.dsCups)} 杯 </div></div>
       <button class="btn gold" id="xjNextBtn" style="width:min(92vw,460px)">下 一 位 →</button></div>`;
     $('xjNextBtn').onclick=xjNext; return;
   }
   if(X.view==='rpsPick'){
     let btns=''; for(let i=0;i<X.n;i++){ if(i===X.drawer) continue; btns+=`<button class="btn" data-opp="${i}" style="margin:3px 0;width:min(92vw,460px)">${escapeHtml(X.names[i])}</button>`; }
     v.innerHTML=`<div class="xj-view">${top}
-      <div class="xj-rule-tag" style="font-size:22px">✊ 猜拳决斗(输喝 ${cup(X.rpsStake)} 杯)</div>
+      <div class="xj-rule-tag" style="font-size:22px"> 猜拳决斗(输喝 ${cup(X.rpsStake)} 杯)</div>
       <div class="sc-prompt"><b>${escapeHtml(me)}</b> 选择对手</div>${btns}
       <button class="btn ghost" id="xjCancel" style="width:min(92vw,460px)">取消</button></div>`;
     v.querySelectorAll('[data-opp]').forEach(b=> b.onclick=()=>{ X.rpsOpp=parseInt(b.dataset.opp,10); X.view='rpsA'; xjRender(); });
@@ -1712,9 +1744,9 @@ function xjRender(){
       <div class="sc-prompt">把手机交给 <b>${escapeHtml(who)}</b></div>
       <div class="sc-hint">秘密出拳(别让对方看到)</div>
       <div class="sc-dirs">
-        <button class="btn" data-rps="0" style="font-size:32px">✊</button>
-        <button class="btn" data-rps="1" style="font-size:32px">✋</button>
-        <button class="btn" data-rps="2" style="font-size:32px">✌️</button>
+        <button class="btn" data-rps="0" style="font-size:24px">石头</button>
+        <button class="btn" data-rps="1" style="font-size:24px">布</button>
+        <button class="btn" data-rps="2" style="font-size:24px">剪刀</button>
       </div></div>`;
     v.querySelectorAll('[data-rps]').forEach(b=> b.onclick=()=>{
       const c=parseInt(b.dataset.rps,10);
@@ -1728,8 +1760,8 @@ function xjRender(){
     const loserName = tie?'':(xjRpsBeat(a,b)? X.names[X.rpsOpp] : me);
     v.innerHTML=`<div class="xj-view">${top}
       <div class="sc-prompt" style="font-size:20px">${escapeHtml(me)} ${XJ_RPS[a]} &nbsp;VS&nbsp; ${XJ_RPS[b]} ${escapeHtml(X.names[X.rpsOpp])}</div>
-      <div class="sc-big ${tie?'miss-txt':'save-txt'}">${tie?'平 局!':'😵 '+escapeHtml(loserName)+' 输'}</div>
-      ${tie?'':`<div class="xj-rule"><div class="xj-rule-desc"><b>${escapeHtml(loserName)}</b> 喝 ${cup(X.rpsStake)} 杯 🍶</div></div>`}
+      <div class="sc-big ${tie?'miss-txt':'save-txt'}">${tie?'平 局!':' '+escapeHtml(loserName)+' 输'}</div>
+      ${tie?'':`<div class="xj-rule"><div class="xj-rule-desc"><b>${escapeHtml(loserName)}</b> 喝 ${cup(X.rpsStake)} 杯 </div></div>`}
       <div style="display:flex;gap:10px;width:min(92vw,460px)">
         <button class="btn ${tie?'gold':'ghost'}" id="xjReplay" style="flex:1">${tie?'再 出 一 次':'再来一局'}</button>
         <button class="btn gold" id="xjNextBtn" style="flex:1">完成 · 下一位 →</button>
@@ -1740,8 +1772,8 @@ function xjRender(){
   }
   if(X.view==='piao'){
     v.innerHTML=`<div class="xj-view">${top}
-      <div class="xj-rule-tag" style="font-size:22px">🎫 打出尿牌</div>
-      <div class="xj-rule"><div class="xj-rule-desc">打出一张「尿牌」= <b>准许本人去撒尿</b> 🚽,此牌用掉作废。<br>没有尿牌的人,中途<b>不许离桌上厕所</b>!</div></div>
+      <div class="xj-rule-tag" style="font-size:22px"> 打出尿牌</div>
+      <div class="xj-rule"><div class="xj-rule-desc">打出一张「尿牌」= <b>准许本人去撒尿</b> ,此牌用掉作废。<br>没有尿牌的人,中途<b>不许离桌上厕所</b>!</div></div>
       <button class="btn gold" id="xjPiaoGo" style="width:min(92vw,460px)">出 牌 · 去 撒 尿!</button>
       <button class="btn ghost" id="xjCancel" style="width:min(92vw,460px)">取消</button></div>`;
     $('xjPiaoGo').onclick=()=>{ X.view='piaoDone'; xjRender(); feedback('peek'); };
@@ -1750,8 +1782,8 @@ function xjRender(){
   }
   if(X.view==='piaoDone'){
     v.innerHTML=`<div class="xj-view">${top}
-      <div class="sc-big goal-txt">🚽 放 行!</div>
-      <div class="xj-rule"><div class="xj-rule-desc">尿牌已用掉,尽情去吧~ 没尿牌的继续憋着 😆</div></div>
+      <div class="sc-big goal-txt"> 放 行!</div>
+      <div class="xj-rule"><div class="xj-rule-desc">尿牌已用掉,尽情去吧~ 没尿牌的继续憋着 </div></div>
       <button class="btn gold" id="xjBackDraw" style="width:min(92vw,460px)">返回</button></div>`;
     $('xjBackDraw').onclick=()=>{ X.view='draw'; xjRender(); };
     return;
@@ -1780,9 +1812,9 @@ function xjRender(){
   }
   const rr=X.card.r;
   let go='';
-  if(rr===14) go=`<button class="btn gold" id="xjGo" style="width:min(92vw,460px)">🎯 点杀 · 指定一人</button>`;
-  else if(rr===5) go=`<button class="btn gold" id="xjGo" style="width:min(92vw,460px)">✊ 开始猜拳(输喝半杯)</button>`;
-  else if(rr===4) go=`<button class="btn gold" id="xjGo" style="width:min(92vw,460px)">✊ 用猜拳决斗(输喝 1 杯)</button>`;
+  if(rr===14) go=`<button class="btn gold" id="xjGo" style="width:min(92vw,460px)"> 点杀 · 指定一人</button>`;
+  else if(rr===5) go=`<button class="btn gold" id="xjGo" style="width:min(92vw,460px)"> 开始猜拳(输喝半杯)</button>`;
+  else if(rr===4) go=`<button class="btn gold" id="xjGo" style="width:min(92vw,460px)"> 用猜拳决斗(输喝 1 杯)</button>`;
   const nextLabel = (rr===4)?'他们自己玩 · 下一位 →':'下 一 位 →';
   const nextCls = go?'ghost':'gold';
   v.innerHTML=`<div class="xj-view">
@@ -1808,6 +1840,7 @@ let LANG = 'zh';
 const I18N_ORIG = new WeakMap();
 let I18N_MO = null;
 const EN_DICT = [
+  ['石头','Rock'],['布','Paper'],['剪刀','Scissors'],
   /* —— 游戏 / 首页 —— */
   ['德州扑克','Texas Hold’em'],['21 点','Blackjack'],['21点','Blackjack'],
   ['点球大战','Penalty Shootout'],['小姐牌','Miss Card'],
@@ -1847,10 +1880,10 @@ const EN_DICT = [
   ['确认身份','Confirm identity'],[' 本人可以查看这副底牌',' may view these cards'],['只有 ','Only '],
   ['不是我','Not me'],['我是 ','I’m '],
   /* —— 结算 / 牌型 —— */
-  ['谁该喝酒 🍻','Who drinks 🍻'],['免喝 🎉','Safe 🎉'],['没下注 · 免喝','No bet · safe'],
+  ['谁该喝酒 ','Who drinks '],['免喝 ','Safe '],['没下注 · 免喝','No bet · safe'],
   ['免喝','Safe'],['赢家','Winner'],
   [' 赢得这一池 ',' wins the pot of '],[' · 牌型:',' · Hand: '],[' · 其余玩家全部弃牌',' · everyone else folded'],
-  ['🏆 平局:','🏆 Tie: '],[' · 共 ',' · total '],
+  [' 平局:',' Tie: '],[' · 共 ',' · total '],
   ['亮牌','Showdown'],['公共牌','Community'],['本局明牌','Hands this round'],
   ['下一局 · 轮流换庄','Next · rotate dealer'],['下 一 局','Next Hand'],
   ['皇家同花顺','Royal Flush'],['同花顺','Straight Flush'],['四条','Quads'],['葫芦','Full House'],
@@ -1861,7 +1894,7 @@ const EN_DICT = [
   ['21点!','21!'],['爆 ','Bust '],['停 ','Stand '],['爆牌','Bust'],[' 点',' pts'],
   /* —— 点球大战 —— */
   ['点球大战 · 2 人对决','Penalty Shootout · 1 v 1'],['输家罚酒(杯)','Loser drinks (cups)'],
-  ['主罚 ⚽️','Shooter ⚽️'],['扑救 🧤','Keeper 🧤'],
+  ['主罚 ','Shooter '],['扑救 ','Keeper '],
   [' 轮 / 共 5 轮',' / 5 rounds'],['突然死亡 · 第 ','Sudden Death #'],[' 轮',''],
   ['秘密选择射门方向(别让对方看到)','Secretly pick your shot (hide it)'],
   ['秘密选择扑救方向','Secretly pick your dive'],
@@ -1869,34 +1902,34 @@ const EN_DICT = [
   ['停在绿色刁钻区 = 必进!两端红色 = 射偏','Stop in the green zone = sure goal! Red ends = miss'],
   ['射 门!','SHOOT!'],
   ['← 左扑','← Dive L'],['↑ 中路','↑ Mid'],['右扑 →','Dive R →'],['← 左','← L'],['↑ 中','↑ Mid'],['右 →','R →'],
-  ['⚽️ 进 球!','⚽️ GOAL!'],['🧤 扑 出!','🧤 SAVED!'],['😵 射 偏!','😵 MISS!'],
+  [' 进 球!',' GOAL!'],[' 扑 出!',' SAVED!'],[' 射 偏!',' MISS!'],
   ['下 一 球','Next Kick'],['查看战况','See result'],['再 来 一 局','Play Again'],
   ['(刁钻)',' (top corner)'],['射左','shot L'],['射中','shot M'],['射右','shot R'],
   ['扑左','dove L'],['扑中','dove M'],['扑右','dove R'],
   /* —— 小姐牌 —— */
   ['小姐牌 · 规则总览','Miss Card · All Rules'],
   ['牌堆剩 ','Deck: '],[' 张',' left'],[' · 下张 K 喝 ',' · next K drinks '],
-  ['抽 牌','DRAW'],['🎫 出尿牌','🎫 Pee Card'],['规则','Rules'],
+  ['抽 牌','DRAW'],[' 出尿牌',' Pee Card'],['规则','Rules'],
   ['指定并继续 →','Set & continue →'],['指定「下一个抽到 K 的人」喝几杯','Set how many cups the next K-drawer gets'],
-  ['🎯 点杀 · 指定一人','🎯 Kill · pick someone'],['🎲 随机抽一个','🎲 Random'],
-  [' 指定一个倒霉蛋',' picks a victim'],['💀 ',' 💀 '],
+  [' 点杀 · 指定一人',' Kill · pick someone'],[' 随机抽一个',' Random'],
+  [' 指定一个倒霉蛋',' picks a victim'],[' ','  '],
   [' 判 ',' makes '],[' 喝几杯:',' drink how many cups:'],['就 这 么 定!','Lock it in!'],
   ['被点杀!','Killed! '],['完成 · 下一位 →','Done · Next →'],['下 一 位 →','Next →'],
   [' 选择对手',' picks an opponent'],['把手机交给 ','Pass the phone to '],
   ['秘密出拳(别让对方看到)','Throw in secret (hide it)'],
   [' 输',' loses'],['再 出 一 次','Throw again'],['再来一局','Rematch'],
-  ['🎫 打出尿牌','🎫 Play Pee Card'],['出 牌 · 去 撒 尿!','Play it · go pee!'],['🚽 放 行!','🚽 Allowed!'],
-  ['尿牌已用掉,尽情去吧~ 没尿牌的继续憋着 😆','Pee card used — off you go! No card = hold it 😆'],
-  ['打出一张「尿牌」= 准许本人去撒尿 🚽,此牌用掉作废。没有尿牌的人,中途不许离桌上厕所!','Play a Pee Card = you may go to the toilet 🚽 (card is used up). No card = no leaving the table!'],
-  ['✊ 开始猜拳(输喝半杯)','✊ Rock-Paper-Scissors (loser: half cup)'],
-  ['✊ 用猜拳决斗(输喝 1 杯)','✊ Settle by RPS (loser: 1 cup)'],
+  [' 打出尿牌',' Play Pee Card'],['出 牌 · 去 撒 尿!','Play it · go pee!'],[' 放 行!',' Allowed!'],
+  ['尿牌已用掉,尽情去吧~ 没尿牌的继续憋着 ','Pee card used — off you go! No card = hold it '],
+  ['打出一张「尿牌」= 准许本人去撒尿 ,此牌用掉作废。没有尿牌的人,中途不许离桌上厕所!','Play a Pee Card = you may go to the toilet  (card is used up). No card = no leaving the table!'],
+  [' 开始猜拳(输喝半杯)',' Rock-Paper-Scissors (loser: half cup)'],
+  [' 用猜拳决斗(输喝 1 杯)',' Settle by RPS (loser: 1 cup)'],
   ['他们自己玩 · 下一位 →','They play it out · Next →'],
-  ['✊ 猜拳决斗(输喝 ','✊ RPS duel (loser drinks '],[' 杯)',' cups)'],
+  [' 猜拳决斗(输喝 ',' RPS duel (loser drinks '],[' 杯)',' cups)'],
   /* —— 小姐牌 牌面规则 —— */
-  ['A · 点杀','A · Kill'],['2 · 小姐 👑','2 · Miss 👑'],['3 · 逛三园','3 · Three Gardens'],
+  ['A · 点杀','A · Kill'],['2 · 小姐 ','2 · Miss '],['3 · 逛三园','3 · Three Gardens'],
   ['4 · 找人决斗','4 · Duel'],['5 · 石头剪刀布','5 · Rock-Paper-Scissors'],['6 · 摸鼻子','6 · Touch Nose'],
-  ['7 · 七的倍数','7 · Multiples of 7'],['8 · 尿牌 🎫','8 · Pee Card 🎫'],['9 · 自己喝','9 · You Drink'],
-  ['10 · 神经病 🤪','10 · Madman 🤪'],['J · 上家喝','J · Left drinks'],['Q · 下家喝','Q · Right drinks'],
+  ['7 · 七的倍数','7 · Multiples of 7'],['8 · 尿牌 ','8 · Pee Card '],['9 · 自己喝','9 · You Drink'],
+  ['10 · 神经病 ','10 · Madman '],['J · 上家喝','J · Left drinks'],['Q · 下家喝','Q · Right drinks'],
   ['K · 定酒','K · Set Drink'],
   [' 点杀任意一人,并自己决定 TA 喝几杯!(也可玩蒙眼版:蒙一人眼,指人问 TA 喝不喝)',
    ' kills anyone and decides how many cups they drink! (Or blindfold version: cover one player’s eyes, point at people and ask if they drink.)'],
@@ -1914,7 +1947,7 @@ const EN_DICT = [
    ' starts counting; on 7, any number with 7, or a multiple of 7, slap the table and say “pass” (reverse direction); mistakes drink a cup.'],
   [' 获得一张「尿牌」收好——有尿牌才能去撒尿!没有尿牌的人中途不许离桌上厕所。想去时点「出尿牌」打出(作废)。',
    ' gets a “Pee Card” — only with one may you go to the toilet! No card = no leaving the table. Tap “Pee Card” to play it.'],
-  [' 自己喝一杯,认栽 🍶。',' drinks a cup. Tough luck 🍶.'],
+  [' 自己喝一杯,认栽 。',' drinks a cup. Tough luck .'],
   [' 先大喊一声「我是神经病!」,此后谁搭理 TA(回应/对话)谁喝——直到下一张 10 出现才换人。',
    ' shouts “I’m the madman!” — anyone who responds to / talks to them drinks, until the next 10 is drawn.'],
   ['从 ','From '],
@@ -1936,23 +1969,27 @@ const EN_DICT = [
   ['先轮流传手机,每人按住看自己的底牌,看完盖上。','Pass the phone around; each holds to view their hole cards, then covers them.'],
   ['依次行动:弃牌 / 过牌 / 跟注 / 加注(0.5–5 杯可调)。','Act in order: fold / check / call / raise (0.5–5 cups).'],
   ['自动发翻牌 / 转牌 / 河牌,摊牌自动比牌型。','Auto flop / turn / river; auto showdown.'],
-  ['赢家免喝,其余每人喝掉自己倒进池子的酒 🍶。','Winner is safe; everyone else drinks what they poured in 🍶.'],
+  ['赢家免喝,其余每人喝掉自己倒进池子的酒 。','Winner is safe; everyone else drinks what they poured in .'],
   ['每局一人坐庄,其余为闲家,下一局轮流换庄。','One dealer per round; others are players; dealer rotates each round.'],
   ['各自 2 张明牌,最接近 21 不爆为目标(A=1/11,JQK=10)。','2 face-up cards each; get closest to 21 without busting (A=1/11, JQK=10).'],
   ['闲家依次要牌 / 停牌,庄家最后行动。','Players hit / stand in turn; dealer acts last.'],
   ['爆牌 / 输给庄家 → 自己喝底注;赢庄家 → 庄家喝。','Bust / lose to dealer & you drink the ante; beat dealer & dealer drinks.'],
-  ['庄家爆牌 → 没爆的闲家都赢,庄家照单全喝 🍶。','Dealer busts & all non-bust players win; dealer drinks it all 🍶.'],
+  ['庄家爆牌 → 没爆的闲家都赢,庄家照单全喝 。','Dealer busts & all non-bust players win; dealer drinks it all .'],
   ['双方轮流主罚,各 5 球;平局进入突然死亡。','Players alternate, 5 kicks each; a tie goes to sudden death.'],
   ['射手秘密选方向 + 蓄力;门将秘密选扑救方向。','Shooter secretly picks direction + power; keeper secretly picks a dive.'],
   ['蓄力停在绿色刁钻区 = 必进;两端红色 = 射偏。','Stop power in the green zone = sure goal; red ends = miss.'],
-  ['最终输家罚酒 🍶。','The loser drinks 🍶.'],
+  ['最终输家罚酒 。','The loser drinks .'],
   ['围一圈坐,轮流抽牌,按牌面执行整蛊规则。','Sit in a circle, take turns drawing, follow each card’s dare.'],
   ['上家/下家按座位昵称自动判定;K 定酒链式累计。','Left/right auto-resolve by seat names; K “Set Drink” chains on.'],
-  ['抽完自动重新洗牌,玩到尽兴为止 🍻。','Auto-reshuffles when empty; play as long as you like 🍻.'],
+  ['抽完自动重新洗牌,玩到尽兴为止 。','Auto-reshuffles when empty; play as long as you like .'],
   /* —— 标语 —— */
   ['返回主菜单?当前牌局将不会保留。','Back to menu? The current game will not be saved.']
 ];
 function i18nInit() {
+  // 去掉去 emoji 后可能产生的空白键,避免空串 key 触发逐字爆裂
+  for (let i = EN_DICT.length - 1; i >= 0; i--) {
+    if (!EN_DICT[i][0] || !EN_DICT[i][0].trim()) EN_DICT.splice(i, 1);
+  }
   EN_DICT.sort((a, b) => b[0].length - a[0].length);
 }
 function trStr(s) {
@@ -2053,7 +2090,7 @@ $('startXJ').onclick=()=>{ X.view='setup'; show('xj'); xjRender(); };
 // 音效开关
 $('soundBtn').onclick=()=>{
   soundOn=!soundOn;
-  $('soundBtn').textContent=soundOn?'🔊':'🔇';
+  $('soundBtn').innerHTML=ic(soundOn?'volOn':'volOff');
   $('soundBtn').classList.toggle('off',!soundOn);
   if(soundOn){ ac(); sfx('tap'); }
 };
@@ -2073,6 +2110,8 @@ document.addEventListener('pointerdown', e=>{
 
 // 初始
 i18nInit();
+document.querySelectorAll('[data-ic]').forEach(el=>{ el.innerHTML=ic(el.getAttribute('data-ic')); });
+$('soundBtn').innerHTML=ic('volOn');
 G.names=['玩家1','玩家2','玩家3','玩家4'];
 show('home');
 applyTheme();
