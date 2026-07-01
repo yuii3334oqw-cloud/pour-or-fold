@@ -462,6 +462,39 @@ body.table-mode #screen-bj-table .foot{flex:none;}
 .xj-li .k{font-family:var(--pix);color:var(--orange);min-width:34px;font-size:18px;}
 .xj-li .v{font-size:13px;color:var(--muted);line-height:1.5;flex:1;}
 .xj-li .v b{color:var(--text);}
+/* ============ 首页玩法演示 ============ */
+.howto{display:flex;align-items:stretch;justify-content:center;gap:6px;}
+.ht-step{flex:1;background:linear-gradient(160deg,#1a212c,#11161e);border:2px solid rgba(0,0,0,.5);
+  border-radius:10px;padding:12px 6px;text-align:center;box-shadow:0 3px 0 rgba(0,0,0,.45);}
+.ht-ic{display:flex;justify-content:center;color:var(--orange-soft);margin-bottom:4px;}
+.ht-ic .ic{width:24px;height:24px;}
+.ht-t{font-family:var(--pix);font-size:15px;color:var(--text);}
+.ht-d{font-size:10.5px;color:var(--muted);margin-top:2px;line-height:1.3;}
+.ht-arrow{display:flex;align-items:center;color:var(--orange);font-family:var(--pix);font-size:16px;}
+
+/* ============ 真心话大冒险 ============ */
+.td-levels{display:flex;gap:10px;}
+.td-chip{flex:1;background:#161d27;border:2px solid rgba(0,0,0,.55);border-radius:10px;
+  padding:12px 8px;text-align:center;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.5);transition:border-color .15s,background .15s;}
+.td-chip.on{border-color:var(--orange);background:#241a16;box-shadow:0 3px 0 rgba(0,0,0,.5),0 0 16px var(--glow);}
+.td-chip-t{font-family:var(--pix);font-size:20px;color:var(--orange-soft);}
+.td-chip-d{font-size:10.5px;color:var(--muted);margin-top:4px;line-height:1.35;}
+.td-badge{font-family:var(--pix);font-size:12px;padding:2px 10px;border-radius:6px;border:1px solid #5e2b18;
+  color:var(--orange-soft);background:#2a1610;}
+.td-two{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:min(92vw,460px);}
+.td-two .btn{padding:22px 6px;font-size:19px;}
+.td-kind{font-family:var(--pix);font-size:30px;letter-spacing:.06em;margin:6px 0;}
+.td-kind.truth{color:#5fa6e0;} .td-kind.dare{color:var(--orange);}
+.td-card{background:linear-gradient(160deg,#1e2632,#11161e);border:3px solid rgba(0,0,0,.55);
+  border-radius:14px;padding:26px 22px;width:min(92vw,460px);min-height:120px;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 5px 0 rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.05);}
+.td-prompt{font-size:22px;line-height:1.6;color:var(--text);font-weight:500;}
+
+/* ============ 庆祝彩带 ============ */
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:80;overflow:hidden;}
+.confetti i{position:absolute;top:-18px;width:9px;height:9px;border-radius:1px;
+  animation:conffall linear forwards;box-shadow:0 0 0 1px rgba(0,0,0,.25);}
+@keyframes conffall{to{transform:translateY(108vh) rotate(680deg);opacity:.8;}}
 </style>
 </head>
 <body class="theme-blue">
@@ -472,6 +505,7 @@ body.table-mode #screen-bj-table .foot{flex:none;}
     <div class="brand">POUR <span style="color:var(--muted)">or</span> FOLD</div>
     <div class="top-actions">
       <button class="icon-btn no-tr" id="langBtn" aria-label="语言/Language">EN</button>
+      <button class="icon-btn no-tr off" id="bgmBtn" aria-label="背景音乐"></button>
       <button class="icon-btn no-tr" id="soundBtn" aria-label="音效开关"></button>
       <button class="menu-btn" id="homeBtn" aria-label="返回主菜单">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v9h5v-5h4v5h5v-9"/></svg>
@@ -509,6 +543,13 @@ body.table-mode #screen-bj-table .foot{flex:none;}
           <div class="gc-desc">瞄准 + 蓄力射门 vs 门将扑救的博弈<br><span class="gc-pill">2 P · 对战</span></div>
         </div>
       </button>
+      <button class="game-card" id="startTD" style="--gi:#e6b45f;--gib:#2e2410">
+        <div class="g-icon" data-ic="bubble"></div>
+        <div class="gc-body">
+          <div class="gc-title">真心话大冒险</div>
+          <div class="gc-desc">清水 / 微醺 / 重口三档 · 真心话 or 大冒险<br><span class="gc-pill">2+ P</span></div>
+        </div>
+      </button>
       <button class="game-card" id="startXJ" style="--gi:#d98fd0;--gib:#2c1230">
         <div class="g-icon" data-ic="crown"></div>
         <div class="gc-body">
@@ -516,6 +557,14 @@ body.table-mode #screen-bj-table .foot{flex:none;}
           <div class="gc-desc">抽牌触发整蛊规则 · A点杀/2小姐/K定酒…<br><span class="gc-pill">3-12 P</span></div>
         </div>
       </button>
+    </div>
+    <div class="section-title">三 秒 学 会</div>
+    <div class="howto">
+      <div class="ht-step"><div class="ht-ic" data-ic="phone"></div><div class="ht-t">传手机</div><div class="ht-d">一台手机轮流玩</div></div>
+      <div class="ht-arrow">→</div>
+      <div class="ht-step"><div class="ht-ic" data-ic="play"></div><div class="ht-t">玩一局</div><div class="ht-d">下注/抽牌/对决</div></div>
+      <div class="ht-arrow">→</div>
+      <div class="ht-step"><div class="ht-ic" data-ic="cup"></div><div class="ht-t">输的喝</div><div class="ht-d">赌注是酒不是钱</div></div>
     </div>
     <div class="foot">请理性饮酒 · 切勿酒驾 · 未成年人请勿饮酒</div>
   </section>
@@ -661,6 +710,11 @@ body.table-mode #screen-bj-table .foot{flex:none;}
     <div id="xjView"></div>
   </section>
 
+  <!-- ============ 真心话大冒险(全部由 JS 渲染) ============ -->
+  <section id="screen-td" class="hidden">
+    <div id="tdView"></div>
+  </section>
+
 </div>
 
 <!-- ============ 看牌覆盖层(共用) ============ -->
@@ -708,6 +762,10 @@ const ICONS = {
   target:'<circle cx="8" cy="8" r="5.8"/><circle cx="8" cy="8" r="3.2"/><circle class="f" cx="8" cy="8" r="1"/>',
   skull:'<path d="M8 2.2A5 5 0 0 0 3 7.2v2.3c0 .9.6 1.6 1.4 1.8v1.6h7.2v-1.6c.8-.2 1.4-.9 1.4-1.8V7.2A5 5 0 0 0 8 2.2Z"/><circle class="f" cx="6.1" cy="8" r="1.1"/><circle class="f" cx="9.9" cy="8" r="1.1"/><path d="M7 13v-1.4M9 13v-1.4"/>',
   ticket:'<path d="M2.6 5.6h10.8v1.8a1 1 0 0 0 0 2v1.8H2.6v-1.8a1 1 0 0 0 0-2z"/><path d="M9 5.6v6" stroke-dasharray="1 1.3"/>',
+  bubble:'<path d="M2.6 4.5A1.5 1.5 0 0 1 4.1 3h7.8a1.5 1.5 0 0 1 1.5 1.5v4.5a1.5 1.5 0 0 1-1.5 1.5H7l-3 2.5V10.5H4.1A1.5 1.5 0 0 1 2.6 9z"/><path class="f" d="M5.6 6.2h4.8M5.6 8h3.2" stroke="currentColor" stroke-width="1.2" fill="none"/>',
+  phone:'<rect x="4.5" y="2.5" width="7" height="11" rx="1.5"/><path d="M6.7 4.2h2.6"/><path class="f" d="M8 11.9a.7.7 0 1 0 .01 0z"/>',
+  play:'<path class="f" d="M5 3.5 12.5 8 5 12.5z"/>',
+  note:'<path d="M6 12V4l6-1.4V10"/><circle cx="4.4" cy="12" r="1.8"/><circle cx="10.4" cy="10" r="1.8"/>',
   glove:'<path d="M5 13.4V8.2c0-.6-.8-.7-1-.1-.3.8-.9.6-.8-.3.2-1.6 1-3.6 2.4-4.2.9-.4 1.6 0 1.6 1.1V7h2.6v6.4Z"/>',
   die:'<rect x="3" y="3" width="10" height="10" rx="2.2"/><circle class="f" cx="6" cy="6" r="1"/><circle class="f" cx="8" cy="8" r="1"/><circle class="f" cx="10" cy="10" r="1"/>',
   volOn:'<path d="M3 6.3h2.4L8.8 3.4v9.2L5.4 9.7H3z"/><path d="M11 6a3 3 0 0 1 0 4M12.8 4.4a5.5 5.5 0 0 1 0 7.2"/>',
@@ -1063,7 +1121,7 @@ function finishHand(winners, reason, bestScore){
   G.revealed=5;
   renderResult(winners, reason, bestScore);
   show('result');
-  feedback('win');
+  feedback('win'); confetti();
 }
 
 /* =========================================================
@@ -1337,7 +1395,7 @@ function bjResolve(){
     if(o==='win') dealerDrinks+=B.bet;
   }
   B.dealerDrinks=dealerDrinks;
-  bjRenderResult(); show('bj-result'); feedback('win');
+  bjRenderResult(); show('bj-result'); feedback('win'); confetti();
 }
 function bjRender(){
   $('bjPhaseLabel').textContent = B.phase==='dealer'?'庄 家 行 动':'闲 家 行 动';
@@ -1570,7 +1628,7 @@ function scKick(){
 }
 function scNext(){
   SC.kickIndex++;
-  if(SC.kickIndex>=10 && SC.kickIndex%2===0 && SC.scoreA!==SC.scoreB){ SC.view='end'; scRender(); return; }
+  if(SC.kickIndex>=10 && SC.kickIndex%2===0 && SC.scoreA!==SC.scoreB){ SC.view='end'; scRender(); confetti(); return; }
   SC.shotDir=null; SC.saveDir=null; SC.shotMiss=false; SC.sweet=false; SC.view='shoot'; scRender();
 }
 
@@ -1840,6 +1898,20 @@ let LANG = 'zh';
 const I18N_ORIG = new WeakMap();
 let I18N_MO = null;
 const EN_DICT = [
+  ['真心话大冒险','Truth or Dare'],['真心话','Truth'],['大冒险','Dare'],
+  ['选个尺度','Pick a level'],['清水','Mild'],['微醺','Spicy'],['重口','Wild'],
+  ['轻松搞笑,人人都能玩','Light & funny, anyone can play'],
+  ['有点私人,微微上头','A bit personal, mildly spicy'],
+  ['大胆社死,慎入!','Bold & wild — beware!'],
+  ['选真心话,还是大冒险?','Truth, or Dare?'],['换一题','Reroll'],
+  ['不敢做?罚自己一杯','Chicken out? Drink one'],
+  ['· 轮流来,每人选 ','· Take turns; each picks '],[' 或 ',' or '],[',完成对应任务。',', do the task.'],
+  ['· 不敢做?罚自己一杯,再点下一位。','· Chicken out? Drink one, then hit Next.'],
+  ['· 尺度随时可在开始前调整,量力而行。','· Adjust the level before you start; know your limits.'],
+  ['清水 / 微醺 / 重口三档 · 真心话 or 大冒险','Mild / Spicy / Wild · Truth or Dare'],
+  ['· 请把手机递给 TA','· pass the phone over'],['开 始','START'],
+  ['三 秒 学 会','3-SEC GUIDE'],['传手机','Pass phone'],['玩一局','Play a round'],['输的喝','Loser drinks'],
+  ['一台手机轮流玩','One phone, take turns'],['下注/抽牌/对决','Bet / draw / duel'],['赌注是酒不是钱','Drinks, not money'],
   ['石头','Rock'],['布','Paper'],['剪刀','Scissors'],
   /* —— 游戏 / 首页 —— */
   ['德州扑克','Texas Hold’em'],['21 点','Blackjack'],['21点','Blackjack'],
@@ -2048,6 +2120,226 @@ function setLang(l) {
 }
 
 /* =========================================================
+   真心话大冒险 · 分级题库(中英双语)
+========================================================= */
+const TD_BANK = {
+  truth:{
+    mild:[
+      {zh:'说出在座你最欣赏的一个人,并说原因。',en:'Name the person here you admire most, and why.'},
+      {zh:'你做过最尴尬的一件事是什么?',en:'What’s the most embarrassing thing you’ve done?'},
+      {zh:'把你的手机屏保给大家看一眼。',en:'Show everyone your phone wallpaper.'},
+      {zh:'最近一次说谎是为了什么?',en:'What was your most recent lie about?'},
+      {zh:'在座谁最可能一夜暴富?为什么?',en:'Who here is most likely to get rich overnight? Why?'},
+      {zh:'认真说出你自己的三个优点。',en:'Say three of your own good qualities, seriously.'},
+      {zh:'你今年最想完成的一件事是什么?',en:'What do you most want to accomplish this year?'},
+      {zh:'你最喜欢的一句歌词,唱出来。',en:'Sing your favorite line from any song.'},
+      {zh:'你上一次哭是因为什么?',en:'What made you cry the last time?'},
+      {zh:'在座第一印象最好的是谁?',en:'Who here gave you the best first impression?'},
+      {zh:'你手机里最舍不得删的一个 App?',en:'Which app could you never bring yourself to delete?'},
+      {zh:'说一个你最近很上头的东西(剧/歌/游戏)。',en:'Name something you’re obsessed with lately.'}
+    ],
+    spicy:[
+      {zh:'把你相册里最近的一张照片展示给大家。',en:'Show the most recent photo in your gallery.'},
+      {zh:'你偷偷喜欢过在座的某个人吗?',en:'Have you ever secretly had a crush on someone here?'},
+      {zh:'念出你最近一次的搜索记录。',en:'Read out your most recent search history.'},
+      {zh:'说一个你几乎没跟别人讲过的小秘密。',en:'Share a small secret you’ve told almost no one.'},
+      {zh:'你朋友圈屏蔽过谁?为什么?',en:'Whose eyes do you hide your posts from, and why?'},
+      {zh:'你做过最疯狂的一件事是什么?',en:'What’s the craziest thing you’ve ever done?'},
+      {zh:'在座谁最有可能是"海王/海后"?',en:'Who here is most likely a heartbreaker?'},
+      {zh:'你给别人取过最损的一个外号是?',en:'The most savage nickname you’ve given someone?'},
+      {zh:'你最丢人的一次醉酒经历?',en:'Your most embarrassing drunk story?'},
+      {zh:'前任和现任,你更怀念哪个瞬间?',en:'Ex or current — which moment do you miss more?'},
+      {zh:'手机里有没有你不想被人看到的聊天?(不用打开)',en:'Any chats you’d hate people to see? (don’t open them)'},
+      {zh:'你最近一次心动是对谁?可以形容不指名。',en:'Who gave you butterflies most recently? Describe, no names needed.'}
+    ],
+    wild:[
+      {zh:'说出在座你最想单独约出去的一个人。',en:'Name the one person here you’d most want a one-on-one date with.'},
+      {zh:'你给暗恋对象发过最大胆的一条消息是?',en:'The boldest message you’ve ever sent a crush?'},
+      {zh:'现场念出你和某个联系人的最后一条聊天。',en:'Read aloud your last message with any one contact.'},
+      {zh:'你做过最"社死"的一件事,细节版。',en:'Your most mortifying moment — with full details.'},
+      {zh:'在座如果只能删一个好友,你删谁?',en:'If you had to unfriend one person here, who?'},
+      {zh:'你撒过最大的一个谎,后来穿帮了吗?',en:'Your biggest lie ever — did it get exposed?'},
+      {zh:'你手机备注最特别的一个人,备注写的是什么?',en:'Your most special saved-contact name — what is it?'},
+      {zh:'说出你最不想让爸妈知道的一件事。',en:'One thing you’d least want your parents to know.'},
+      {zh:'在座你最想和谁交换一天人生?',en:'Who here would you swap lives with for a day?'},
+      {zh:'你收到过或做过最尴尬的一次表白/被拒经历?',en:'Your most awkward confession or rejection?'},
+      {zh:'选一个在座的人,说出你对 TA 的真实评价。',en:'Pick someone here and give your honest take on them.'},
+      {zh:'你谈过最短的一段感情多久?为什么分?',en:'Your shortest relationship — how long, and why it ended?'}
+    ]
+  },
+  dare:{
+    mild:[
+      {zh:'用最夸张的语气念一句广告词。',en:'Read an ad slogan in the most over-the-top voice.'},
+      {zh:'和右手边的人击掌三次并大喊"兄弟"。',en:'High-five the person on your right 3× and yell “bro”.'},
+      {zh:'模仿一个在座的人说话,让大家猜是谁。',en:'Impersonate someone here; let the others guess who.'},
+      {zh:'原地做十个开合跳。',en:'Do 10 jumping jacks right now.'},
+      {zh:'给全场比一个你最丑的表情,保持五秒。',en:'Pull your ugliest face and hold it for 5 seconds.'},
+      {zh:'连续学三种动物叫。',en:'Imitate three different animal sounds in a row.'},
+      {zh:'对着手机镜头说一句土味情话。',en:'Say a cheesy pickup line to the camera.'},
+      {zh:'唱任意一首歌的副歌部分。',en:'Sing the chorus of any song.'},
+      {zh:'夸右边的人三十秒,中间不能停。',en:'Compliment the person on your right for 30s, no pausing.'},
+      {zh:'用一种方言说"我今天超开心"。',en:'Say “I’m so happy today” in an accent or dialect.'},
+      {zh:'让左边的人给你摆个 pose,你定住拍照。',en:'Let your left neighbor pose you; freeze for a photo.'},
+      {zh:'学主持人报幕的样子介绍下一位玩家。',en:'Introduce the next player like a game-show host.'}
+    ],
+    spicy:[
+      {zh:'让全场投票选一人,你和 TA 深情对视十秒。',en:'The group picks one person — hold eye contact 10s.'},
+      {zh:'模仿你喝醉后的样子走一圈。',en:'Walk a lap imitating drunk-you.'},
+      {zh:'打开外卖软件,念出你最近点的三单。',en:'Open your delivery app and read your last 3 orders.'},
+      {zh:'让在座任意一人翻你最近三条朋友圈。',en:'Let anyone here scroll your last 3 posts.'},
+      {zh:'用最"性感"的声音报一遍桌上的东西。',en:'Name everything on the table in your sexiest voice.'},
+      {zh:'和对面的人玩"三十秒不许笑"对视。',en:'Stare-off with the person across you — first to laugh loses.'},
+      {zh:'让右边的人在你脸上画一笔(可洗)。',en:'Let your right neighbor draw one line on your face (washable).'},
+      {zh:'给微信列表第五个人发"在吗",截图为证(或喝两杯)。',en:'Text “you there?” to your 5th chat; screenshot it (or drink 2).'},
+      {zh:'学一下你男神/女神的经典动作。',en:'Imitate your celebrity crush’s signature move.'},
+      {zh:'抱着桌上一样东西当"对象",表白三十秒。',en:'Confess your love to an object on the table for 30s.'},
+      {zh:'让全场每人问你一个问题,你诚实回答其中一个。',en:'Everyone asks one question; answer one honestly.'},
+      {zh:'现场给一个朋友打电话说"我突然有点想你"(或喝三杯)。',en:'Call a friend and say “I suddenly miss you” (or drink 3).'}
+    ],
+    wild:[
+      {zh:'让全场投票选一个人,给对方一个真诚的拥抱。',en:'The group picks one person — give them a sincere hug.'},
+      {zh:'发一条朋友圈:"有点想你了",保留一分钟(或喝三杯)。',en:'Post “missing someone” for one minute (or drink 3).'},
+      {zh:'让右边的人看你微信聊天列表第一个是谁。',en:'Let your right neighbor see who’s #1 in your chat list.'},
+      {zh:'给你前任或暗恋对象发一个表情包,截图为证(或喝四杯)。',en:'Send an emoji to your ex or crush; screenshot it (or drink 4).'},
+      {zh:'公开你手机里最尴尬的一张自拍。',en:'Show the most embarrassing selfie on your phone.'},
+      {zh:'让全场任意一人问三个问题,你必须全部诚实回答。',en:'Answer 3 questions from anyone here — all honestly.'},
+      {zh:'选一个在座的人,说出你对 TA 的第一印象和现在印象。',en:'Pick someone; share your first vs current impression of them.'},
+      {zh:'模仿在座每一个人的一个标志性动作。',en:'Imitate one signature move of every person here.'},
+      {zh:'让对面的人念出你通话记录里的第一个(或喝三杯)。',en:'Let someone read the top entry in your call log (or drink 3).'},
+      {zh:'对着镜头认真表白一个此刻最想念的人(不用发出去)。',en:'Sincerely confess to whoever you miss most (don’t send it).'},
+      {zh:'让全场决定你接下来三局的绰号。',en:'Let the group pick your nickname for the next 3 rounds.'},
+      {zh:'说出在座每个人的一个优点和一个"小毛病"。',en:'Name one strength and one flaw for every person here.'}
+    ]
+  }
+};
+const TD = { names:['玩家1','玩家2','玩家3','玩家4'], n:4, level:'mild', turn:0, view:'setup', kind:null, prompt:null };
+const TD_LV = { mild:'清水', spicy:'微醺', wild:'重口' };
+const TD_LVD = { mild:'轻松搞笑,人人都能玩', spicy:'有点私人,微微上头', wild:'大胆社死,慎入!' };
+function tdP(it){ return (LANG==='en') ? it.en : it.zh; }
+function tdRenderNames(){
+  let h='';
+  for(let i=0;i<TD.n;i++){ const v=TD.names[i]||('玩家'+(i+1));
+    h+='<div class="name-input"><span class="seat-num">'+(i+1)+'</span><input type="text" maxlength="8" value="'+escapeHtml(v)+'" data-i="'+i+'" placeholder="玩家'+(i+1)+'"></div>'; }
+  return h;
+}
+function tdCollect(){ for(let i=0;i<TD.n;i++){ TD.names[i]=(TD.names[i]&&TD.names[i].trim())?TD.names[i].trim():('玩家'+(i+1)); } TD.names=TD.names.slice(0,TD.n); }
+function tdDraw(kind){
+  TD.kind=kind;
+  const pool=TD_BANK[kind][TD.level];
+  TD.prompt=pool[Math.floor(Math.random()*pool.length)];
+  TD.view='prompt'; tdRender();
+}
+function tdNext(){ TD.turn=(TD.turn+1)%TD.n; TD.view='pick'; tdRender(); }
+function tdRender(){
+  const v=$('tdView');
+  if(TD.view==='setup'){
+    let chips='';
+    for(const k of ['mild','spicy','wild']){
+      chips+='<div class="td-chip '+(TD.level===k?'on':'')+'" data-lv="'+k+'"><div class="td-chip-t">'+TD_LV[k]+'</div><div class="td-chip-d">'+TD_LVD[k]+'</div></div>';
+    }
+    v.innerHTML='<div style="padding:2px">'
+      +'<div class="section-title">选个尺度</div>'
+      +'<div class="td-levels">'+chips+'</div>'
+      +'<div class="section-title" style="margin-top:16px">人数</div>'
+      +'<div class="card-panel"><div class="count-row">'
+        +'<button class="btn stepper" id="tdMinus">−</button><div class="num" id="tdCount">'+TD.n+'</div><button class="btn stepper" id="tdPlus">+</button>'
+      +'</div><div class="section-title" style="margin-top:14px">玩家昵称</div><div class="names" id="tdNames">'+tdRenderNames()+'</div></div>'
+      +'<div class="card-panel rules" style="margin-top:14px">'
+        +'<div>· 轮流来,每人选 <b>真心话</b> 或 <b>大冒险</b>,完成对应任务。</div>'
+        +'<div>· 不敢做?<b>罚自己一杯</b>,再点下一位。</div>'
+        +'<div>· 尺度随时可在开始前调整,量力而行 。</div>'
+      +'</div>'
+      +'<div style="margin-top:18px;display:grid;gap:10px">'
+        +'<button class="btn gold full btn-lg" id="tdStart">开 始</button>'
+        +'<button class="btn ghost full" id="tdBack">返回</button>'
+      +'</div></div>';
+    $('tdNames').querySelectorAll('input').forEach(inp=>{ inp.oninput=()=>{ TD.names[parseInt(inp.dataset.i,10)]=inp.value; }; });
+    v.querySelectorAll('[data-lv]').forEach(b=> b.onclick=()=>{ TD.level=b.dataset.lv; sfx('tap'); tdRender(); });
+    $('tdMinus').onclick=()=>{ if(TD.n>2){ TD.n--; tdRender(); } };
+    $('tdPlus').onclick=()=>{ if(TD.n<12){ TD.n++; tdRender(); } };
+    $('tdStart').onclick=()=>{ tdCollect(); TD.turn=0; TD.view='pick'; feedback('deal'); tdRender(); };
+    $('tdBack').onclick=()=> show('home');
+    return;
+  }
+  const me=TD.names[TD.turn];
+  const badge='<span class="td-badge">'+TD_LV[TD.level]+'</span>';
+  if(TD.view==='pick'){
+    v.innerHTML='<div class="xj-view">'
+      +'<div class="xj-top">'+badge+'</div>'
+      +'<div class="sc-prompt">轮到 <b>'+escapeHtml(me)+'</b> · 请把手机递给 TA</div>'
+      +'<div class="sc-hint">选真心话,还是大冒险?</div>'
+      +'<div class="td-two">'
+        +'<button class="btn gold" id="tdTruth">真心话</button>'
+        +'<button class="btn gold" id="tdDare">大冒险</button>'
+      +'</div>'
+      +'<button class="btn ghost" id="tdQuit" style="width:min(92vw,460px)">结束</button>'
+    +'</div>';
+    $('tdTruth').onclick=()=>{ sfx('tap'); tdDraw('truth'); };
+    $('tdDare').onclick=()=>{ sfx('tap'); tdDraw('dare'); };
+    $('tdQuit').onclick=()=> show('home');
+    return;
+  }
+  // prompt
+  v.innerHTML='<div class="xj-view">'
+    +'<div class="xj-top">'+badge+' · '+escapeHtml(me)+'</div>'
+    +'<div class="td-kind '+TD.kind+'">'+(TD.kind==='truth'?'真心话':'大冒险')+'</div>'
+    +'<div class="td-card"><div class="td-prompt">'+escapeHtml(tdP(TD.prompt))+'</div></div>'
+    +'<div class="sc-hint">不敢做?罚自己一杯 </div>'
+    +'<div class="td-two">'
+      +'<button class="btn" id="tdAgain">换一题</button>'
+      +'<button class="btn gold" id="tdDone">完成 · 下一位 →</button>'
+    +'</div>'
+  +'</div>';
+  $('tdAgain').onclick=()=>{ sfx('tap'); tdDraw(TD.kind); };
+  $('tdDone').onclick=()=>{ feedback('tap'); tdNext(); };
+}
+
+/* =========================================================
+   背景音乐(可关)· WebAudio 合成的轻量 chiptune 循环
+========================================================= */
+let bgmOn=false, bgmTimer=null, bgmStep=0;
+const BGM_MEL=[440,392,329.6,392, 293.7,329.6,392,329.6, 261.6,293.7,329.6,293.7, 220,261.6,293.7,392];
+function bgmNote(f,dur,vol){
+  const c=ac(); if(!c) return;
+  try{
+    const t=c.currentTime,o=c.createOscillator(),g=c.createGain();
+    o.type='triangle'; o.frequency.setValueAtTime(f,t);
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.exponentialRampToValueAtTime(vol,t+0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.connect(g); g.connect(c.destination); o.start(t); o.stop(t+dur+0.03);
+  }catch(e){}
+}
+function bgmTick(){
+  if(!bgmOn) return;
+  const f=BGM_MEL[bgmStep%BGM_MEL.length];
+  bgmNote(f,0.34,0.045);
+  if(bgmStep%4===0) bgmNote(f/2,0.5,0.03);   // 低音
+  bgmStep++;
+}
+function bgmStart(){ if(!ac()) return; bgmOn=true; bgmStep=0; if(bgmTimer) clearInterval(bgmTimer); bgmTimer=setInterval(bgmTick,300); }
+function bgmStop(){ bgmOn=false; if(bgmTimer){ clearInterval(bgmTimer); bgmTimer=null; } }
+
+/* =========================================================
+   庆祝彩带(像素方块)
+========================================================= */
+function confetti(n){
+  const cols=['#d97757','#e6b45f','#5fcf86','#5fa6e0','#d98fd0','#e9e2cf'];
+  const w=document.createElement('div'); w.className='confetti';
+  const k=n||46;
+  for(let i=0;i<k;i++){
+    const p=document.createElement('i');
+    p.style.left=(Math.random()*100)+'vw';
+    p.style.background=cols[i%cols.length];
+    p.style.animationDelay=(Math.random()*0.35)+'s';
+    p.style.animationDuration=(1.1+Math.random()*1)+'s';
+    w.appendChild(p);
+  }
+  document.body.appendChild(w);
+  setTimeout(()=>w.remove(),2600);
+}
+
+/* =========================================================
    事件绑定
 ========================================================= */
 $('startTexas').onclick=()=>{ show('setup'); renderNames(); };
@@ -2087,6 +2379,15 @@ $('startSoccer').onclick=()=>{ SC.view='setup'; show('soccer'); scRender(); };
 // 小姐牌
 $('startXJ').onclick=()=>{ X.view='setup'; show('xj'); xjRender(); };
 
+// 真心话大冒险
+$('startTD').onclick=()=>{ TD.view='setup'; show('td'); tdRender(); };
+
+// 背景音乐开关
+$('bgmBtn').onclick=()=>{
+  if(bgmOn){ bgmStop(); } else { ac(); bgmStart(); }
+  $('bgmBtn').classList.toggle('off',!bgmOn);
+};
+
 // 音效开关
 $('soundBtn').onclick=()=>{
   soundOn=!soundOn;
@@ -2112,6 +2413,7 @@ document.addEventListener('pointerdown', e=>{
 i18nInit();
 document.querySelectorAll('[data-ic]').forEach(el=>{ el.innerHTML=ic(el.getAttribute('data-ic')); });
 $('soundBtn').innerHTML=ic('volOn');
+$('bgmBtn').innerHTML=ic('note');
 G.names=['玩家1','玩家2','玩家3','玩家4'];
 show('home');
 applyTheme();
