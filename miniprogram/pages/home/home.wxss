@@ -25,3 +25,4 @@
   border: 2rpx solid #3a4658; border-radius: 8rpx; padding: 2rpx 12rpx;
 }
 .garrow { color: var(--orange); font-size: 24rpx; opacity: .7; }
+.gcard.hot { border-color: var(--orange); box-shadow: 0 8rpx 0 rgba(0,0,0,.5), 0 0 26rpx rgba(217,119,87,.45); }

@@ -5,6 +5,16 @@
   </view>
   <view class="sec-title">▶ 选 择 关 卡</view>
 
+  <view class="gcard hot" hover-class="pbtn-press" bindtap="goOnline">
+    <view class="gicon" style="border-color:#e6b45f;background:#2e2410">🌐</view>
+    <view class="gbody">
+      <view class="gtitle">联机房间 · NEW</view>
+      <view class="gdesc">各自手机建房联机 · 德州各看各的底牌</view>
+      <view class="gpill" style="color:#e6b45f;border-color:#e6b45f">德州 / 21点</view>
+    </view>
+    <view class="garrow">▶</view>
+  </view>
+
   <view class="gcard" hover-class="pbtn-press" bindtap="goTexas">
     <view class="gicon" style="border-color:#5fa6e0;background:#10243a">🃏</view>
     <view class="gbody">

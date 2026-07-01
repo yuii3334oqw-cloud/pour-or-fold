@@ -1,0 +1,31 @@
+<view class="wrap">
+  <view class="sec-title">你的昵称</view>
+  <view class="panel">
+    <view class="name-row"><view class="seat-num">我</view>
+      <input class="name-ipt" value="{{nick}}" maxlength="8" bindinput="onNick" placeholder="起个名字"/>
+    </view>
+  </view>
+
+  <view class="sec-title">建 房 间</view>
+  <view class="panel">
+    <view class="td-levels">
+      <view class="td-chip {{game==='texas'?'on':''}}" data-g="texas" bindtap="pick">
+        <view class="td-chip-t">德州扑克</view><view class="td-chip-d">各自看底牌 · 实时同步</view>
+      </view>
+      <view class="td-chip {{game==='blackjack'?'on':''}}" data-g="blackjack" bindtap="pick">
+        <view class="td-chip-t">21 点</view><view class="td-chip-d">轮流坐庄 · 明牌对局</view>
+      </view>
+    </view>
+    <view class="pbtn gold big" hover-class="pbtn-press" bindtap="create">创 建 房 间</view>
+  </view>
+
+  <view class="sec-title">加 入 房 间</view>
+  <view class="panel">
+    <view class="name-row"><view class="seat-num">#</view>
+      <input class="name-ipt" value="{{code}}" type="number" maxlength="4" bindinput="onCode" placeholder="输入 4 位房号"/>
+    </view>
+    <view class="pbtn big" hover-class="pbtn-press" bindtap="join">加 入</view>
+  </view>
+
+  <view class="foot">建房后把房号发到群里,大家各自手机加入 · 请理性饮酒</view>
+</view>

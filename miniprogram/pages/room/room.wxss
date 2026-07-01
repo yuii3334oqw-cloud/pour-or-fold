@@ -1,0 +1,13 @@
+.room-head{display:flex;align-items:center;justify-content:space-between;margin:10rpx 0;}
+.room-code{font-family:var(--pix);font-size:34rpx;}
+.pbtn.sm{padding:10rpx 22rpx;font-size:24rpx;margin-top:0;}
+.lobby-row{display:flex;align-items:center;justify-content:space-between;padding:16rpx 4rpx;border-bottom:2rpx solid rgba(255,255,255,.05);}
+.lobby-nm{font-weight:700;font-size:30rpx;}
+.badge.me{background:var(--orange);color:#241006;border-color:#5e2b18;}
+.lobby-st{font-size:24rpx;color:var(--muted);}
+.lobby-st.ok{color:#5ad17a;}
+.share-btn{margin-top:20rpx;background:#161d27;color:var(--text);border:4rpx solid rgba(0,0,0,.55);
+  border-radius:12rpx;font-size:28rpx;padding:22rpx;box-shadow:0 6rpx 0 rgba(0,0,0,.5);}
+.share-btn::after{border:none;}
+.seat.meseat{border-color:var(--gold);box-shadow:0 6rpx 0 rgba(0,0,0,.5),0 0 22rpx rgba(212,175,55,.5);}
+.bj-dealer-name{font-size:28rpx;font-weight:700;margin-top:12rpx;}

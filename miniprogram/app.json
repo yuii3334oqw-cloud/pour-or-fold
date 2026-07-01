@@ -1,6 +1,8 @@
 {
   "pages": [
     "pages/home/home",
+    "pages/online/online",
+    "pages/room/room",
     "pages/texas/texas",
     "pages/blackjack/blackjack",
     "pages/soccer/soccer",
