@@ -206,3 +206,11 @@ page {
 .hold-hint { font-size: 27rpx; color: var(--gold-soft); }
 .ov-btn { width: 100%; max-width: 620rpx; }
 .foot { text-align: center; color: var(--muted); font-size: 20rpx; padding: 30rpx 0; opacity: .6; }
+
+/* 游戏尺度/选择 chip(联机大厅 + 真心话若移植用) */
+.td-levels { display: flex; gap: 16rpx; margin-bottom: 16rpx; }
+.td-chip { flex: 1; background: #161d27; border: 4rpx solid rgba(0,0,0,.55); border-radius: 12rpx;
+  padding: 20rpx 12rpx; text-align: center; box-shadow: 0 6rpx 0 rgba(0,0,0,.5); }
+.td-chip.on { border-color: var(--orange); background: #241a16; box-shadow: 0 6rpx 0 rgba(0,0,0,.5), 0 0 20rpx rgba(217,119,87,.6); }
+.td-chip-t { font-weight: 800; font-size: 32rpx; color: var(--orange-soft); }
+.td-chip-d { font-size: 20rpx; color: var(--muted); margin-top: 6rpx; line-height: 1.35; }

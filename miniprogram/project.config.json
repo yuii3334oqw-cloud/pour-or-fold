@@ -3,6 +3,7 @@
   "appid": "touristappid",
   "projectname": "pour-or-fold",
   "libVersion": "3.4.3",
+  "cloudfunctionRoot": "cloudfunctions/",
   "setting": {
     "es6": true,
     "enhance": true,

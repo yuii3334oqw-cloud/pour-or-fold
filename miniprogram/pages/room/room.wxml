@@ -1,0 +1,150 @@
+<import src="/tpl/cards.wxml"/>
+<view class="wrap">
+
+  <!-- 大厅 -->
+  <block wx:if="{{vm.mode === 'lobby'}}">
+    <view class="room-head">
+      <view class="room-code">房号 <text class="hl">{{roomId}}</text></view>
+      <view class="pbtn ghost sm" hover-class="pbtn-press" bindtap="copyCode">复制</view>
+    </view>
+    <view class="sec-title">{{vm.gameName}} · 等待玩家({{room.players.length}})</view>
+    <view class="panel">
+      <view class="lobby-row" wx:for="{{vm.players}}" wx:key="index">
+        <view class="lobby-nm">{{item.name}}<text class="badge" wx:if="{{item.host}}">房主</text><text class="badge me" wx:if="{{item.me}}">我</text></view>
+        <view class="lobby-st {{item.ready ? 'ok' : ''}}">{{item.host ? '——' : (item.ready ? '已准备' : '未准备')}}</view>
+      </view>
+    </view>
+    <button class="share-btn" open-type="share">邀请好友 · 发房号到群</button>
+    <view style="margin-top:20rpx;display:grid;gap:16rpx">
+      <view wx:if="{{!vm.isHost}}" class="pbtn gold big" hover-class="pbtn-press" bindtap="onReady">{{vm.iReady ? '取消准备' : '准 备'}}</view>
+      <view wx:if="{{vm.isHost}}" class="pbtn gold big {{vm.canStart ? '' : 'disabled'}}" hover-class="pbtn-press" bindtap="onStart">开 始 游 戏</view>
+      <view wx:if="{{vm.isHost && !vm.canStart}}" class="foot">至少 2 人才能开始</view>
+      <view class="pbtn ghost" hover-class="pbtn-press" bindtap="onLeave">离开房间</view>
+    </view>
+  </block>
+
+  <!-- 德州牌桌 -->
+  <block wx:elif="{{vm.mode === 'texas'}}">
+    <view class="felt">
+      <view class="street">{{vm.street}}</view>
+      <view class="comm">
+        <block wx:for="{{vm.comm}}" wx:key="index">
+          <template wx:if="{{item.face}}" is="pcard" data="{{rs:item.rs,sc:item.sc,red:item.red,size:'sz-md'}}"/>
+          <template wx:else is="pempty" data="{{size:'sz-md'}}"/>
+        </block>
+      </view>
+      <view class="pot-label">P O T · 池底</view>
+      <view class="pot-val">{{vm.pot}}<text class="pot-unit">杯</text></view>
+    </view>
+
+    <view class="seats">
+      <view class="seat {{s.active ? 'active' : ''}} {{s.folded ? 'folded' : ''}} {{s.isMe ? 'meseat' : ''}}"
+            wx:for="{{vm.seats}}" wx:for-item="s" wx:key="index">
+        <view class="seat-top">
+          <view class="seat-name">{{s.name}}<text class="badge me" wx:if="{{s.isMe}}">我</text><text class="badge" wx:if="{{s.d}}">D</text><text class="badge" wx:if="{{s.sb}}">SB</text><text class="badge" wx:if="{{s.bb}}">BB</text></view>
+          <view class="seat-cards">
+            <block wx:if="{{s.mine}}">
+              <template is="pcard" wx:for="{{s.mine}}" wx:for-item="c" wx:key="index" data="{{rs:c.rs,sc:c.sc,red:c.red,size:'sz-sm'}}"/>
+            </block>
+            <block wx:else>
+              <template is="pback" data="{{size:'sz-sm'}}"/><template is="pback" data="{{size:'sz-sm'}}"/>
+            </block>
+          </view>
+        </view>
+        <view class="seat-stat {{s.folded ? 'fold-txt' : ''}}">{{s.stat}}</view>
+        <view class="chip">{{s.bet}}</view>
+      </view>
+    </view>
+
+    <view class="action-bar">
+      <block wx:if="{{vm.myTurn}}">
+        <view class="turn-of">轮到你了 · 请行动</view>
+        <view class="acts">
+          <view class="pbtn danger" hover-class="pbtn-press" bindtap="onFold">弃牌</view>
+          <view class="pbtn" wx:if="{{vm.canCheck}}" hover-class="pbtn-press" bindtap="onCheck">过牌</view>
+          <view class="pbtn" wx:else hover-class="pbtn-press" bindtap="onCall">{{vm.callLabel}}</view>
+        </view>
+        <view class="pbtn gold" hover-class="pbtn-press" bindtap="onRaise">{{vm.raiseLabel}}</view>
+        <view class="raise-row">
+          <view class="pbtn stepper" hover-class="pbtn-press" bindtap="onRaiseM">−</view>
+          <view class="raise-amt">{{vm.raiseStr}}<text class="unit">杯</text></view>
+          <view class="pbtn stepper" hover-class="pbtn-press" bindtap="onRaiseP">+</view>
+        </view>
+      </block>
+      <view wx:else class="turn-of">等 <text class="hl">{{vm.waitName}}</text> 行动…</view>
+    </view>
+  </block>
+
+  <!-- 21点牌桌 -->
+  <block wx:elif="{{vm.mode === 'bj'}}">
+    <view class="felt green">
+      <view class="street">{{vm.phase}}</view>
+      <view class="bj-dealer-name">庄家 · {{vm.dealerName}}</view>
+      <view class="comm">
+        <block wx:for="{{vm.dCards}}" wx:for-item="c" wx:key="index">
+          <template wx:if="{{c.back}}" is="pback" data="{{size:'sz-md'}}"/>
+          <template wx:else is="pcard" data="{{rs:c.rs,sc:c.sc,red:c.red,size:'sz-md'}}"/>
+        </block>
+      </view>
+      <view class="pot-val" style="font-size:52rpx">{{vm.dVal}}</view>
+    </view>
+    <view class="seats">
+      <view class="seat {{s.active ? 'active' : ''}} {{s.bust ? 'folded' : ''}} {{s.isMe ? 'meseat' : ''}}"
+            wx:for="{{vm.seats}}" wx:for-item="s" wx:key="index">
+        <view class="seat-top">
+          <view class="seat-name">{{s.name}}<text class="badge me" wx:if="{{s.isMe}}">我</text><text class="badge" wx:if="{{s.isDealer}}">D</text></view>
+          <view class="seat-stat" style="font-weight:700;color:#e7cd72">{{s.status}}</view>
+        </view>
+        <view class="sd-cards">
+          <template is="pcard" wx:for="{{s.cards}}" wx:for-item="c" wx:key="index" data="{{rs:c.rs,sc:c.sc,red:c.red,size:'sz-sm'}}"/>
+        </view>
+      </view>
+    </view>
+    <view class="action-bar">
+      <block wx:if="{{vm.myTurn}}">
+        <view class="turn-of">轮到你了</view>
+        <view class="acts">
+          <view class="pbtn" hover-class="pbtn-press" bindtap="onHit">要 牌</view>
+          <view class="pbtn gold" hover-class="pbtn-press" bindtap="onStand">停 牌</view>
+        </view>
+      </block>
+      <view wx:else class="turn-of">等 <text class="hl">{{vm.waitName}}</text> 行动…</view>
+    </view>
+  </block>
+
+  <!-- 结算 -->
+  <block wx:elif="{{vm.mode === 'result'}}">
+    <view class="banner">
+      <view class="rt">{{vm.result.title}}</view>
+      <view class="rs">{{vm.result.sub}}</view>
+    </view>
+    <view class="sec-title">谁该喝酒</view>
+    <view class="drink {{d.safe ? 'safe' : ''}}" wx:for="{{vm.result.drinks}}" wx:for-item="d" wx:key="index">
+      <view class="dn">{{d.name}}</view>
+      <view class="da {{d.safe ? 'ok' : 'no'}}">{{d.amt}}</view>
+    </view>
+    <block wx:if="{{vm.game === 'texas' && vm.result.reveal.length}}">
+      <view class="sec-title">亮牌</view>
+      <view class="sd {{r.win ? 'win' : ''}}" wx:for="{{vm.result.reveal}}" wx:for-item="r" wx:key="index">
+        <view class="sd-cards"><template is="pcard" wx:for="{{r.cards}}" wx:for-item="c" wx:key="index" data="{{rs:c.rs,sc:c.sc,red:c.red,size:'sz-sm'}}"/></view>
+        <view class="sd-info">{{r.name}} · {{r.hand}}</view>
+      </view>
+    </block>
+    <block wx:if="{{vm.game === 'blackjack'}}">
+      <view class="sec-title">本局明牌</view>
+      <view class="sd" wx:for="{{vm.result.bjReveal}}" wx:for-item="r" wx:key="index">
+        <view class="sd-cards"><template is="pcard" wx:for="{{r.cards}}" wx:for-item="c" wx:key="index" data="{{rs:c.rs,sc:c.sc,red:c.red,size:'sz-sm'}}"/></view>
+        <view class="sd-info">{{r.name}} · {{r.val}} 点</view>
+      </view>
+    </block>
+    <view style="margin-top:20rpx;display:grid;gap:16rpx">
+      <view wx:if="{{vm.isHost}}" class="pbtn gold big" hover-class="pbtn-press" bindtap="onNext">下 一 局</view>
+      <view wx:else class="foot">等房主开始下一局…</view>
+      <view class="pbtn ghost" hover-class="pbtn-press" bindtap="onLeave">离开房间</view>
+    </view>
+  </block>
+
+  <block wx:else>
+    <view class="foot" style="margin-top:200rpx">连接房间中…</view>
+  </block>
+</view>

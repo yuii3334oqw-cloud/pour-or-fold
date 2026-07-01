@@ -1,0 +1,9 @@
+{
+  "name": "room",
+  "version": "1.0.0",
+  "description": "Pour or Fold - 联机房间裁判(德州 / 21点)",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}
