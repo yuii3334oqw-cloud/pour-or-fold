@@ -12,38 +12,36 @@
 <link rel="apple-touch-icon" href="icon.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Griffy&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Noto+Serif+SC:wght@600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Griffy&family=Pixelify+Sans:wght@400;500;600;700&family=Silkscreen:wght@400;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 /* ============ 基础与变量 ============ */
 :root{
-  --bg:#0d0d10;
-  --bg2:#14141a;
-  --panel:rgba(255,255,255,.028);
-  --panel2:#191922;
-  --panel-border:rgba(240,236,227,.12);
-  --line:rgba(240,236,227,.14);
-  --line-strong:rgba(240,236,227,.32);
-  --blood:#a8362c;
-  --bone:#ece7da;
-  --orange:#c9704b;
-  --orange-soft:#dfa079;
-  --gold:#c9b37e;
-  --pix:'Cormorant Garamond','Noto Serif SC',Georgia,serif;
-  --gold-soft:#d8c79c;
-  --gold-deep:#a8916a;
-  --text:#f0ece3;
-  --muted:#8f8f96;
-  --red:#cf6b62;
-  --danger:#a8362c;
+  --bg:#0a0d12;
+  --bg2:#11161f;
+  --panel:rgba(255,255,255,.04);
+  --panel2:#222b38;
+  --panel-border:rgba(255,255,255,.10);
+  --blood:#b3241c;
+  --bone:#e9e2cf;
+  --orange:#d97757;
+  --orange-soft:#e8a585;
+  --gold:#d4af37;
+  --pix:'Pixelify Sans','Silkscreen',system-ui,sans-serif;
+  --gold-soft:#e7cd72;
+  --gold-deep:#a8841f;
+  --text:#f4f1e8;
+  --muted:#9aa3b0;
+  --red:#e8616b;
+  --danger:#c0392b;
   /* 牌桌主题(蓝/绿轮换) */
-  --felt1:#13202a;
-  --felt2:#0d151c;
+  --felt1:#0f3d5c;
+  --felt2:#0a2740;
   --felt-rim:#06182a;
-  --glow:rgba(201,112,75,.4);
+  --glow:rgba(217,119,87,.6);
 }
 body.theme-green{
-  --felt1:#152219;
-  --felt2:#0d1510;
+  --felt1:#11543f;
+  --felt2:#0a3528;
   --felt-rim:#04201a;
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -53,8 +51,9 @@ html{height:100%;}
 body{min-height:100vh;min-height:100dvh;}
 body{
   background:
-    radial-gradient(130% 100% at 50% 0%, rgba(30,30,38,.85) 0%, transparent 55%),
-    radial-gradient(120% 90% at 50% 120%, rgba(0,0,0,.5) 0%, transparent 50%),
+    radial-gradient(circle at 1px 1px, rgba(217,119,87,.045) 1px, transparent 1.5px) 0 0/20px 20px,
+    radial-gradient(130% 100% at 50% 0%, rgba(30,38,52,.9) 0%, transparent 55%),
+    radial-gradient(120% 90% at 50% 120%, rgba(0,0,0,.55) 0%, transparent 50%),
     var(--bg);
   background-attachment:fixed;
   color:var(--text);
