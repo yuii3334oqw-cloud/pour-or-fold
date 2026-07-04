@@ -214,3 +214,28 @@ page {
 .td-chip.on { border-color: var(--orange); background: #241a16; box-shadow: 0 6rpx 0 rgba(0,0,0,.5), 0 0 20rpx rgba(217,119,87,.6); }
 .td-chip-t { font-weight: 800; font-size: 32rpx; color: var(--orange-soft); }
 .td-chip-d { font-size: 20rpx; color: var(--muted); margin-top: 6rpx; line-height: 1.35; }
+
+/* ============ 网页版同款可爱字体(云端 loadFontFace 加载) ============ */
+/* 像素标题字:标题/数字/按钮等重点元素,中文自动回退系统字体(与网页版一致) */
+.pbtn, .num, .street, .pot-label, .pot-val, .pot-unit, .rt, .badge,
+.td-chip-t, .seat-num, .ov-title, .ov-name, .hold-hand, .sec-title, .raise-amt {
+  font-family: 'Pixelify Sans', -apple-system, 'PingFang SC', 'Noto Sans SC', sans-serif;
+}
+/* 牌面手绘字(点数/花色/牌背) */
+.pc-r, .pc-s, .pc-9 {
+  font-family: 'Griffy', 'Pixelify Sans', serif;
+}
+
+/* 首页等页面级重点元素也用像素字 */
+.logo, .tag, .gtitle, .gpill {
+  font-family: 'Pixelify Sans', -apple-system, 'PingFang SC', 'Noto Sans SC', sans-serif;
+}
+
+
+/* --pix 变量补定义(room 等页面直接引用)与各页面重点元素像素字 */
+page {
+  --pix: 'Pixelify Sans', -apple-system, 'PingFang SC', 'Noto Sans SC', sans-serif;
+}
+.gg, .sc-big, .xj-tag, .xj-big, .xj-k, .xj-top {
+  font-family: 'Pixelify Sans', -apple-system, 'PingFang SC', 'Noto Sans SC', sans-serif;
+}

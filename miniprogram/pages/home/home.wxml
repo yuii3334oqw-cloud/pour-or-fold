@@ -8,7 +8,7 @@
   <view class="gcard hot" hover-class="pbtn-press" bindtap="goOnline">
     <view class="gicon" style="border-color:#e6b45f;background:#2e2410">🌐</view>
     <view class="gbody">
-      <view class="gtitle">联机房间 · NEW</view>
+      <view class="gtitle">联机房间</view>
       <view class="gdesc">各自手机建房联机 · 德州各看各的底牌</view>
       <view class="gpill" style="color:#e6b45f;border-color:#e6b45f">德州 / 21点</view>
     </view>
