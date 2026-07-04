@@ -9,7 +9,14 @@ Page({
     betStr: '1',
     t: null, result: null
   },
-  B: null, bet: 1,
+  onShareAppMessage() {
+    const r = this.data.result;
+    if (this.data.view === 'result' && r) {
+      return { title: '21点战绩 · ' + r.sub, path: '/pages/blackjack/blackjack' };
+    }
+    return { title: '像素聚会牌局 · 21点轮流坐庄!', path: '/pages/blackjack/blackjack' };
+  },
+B: null, bet: 1,
 
   onMinus() { const n = this.data.n; if (n > 2) this.setNum(n - 1); },
   onPlus() { const n = this.data.n; if (n < 8) this.setNum(n + 1); },
@@ -131,7 +138,7 @@ Page({
       view: 'result',
       result: {
         title: dBust ? '庄家爆牌!' : '本 局 结 算',
-        sub: '庄家 ' + B.names[B.dealer] + ' · ' + dv + ' 点' + (dBust ? ' 💥' : '') +
+        sub: '庄家 ' + B.names[B.dealer] + ' · ' + dv + ' 点' + (dBust ? '' : '') +
           (dealerDrinks > 0 ? (' · 喝 ' + P.cup(dealerDrinks) + ' 杯') : ''),
         drinks, rows
       }

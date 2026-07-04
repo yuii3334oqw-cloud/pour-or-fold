@@ -20,7 +20,7 @@
     <view class="panel rules">
       <view class="rule-line">· 围一圈坐,轮流抽牌,按牌面执行整蛊规则。</view>
       <view class="rule-line">· 上家/下家按座位昵称自动判定;K 定酒链式累计。</view>
-      <view class="rule-line">· 抽完自动重新洗牌,玩到尽兴为止 🍻。</view>
+      <view class="rule-line">· 抽完自动重新洗牌,玩到尽兴为止。</view>
     </view>
     <view class="pbtn gold big" hover-class="pbtn-press" bindtap="onStart">开 始 抽 牌</view>
     <view class="foot">请理性饮酒 · 切勿酒驾</view>
@@ -45,7 +45,7 @@
     <view class="sc-prompt">轮到 <text class="hl">{{vm.me}}</text> 抽牌 · 请把手机递给 TA</view>
     <view class="pbtn gold big" hover-class="pbtn-press" bindtap="onDraw">抽 牌</view>
     <view class="xj-row">
-      <view class="pbtn ghost" hover-class="pbtn-press" bindtap="onPiao">🎫 出尿牌</view>
+      <view class="pbtn ghost" hover-class="pbtn-press" bindtap="onPiao">出尿牌</view>
       <view class="pbtn ghost" hover-class="pbtn-press" bindtap="onRules">规则</view>
       <view class="pbtn ghost" hover-class="pbtn-press" bindtap="onBackSetup">结束</view>
     </view>
@@ -73,7 +73,7 @@
       <view class="pbtn gold big" hover-class="pbtn-press" bindtap="onKConfirm">指定并继续 →</view>
     </block>
     <block wx:else>
-      <view class="pbtn gold big" wx:if="{{vm.canDS}}" hover-class="pbtn-press" bindtap="onDS">🎯 点杀 · 指定一人</view>
+      <view class="pbtn gold big" wx:if="{{vm.canDS}}" hover-class="pbtn-press" bindtap="onDS">点杀 · 指定一人</view>
       <view class="pbtn gold big" wx:if="{{vm.canRPS}}" hover-class="pbtn-press" bindtap="onRPS">{{vm.rpsLabel}}</view>
       <view class="pbtn {{(vm.canDS || vm.canRPS) ? 'ghost' : 'gold'}} big" hover-class="pbtn-press" bindtap="onNextPlayer">下 一 位 →</view>
     </block>
@@ -82,16 +82,16 @@
   <!-- 点杀:选人 -->
   <block wx:elif="{{view === 'dsPick'}}">
     <view class="xj-top">{{topStr}}</view>
-    <view class="xj-tag" style="margin-top:24rpx">🎯 点杀</view>
+    <view class="xj-tag" style="margin-top:24rpx">点杀</view>
     <view class="sc-prompt"><text class="hl">{{vm.me}}</text> 指定一个倒霉蛋</view>
     <view class="pbtn" wx:for="{{vm.list}}" wx:key="i" hover-class="pbtn-press" data-i="{{item.i}}" bindtap="onDSPick">{{item.name}}</view>
-    <view class="pbtn ghost" hover-class="pbtn-press" bindtap="onDSRand">🎲 随机抽一个</view>
+    <view class="pbtn ghost" hover-class="pbtn-press" bindtap="onDSRand">随机抽一个</view>
     <view class="pbtn ghost" hover-class="pbtn-press" bindtap="onCancelReveal">取消</view>
   </block>
 
   <!-- 点杀:定杯数 -->
   <block wx:elif="{{view === 'dsCups'}}">
-    <view class="xj-big">💀 {{vm.victim}}</view>
+    <view class="xj-big">✕ {{vm.victim}}</view>
     <view class="xj-rule">
       <view class="xj-desc">{{vm.me}} 判 {{vm.victim}} 喝几杯:</view>
       <view class="count-row" style="margin-top:20rpx">
@@ -105,15 +105,15 @@
 
   <!-- 点杀:结果 -->
   <block wx:elif="{{view === 'dsDone'}}">
-    <view class="xj-big">💀 {{vm.victim}}</view>
-    <view class="xj-rule"><view class="xj-desc">被点杀!{{vm.victim}} 喝 {{vm.cups}} 杯 🍶</view></view>
+    <view class="xj-big">✕ {{vm.victim}}</view>
+    <view class="xj-rule"><view class="xj-desc">被点杀!{{vm.victim}} 喝 {{vm.cups}} 杯</view></view>
     <view class="pbtn gold big" hover-class="pbtn-press" bindtap="onNextPlayer">下 一 位 →</view>
   </block>
 
   <!-- 猜拳:选对手 -->
   <block wx:elif="{{view === 'rpsPick'}}">
     <view class="xj-top">{{topStr}}</view>
-    <view class="xj-tag" style="margin-top:24rpx">✊ 猜拳决斗(输喝 {{vm.stake}} 杯)</view>
+    <view class="xj-tag" style="margin-top:24rpx">猜拳决斗(输喝 {{vm.stake}} 杯)</view>
     <view class="sc-prompt"><text class="hl">{{vm.me}}</text> 选择对手</view>
     <view class="pbtn" wx:for="{{vm.list}}" wx:key="i" hover-class="pbtn-press" data-i="{{item.i}}" bindtap="onRPSOpp">{{item.name}}</view>
     <view class="pbtn ghost" hover-class="pbtn-press" bindtap="onCancelReveal">取消</view>
@@ -124,9 +124,9 @@
     <view class="sc-prompt">把手机交给 <text class="hl">{{vm.who}}</text></view>
     <view class="sc-hint" style="color:#9aa3b0;font-size:24rpx;margin-bottom:20rpx">秘密出拳(别让对方看到)</view>
     <view class="xj-row">
-      <view class="pbtn rps" hover-class="pbtn-press" data-c="0" bindtap="onRPSPick">✊</view>
-      <view class="pbtn rps" hover-class="pbtn-press" data-c="1" bindtap="onRPSPick">✋</view>
-      <view class="pbtn rps" hover-class="pbtn-press" data-c="2" bindtap="onRPSPick">✌️</view>
+      <view class="pbtn rps" hover-class="pbtn-press" data-c="0" bindtap="onRPSPick">石头</view>
+      <view class="pbtn rps" hover-class="pbtn-press" data-c="1" bindtap="onRPSPick">布</view>
+      <view class="pbtn rps" hover-class="pbtn-press" data-c="2" bindtap="onRPSPick">剪刀</view>
     </view>
   </block>
 
@@ -135,8 +135,8 @@
     <view class="sc-prompt" style="font-size:36rpx">{{vm.me}} {{vm.ea}}  VS  {{vm.eb}} {{vm.opp}}</view>
     <view class="xj-big" wx:if="{{vm.tie}}" style="color:#d97757">平 局!</view>
     <block wx:else>
-      <view class="xj-big">😵 {{vm.loser}} 输</view>
-      <view class="xj-rule"><view class="xj-desc">{{vm.loser}} 喝 {{vm.stake}} 杯 🍶</view></view>
+      <view class="xj-big">{{vm.loser}} 输</view>
+      <view class="xj-rule"><view class="xj-desc">{{vm.loser}} 喝 {{vm.stake}} 杯</view></view>
     </block>
     <view class="xj-row">
       <view class="pbtn {{vm.tie ? 'gold' : 'ghost'}}" hover-class="pbtn-press" bindtap="onRPSReplay">{{vm.tie ? '再 出 一 次' : '再来一局'}}</view>
@@ -147,16 +147,16 @@
   <!-- 尿牌 -->
   <block wx:elif="{{view === 'piao'}}">
     <view class="xj-top">{{topStr}}</view>
-    <view class="xj-tag" style="margin-top:24rpx">🎫 打出尿牌</view>
+    <view class="xj-tag" style="margin-top:24rpx">打出尿牌</view>
     <view class="xj-rule">
-      <view class="xj-desc">打出一张「尿牌」= 准许本人去撒尿 🚽,此牌用掉作废。没有尿牌的人,中途不许离桌上厕所!</view>
+      <view class="xj-desc">打出一张「尿牌」= 准许本人去撒尿,此牌用掉作废。没有尿牌的人,中途不许离桌上厕所!</view>
     </view>
     <view class="pbtn gold big" hover-class="pbtn-press" bindtap="onPiaoGo">出 牌 · 去 撒 尿!</view>
     <view class="pbtn ghost" hover-class="pbtn-press" bindtap="onCancel">取消</view>
   </block>
   <block wx:elif="{{view === 'piaoDone'}}">
-    <view class="xj-big" style="color:#5ad17a">🚽 放 行!</view>
-    <view class="xj-rule"><view class="xj-desc">尿牌已用掉,尽情去吧~ 没尿牌的继续憋着 😆</view></view>
+    <view class="xj-big" style="color:#5ad17a">放 行!</view>
+    <view class="xj-rule"><view class="xj-desc">尿牌已用掉,尽情去吧~ 没尿牌的继续椋着</view></view>
     <view class="pbtn gold big" hover-class="pbtn-press" bindtap="onCancel">返回</view>
   </block>
 </view>

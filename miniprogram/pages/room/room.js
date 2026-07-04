@@ -21,7 +21,11 @@ Page({
   },
   onUnload() { if (this.watcher) { try { this.watcher.close(); } catch (e) {} } if (this.data.roomId) NET.call('leave', { roomId: this.data.roomId }); },
   onShareAppMessage() {
-    return { title: '来一局!房号 ' + this.data.roomId, path: '/pages/online/online?code=' + this.data.roomId };
+    const vm = this.data.vm || {};
+    if (vm.mode === 'result' && vm.result) {
+      return { title: '战绩 ' + vm.result.title + ':' + vm.result.sub + ' · 房号 ' + this.data.roomId + ' 来下一局!', path: '/pages/online/online?code=' + this.data.roomId };
+    }
+return { title: '来一局!房号 ' + this.data.roomId, path: '/pages/online/online?code=' + this.data.roomId };
   },
 
   startWatch(id) {

@@ -16,7 +16,7 @@ const XJ_REF = [
   { k: 'Q', v: '下家喝' },
   { k: 'K', v: '定酒:首张喝半杯并指定下张K喝几杯' }
 ];
-const RPS = ['✊', '✋', '✌️'];
+const RPS = ['石头', '布', '剪刀'];
 
 Page({
   data: {
@@ -31,7 +31,10 @@ Page({
   dsVictim: -1, dsCups: 1, rpsOpp: -1, rpsA: -1, rpsB: -1, rpsStake: 0.5,
   isK: false, cardR: 0,
 
-  onMinus() { const n = this.data.n; if (n > 3) this.setNum(n - 1); },
+  onShareAppMessage() {
+    return { title: '像素聚会牌局 · 小姐牌整蛊开局!', path: '/pages/xiaojie/xiaojie' };
+  },
+onMinus() { const n = this.data.n; if (n > 3) this.setNum(n - 1); },
   onPlus() { const n = this.data.n; if (n < 12) this.setNum(n + 1); },
   setNum(n) {
     FX.feedback('tap');
@@ -76,7 +79,7 @@ Page({
       vm: {
         canDS: c.r === 14,
         canRPS: c.r === 4 || c.r === 5,
-        rpsLabel: c.r === 5 ? '✊ 开始猜拳(输喝半杯)' : '✊ 用猜拳决斗(输喝 1 杯)'
+        rpsLabel: c.r === 5 ? '开始猜拳(输喝半杯)' : '用猜拳决斗(输喝 1 杯)'
       }
     });
   },
@@ -87,19 +90,19 @@ Page({
     const next = ns[(this.drawer + 1) % n];
     const r = c.r;
     if (r === 14) return { tag: 'A · 点杀', desc: me + ' 点杀任意一人,并自己决定 TA 喝几杯!(也可玩蒙眼版:蒙一人眼,指人问 TA 喝不喝)' };
-    if (r === 2) return { tag: '2 · 小姐 👑', desc: me + ' 成为「小姐」,要立刻亮明身份。之后谁喝酒都能点小姐陪喝半杯,陪喝后要说「谢谢老板」——直到下一张 2 出现才换人/解除。' };
+    if (r === 2) return { tag: '2 · 小姐', desc: me + ' 成为「小姐」,要立刻亮明身份。之后谁喝酒都能点小姐陪喝半杯,陪喝后要说「谢谢老板」——直到下一张 2 出现才换人/解除。' };
     if (r === 3) return { tag: '3 · 逛三园', desc: '从 ' + me + ' 开始「逛三园」:轮流说 动物园/植物园/水果园 里的东西,不能重复、不能卡壳,出错者喝半杯。' };
     if (r === 4) return { tag: '4 · 找人决斗', desc: me + ' 点名一人决斗,玩什么自己定(猜拳、划拳、闷酒…),输的人喝一杯!' };
     if (r === 5) return { tag: '5 · 石头剪刀布', desc: me + ' 和大家一起出拳,每输一轮 +半杯,可连续淘汰到只剩一人。' };
     if (r === 6) return { tag: '6 · 摸鼻子', desc: me + ' 不要出声,悄悄开始摸鼻子;其他人察觉后也跟着偷偷摸——最后一个摸的人喝半杯。' };
     if (r === 7) return { tag: '7 · 七的倍数', desc: '从 ' + me + ' 开始报数,遇到 7、含 7、或 7 的倍数 要拍桌说「过」并反向,出错者喝一杯。' };
-    if (r === 8) return { tag: '8 · 尿牌 🎫', desc: me + ' 获得一张「尿牌」收好——有尿牌才能去撒尿!没有尿牌的人中途不许离桌上厕所。想去时点「出尿牌」打出(作废)。' };
-    if (r === 9) return { tag: '9 · 自己喝', desc: me + ' 自己喝一杯,认栽 🍶。' };
-    if (r === 10) return { tag: '10 · 神经病 🤪', desc: me + ' 先大喊一声「我是神经病!」,此后谁搭理 TA(回应/对话)谁喝——直到下一张 10 出现才换人。' };
+    if (r === 8) return { tag: '8 · 尿牌', desc: me + ' 获得一张「尿牌」收好——有尿牌才能去撒尿!没有尿牌的人中途不许离桌上厕所。想去时点「出尿牌」打出(作废)。' };
+    if (r === 9) return { tag: '9 · 自己喝', desc: me + ' 自己喝一杯,认栽。' };
+    if (r === 10) return { tag: '10 · 神经病', desc: me + ' 先大喊一声「我是神经病!」,此后谁搭理 TA(回应/对话)谁喝——直到下一张 10 出现才换人。' };
     if (r === 11) return { tag: 'J · 上家喝', desc: me + ' 的上家「' + prev + '」喝一杯。' };
     if (r === 12) return { tag: 'Q · 下家喝', desc: me + ' 的下家「' + next + '」喝一杯。' };
     const drinkNow = (this.kPending == null) ? 0.5 : this.kPending;
-    return { tag: 'K · 定酒', desc: me + ' 抽到 K,先喝 ' + P.cup(drinkNow) + ' 杯;再指定「下一个抽到 K 的人」喝几杯 👇' };
+    return { tag: 'K · 定酒', desc: me + ' 抽到 K,先喝 ' + P.cup(drinkNow) + ' 杯;再指定「下一个抽到 K 的人」喝几杯' };
   },
   onNextPlayer() {
     FX.feedback('tap');

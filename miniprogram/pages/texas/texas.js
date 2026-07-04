@@ -10,7 +10,14 @@ Page({
   },
   G: null, peekI: -1, scores: null,
 
-  /* ---------- 设置 ---------- */
+  onShareAppMessage() {
+    const r = this.data.result;
+    if (this.data.view === 'result' && r) {
+      return { title: '德州战绩 · ' + r.sub, path: '/pages/texas/texas' };
+    }
+    return { title: '像素聚会牌局 · 一台手机来局德州!', path: '/pages/texas/texas' };
+  },
+/* ---------- 设置 ---------- */
   onMinus() { const n = this.data.numPlayers; if (n > 2) this.setNum(n - 1); },
   onPlus() { const n = this.data.numPlayers; if (n < 8) this.setNum(n + 1); },
   setNum(n) {
@@ -196,15 +203,15 @@ Page({
     let title, sub;
     if (winners.length === 1) {
       title = 'WINNER';
-      sub = '🏆 ' + winNames + ' 赢得这一池 ' + P.cup(pot) + ' 杯' +
+      sub = winNames + ' 赢得这一池 ' + P.cup(pot) + ' 杯' +
         (reason === 'showdown' && best ? (' · 牌型:' + P.handName(best)) : ' · 其余玩家全部弃牌');
     } else {
       title = 'SPLIT POT';
-      sub = '🏆 平局:' + winNames + ' · 共 ' + P.cup(pot) + ' 杯';
+      sub = '平局:' + winNames + ' · 共 ' + P.cup(pot) + ' 杯';
     }
     const drinks = G.players.map((p, i) => {
       const win = winners.indexOf(i) >= 0;
-      if (win) return { name: p.name, tag: '赢家', amt: '免喝 🎉', safe: true };
+      if (win) return { name: p.name, tag: '赢家', amt: '免喝', safe: true };
       if (p.contributed > 0) return { name: p.name, tag: '', amt: '喝 ' + P.cup(p.contributed) + ' 杯', safe: false };
       return { name: p.name, tag: '', amt: '没下注 · 免喝', safe: true };
     });

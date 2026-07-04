@@ -2,7 +2,10 @@ const FX = require('../../utils/fx');
 const BGM = require('../../utils/bgm');
 Page({
   data: { bgmOn: false },
-  onShow() { this.setData({ bgmOn: BGM.isOn() }); },
+  onShareAppMessage() {
+    return { title: '像素聚会牌局 · 德州/21点/点球/小姐牌,一部手机全搞定!', path: '/pages/home/home' };
+  },
+onShow() { this.setData({ bgmOn: BGM.isOn() }); },
   toggleBgm() {
     FX.feedback('tap');
     this.setData({ bgmOn: BGM.toggle() });

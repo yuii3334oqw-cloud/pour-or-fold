@@ -6,7 +6,7 @@
 </template>
 
 <template name="pback">
-  <view class="pc back {{size}}"><text class="pc-9">9</text></view>
+  <view class="pc back {{size}}"><text class="pc-9">9</text><text class="pc-9 flip">9</text></view>
 </template>
 
 <template name="pempty">

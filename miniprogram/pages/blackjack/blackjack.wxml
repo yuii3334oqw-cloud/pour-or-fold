@@ -28,7 +28,7 @@
       <view class="rule-line">· 各自 2 张明牌,最接近 21 不爆为目标(A=1/11,JQK=10)。</view>
       <view class="rule-line">· 闲家依次要牌 / 停牌,庄家最后行动。</view>
       <view class="rule-line">· 爆牌 / 输给庄家 → 自己喝底注;赢庄家 → 庄家喝。</view>
-      <view class="rule-line">· 庄家爆牌 → 没爆的闲家都赢,庄家照单全喝 🍶。</view>
+      <view class="rule-line">· 庄家爆牌 → 没爆的闲家都赢,庄家照单全喝。</view>
     </view>
     <view class="pbtn gold big" hover-class="pbtn-press" bindtap="onStart">开 始 发 牌</view>
     <view class="foot">请理性饮酒 · 切勿酒驾</view>
@@ -77,7 +77,7 @@
       <view class="rt">{{result.title}}</view>
       <view class="rs">{{result.sub}}</view>
     </view>
-    <view class="sec-title">谁该喝酒 🍻</view>
+    <view class="sec-title">谁该喝酒</view>
     <view class="drink {{d.safe ? 'safe' : ''}}" wx:for="{{result.drinks}}" wx:for-item="d" wx:key="index">
       <view class="dn">{{d.name}}<text class="tag" wx:if="{{d.tag}}">{{d.tag}}</text></view>
       <view class="da {{d.safe ? 'ok' : 'no'}}">{{d.amt}}</view>
@@ -91,6 +91,7 @@
       <view class="sd-info">{{r.name}}</view>
     </view>
     <view class="pbtn gold big" hover-class="pbtn-press" bindtap="onNext">下一局 · 轮流换庄</view>
+    <button class="share-pbtn" open-type="share">分 享 战 绩</button>
     <view class="pbtn ghost" hover-class="pbtn-press" bindtap="onBackSetup">结束 · 重新设置</view>
     <view class="foot">请理性饮酒 · 切勿酒驾</view>
   </block>

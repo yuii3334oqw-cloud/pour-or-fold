@@ -140,6 +140,7 @@
     <view style="margin-top:20rpx;display:grid;gap:16rpx">
       <view wx:if="{{vm.isHost}}" class="pbtn gold big" hover-class="pbtn-press" bindtap="onNext">下 一 局</view>
       <view wx:else class="foot">等房主开始下一局…</view>
+      <button class="share-pbtn" open-type="share">分享战绩 · 邀请下一局</button>
       <view class="pbtn ghost" hover-class="pbtn-press" bindtap="onLeave">离开房间</view>
     </view>
   </block>

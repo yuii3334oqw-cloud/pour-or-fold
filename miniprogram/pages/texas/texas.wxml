@@ -22,7 +22,7 @@
       <view class="rule-line">· 先轮流传手机,每人按住看自己的底牌,看完盖上。</view>
       <view class="rule-line">· 依次行动:弃牌 / 过牌 / 跟注 / 加注(0.5–5 杯可调)。</view>
       <view class="rule-line">· 自动发翻牌 / 转牌 / 河牌,摊牌自动比牌型。</view>
-      <view class="rule-line">· 赢家免喝,其余每人喝掉自己倒进池子的酒 🍶。</view>
+      <view class="rule-line">· 赢家免喝,其余每人喝掉自己倒进池子的酒。</view>
     </view>
     <view class="pbtn gold big" hover-class="pbtn-press" bindtap="onStart">开 始 发 牌</view>
     <view class="foot">请理性饮酒 · 切勿酒驾</view>
@@ -82,7 +82,7 @@
       <view class="rt">{{result.title}}</view>
       <view class="rs">{{result.sub}}</view>
     </view>
-    <view class="sec-title">谁该喝酒 🍻</view>
+    <view class="sec-title">谁该喝酒</view>
     <view class="drink {{d.safe ? 'safe' : ''}}" wx:for="{{result.drinks}}" wx:for-item="d" wx:key="index">
       <view class="dn">{{d.name}}<text class="tag" wx:if="{{d.tag}}">{{d.tag}}</text></view>
       <view class="da {{d.safe ? 'ok' : 'no'}}">{{d.amt}}</view>
@@ -94,7 +94,7 @@
           <template is="pcard" wx:for="{{r.cards}}" wx:for-item="c" wx:key="index"
                     data="{{rs: c.rs, sc: c.sc, red: c.red, size: 'sz-sm'}}"/>
         </view>
-        <view class="sd-info">{{r.name}} {{r.win ? '🏆' : ''}} · {{r.hand}}</view>
+        <view class="sd-info">{{r.name}} {{r.win ? '★' : ''}} · {{r.hand}}</view>
       </view>
       <view class="sec-title">公共牌</view>
       <view class="sd">
@@ -105,6 +105,7 @@
       </view>
     </block>
     <view class="pbtn gold big" hover-class="pbtn-press" bindtap="onNextHand">下 一 局</view>
+    <button class="share-pbtn" open-type="share">分 享 战 绩</button>
     <view class="pbtn ghost" hover-class="pbtn-press" bindtap="onBackSetup">结束 · 重新设置</view>
     <view class="foot">请理性饮酒 · 切勿酒驾</view>
   </block>
@@ -130,7 +131,7 @@
         </block>
       </view>
       <view class="hold-hand" wx:if="{{ov.holding}}">当前牌型 · {{ov.hand}}</view>
-      <view class="hold-hint">👇 按住查看底牌 · 松手盖回</view>
+      <view class="hold-hint">▼ 按住查看底牌 · 松手盖回</view>
     </view>
     <view class="pbtn gold big ov-btn" hover-class="pbtn-press" bindtap="onPeekDone">{{ov.type === 'deal' ? '看好了 · 下一位 →' : '盖上 · 完成'}}</view>
   </block>

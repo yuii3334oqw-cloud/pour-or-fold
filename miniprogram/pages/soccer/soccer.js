@@ -13,7 +13,13 @@ Page({
   },
   pen: 3, kick: 0, shotDir: null, saveDir: null,
   outcome: '', sweet: false, miss: false,
-  timer: null, pos: 0, pdir: 1,
+  onShareAppMessage() {
+    if (this.data.view === 'end') {
+      return { title: '点球战绩 · ' + this.data.a + ' ' + this.data.scoreA + ':' + this.data.scoreB + ' ' + this.data.b + ',输家喝 ' + this.data.penStr + ' 杯!', path: '/pages/soccer/soccer' };
+    }
+    return { title: '像素聚会牌局 · 点球大战一决胜负!', path: '/pages/soccer/soccer' };
+  },
+timer: null, pos: 0, pdir: 1,
 
   onUnload() { this.stopLoop(); },
   onHide() { this.stopLoop(); },
@@ -83,7 +89,7 @@ Page({
     const bd = this.board();
     const isLast = (this.kick + 1 >= 10) && ((this.kick + 1) % 2 === 0) && true;
     Object.assign(bd, {
-      txt: this.outcome === 'goal' ? '⚽️ 进 球!' : (this.outcome === 'save' ? '🧤 扑 出!' : '😵 射 偏!'),
+      txt: this.outcome === 'goal' ? '进 球!' : (this.outcome === 'save' ? '扑 出!' : '射 偏!'),
       cls: this.outcome,
       line: bd.shooter + ' 射' + DL[this.shotDir] + (this.sweet ? '(刁钻)' : '') + ' · ' + bd.keeper + ' 扑' + DL[this.saveDir],
       ballLeft: DIRP[this.shotDir], ballBottom: '-60rpx', ballDeg: 0,

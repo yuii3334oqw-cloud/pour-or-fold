@@ -1,5 +1,6 @@
 const CLOUD_ENV = require('./utils/cloudenv');
 const FONT_PIXELIFY = require('./utils/font-pixelify');
+const FONT_PIXELCN = require('./utils/font-pixelcn');
 
 App({
   onLaunch() {
@@ -8,16 +9,20 @@ App({
     }
     this.loadFonts();
   },
-  // 网页版同款像素字体:base64 内嵌,无需网络/云存储
+  // 像素字体:Pixelify Sans(英数) + 缝合怪 Fusion Pixel(中文,已裁剪子集),base64 内嵌
   loadFonts() {
-    wx.loadFontFace({
-      global: true,
-      family: 'Pixelify Sans',
-      source: 'url("data:font/ttf;base64,' + FONT_PIXELIFY + '")',
-      scopes: ['webview'],
-      success: () => console.log('[font] loaded: Pixelify Sans'),
-      fail: (e) => console.warn('[font] load fail:', e)
-    });
+    const load = (family, b64) => {
+      wx.loadFontFace({
+        global: true,
+        family,
+        source: 'url("data:font/ttf;base64,' + b64 + '")',
+        scopes: ['webview'],
+        success: () => console.log('[font] loaded:', family),
+        fail: (e) => console.warn('[font] load fail:', family, e)
+      });
+    };
+    load('Pixelify Sans', FONT_PIXELIFY);
+    load('Fusion Pixel', FONT_PIXELCN);
   },
   globalData: {}
 });
