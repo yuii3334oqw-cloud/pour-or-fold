@@ -273,3 +273,20 @@ page {
   content: ''; position: absolute; top: 8rpx; left: 8rpx; right: 8rpx; bottom: 8rpx;
   border: 2rpx solid rgba(233,226,207,.30); border-radius: 6rpx; pointer-events: none;
 }
+
+
+/* 发牌/翻牌入场动画 */
+.pc { animation: cardIn .22s ease-out; }
+@keyframes cardIn {
+  from { transform: translateY(16rpx) rotate(2deg) scale(.88); opacity: 0; }
+  to { transform: translateY(0) rotate(0) scale(1); opacity: 1; }
+}
+
+/* 胜利像素彩带 */
+.confetti { position: fixed; left: 0; right: 0; top: 0; bottom: 0; pointer-events: none; z-index: 95; overflow: hidden; }
+.cf { position: absolute; top: -24rpx; animation-name: cfFall; animation-timing-function: linear; animation-fill-mode: forwards; }
+@keyframes cfFall {
+  0% { transform: translateY(-4vh) rotate(0deg); opacity: 1; }
+  70% { opacity: 1; }
+  100% { transform: translateY(108vh) rotate(560deg); opacity: 0; }
+}

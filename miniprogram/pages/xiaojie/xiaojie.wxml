@@ -29,9 +29,10 @@
   <!-- 规则总览 -->
   <block wx:elif="{{view === 'rules'}}">
     <view class="sec-title">小姐牌 · 规则总览</view>
-    <view class="xj-li" wx:for="{{refList}}" wx:key="index">
+    <view class="foot">点任意规则可自定义玩法 · 内容清空则恢复默认</view>
+    <view class="xj-li" wx:for="{{refList}}" wx:key="index" bindtap="onEditRule" data-k="{{item.k}}">
       <view class="xj-k">{{item.k}}</view>
-      <view class="xj-v">{{item.v}}</view>
+      <view class="xj-v">{{item.v}} <text class="badge" wx:if="{{item.custom}}">自定义</text></view>
     </view>
     <view class="pbtn gold big" hover-class="pbtn-press" bindtap="onRulesBack">返回牌桌</view>
   </block>

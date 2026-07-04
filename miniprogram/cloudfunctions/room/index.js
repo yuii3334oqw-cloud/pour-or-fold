@@ -9,8 +9,8 @@ const STATE = db.collection('roomState');   // 私密(仅云函数读写:底牌/
 
 const MAXP = 8;
 function code() { return String(Math.floor(1000 + Math.random() * 9000)); }
-async function getRoom(id) { const r = await ROOMS.doc(id).get().catch(() => null); return r && r.data ? r.data : null; }
-async function getState(id) { const r = await STATE.doc(id).get().catch(() => null); return r && r.data ? r.data : null; }
+async function getRoom(id) { const r = await ROOMS.doc(id).get().catch(() => null); return r && r.data ? (delete r.data._id, r.data) : null; }
+async function getState(id) { const r = await STATE.doc(id).get().catch(() => null); return r && r.data ? (delete r.data._id, r.data) : null; }
 
 exports.main = async (event) => {
   const openid = (cloud.getWXContext() || {}).OPENID || 'anon';

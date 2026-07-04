@@ -52,7 +52,7 @@
       <view class="seat {{s.active ? 'active' : ''}} {{s.bust ? 'folded' : ''}}"
             wx:for="{{t.seats}}" wx:for-item="s" wx:key="index">
         <view class="seat-top">
-          <view class="seat-name">{{s.name}}</view>
+          <view class="seat-name">{{s.name}}<text class="badge" wx:if="{{s.doubled}}">2X</text></view>
           <view class="seat-stat" style="font-size:26rpx;font-weight:700;color:#e7cd72">{{s.status}}</view>
         </view>
         <view class="sd-cards">
@@ -66,6 +66,7 @@
       <view class="turn-of">轮到 <text class="hl">{{t.actor}}</text>({{t.role}})· 请把手机递给 TA</view>
       <view class="acts">
         <view class="pbtn" hover-class="pbtn-press" bindtap="onHit">要 牌</view>
+        <view class="pbtn" wx:if="{{t.canDouble}}" hover-class="pbtn-press" bindtap="onDouble">双 倍</view>
         <view class="pbtn gold" hover-class="pbtn-press" bindtap="onStand">停 牌</view>
       </view>
     </view>
@@ -95,4 +96,9 @@
     <view class="pbtn ghost" hover-class="pbtn-press" bindtap="onBackSetup">结束 · 重新设置</view>
     <view class="foot">请理性饮酒 · 切勿酒驾</view>
   </block>
+</view>
+
+
+<view class="confetti" wx:if="{{view === 'result' && confetti.length}}">
+  <view class="cf" wx:for="{{confetti}}" wx:key="index" style="left:{{item.l}}%;width:{{item.s}}rpx;height:{{item.s}}rpx;background:{{item.c}};animation-duration:{{item.t}}s;animation-delay:{{item.d}}s"></view>
 </view>

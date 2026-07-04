@@ -1,5 +1,6 @@
 const P = require('../../utils/poker');
 const FX = require('../../utils/fx');
+const CF = require('../../utils/confetti');
 
 const DIRP = { left: '22%', center: '50%', right: '78%' };
 const DL = { left: '左', center: '中', right: '右' };
@@ -117,7 +118,7 @@ timer: null, pos: 0, pdir: 1,
     if (this.kick >= 10 && this.kick % 2 === 0 && this.data.scoreA !== this.data.scoreB) {
       const aWin = this.data.scoreA > this.data.scoreB;
       this.setData({
-        view: 'end',
+        view: 'end', confetti: CF(),
         vm: { winner: aWin ? this.data.a : this.data.b, loser: aWin ? this.data.b : this.data.a, pen: P.cup(this.pen) }
       });
       FX.feedback('win');

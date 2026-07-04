@@ -1,5 +1,6 @@
 const P = require('../../utils/poker');
 const FX = require('../../utils/fx');
+const CF = require('../../utils/confetti');
 
 Page({
   data: {
@@ -224,7 +225,7 @@ Page({
       });
     }
     this.setData({
-      view: 'result', ov: null,
+      view: 'result', ov: null, confetti: CF(),
       result: { title, sub, drinks, rows, commRow: G.community.map(P.disp), showCards: reason === 'showdown' }
     });
     FX.feedback('win');

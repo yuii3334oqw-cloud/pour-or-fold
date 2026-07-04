@@ -57,5 +57,15 @@
     <view class="garrow">▶</view>
   </view>
 
-  <view class="foot">请理性饮酒 · 切勿酒驾 · 未成年人请勿饮酒</view>
+  <view class="gcard" hover-class="pbtn-press" bindtap="goTruth">
+    <view class="gicon gi-truth" style="border-color:#e8616b;background-color:#2f1216"></view>
+    <view class="gbody">
+      <view class="gtitle">真心话大冒险</view>
+      <view class="gdesc">清水/微醺/重口三档 · 不接受就喝</view>
+      <view class="gpill" style="color:#e8616b;border-color:#e8616b">2+ P</view>
+    </view>
+    <view class="garrow">▶</view>
+  </view>
+
+<view class="foot">请理性饮酒 · 切勿酒驾 · 未成年人请勿饮酒</view>
 </view>

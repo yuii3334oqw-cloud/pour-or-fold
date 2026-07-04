@@ -31,7 +31,34 @@ Page({
   dsVictim: -1, dsCups: 1, rpsOpp: -1, rpsA: -1, rpsB: -1, rpsStake: 0.5,
   isK: false, cardR: 0,
 
-  onShareAppMessage() {
+  onLoad() { this.loadRef(); },
+  loadRef() {
+    let ov = {};
+    try { ov = wx.getStorageSync('xj_custom') || {}; } catch (e) {}
+    this.setData({ refList: XJ_REF.map(r => ({ k: r.k, v: ov[r.k] || r.v, custom: !!ov[r.k] })) });
+  },
+  onEditRule(e) {
+    const k = e.currentTarget.dataset.k;
+    const def = XJ_REF.find(r => r.k === k) || { v: '' };
+    let ov = {};
+    try { ov = wx.getStorageSync('xj_custom') || {}; } catch (e2) {}
+    wx.showModal({
+      title: '自定义「' + k + '」规则',
+      editable: true,
+      content: ov[k] || '',
+      placeholderText: def.v,
+      confirmText: '保存',
+      success: (res) => {
+        if (!res.confirm) return;
+        const t = (res.content || '').trim();
+        if (t) ov[k] = t; else delete ov[k];
+        wx.setStorageSync('xj_custom', ov);
+        this.loadRef();
+        FX.feedback('tap');
+      }
+    });
+  },
+onShareAppMessage() {
     return { title: '像素聚会牌局 · 小姐牌整蛊开局!', path: '/pages/xiaojie/xiaojie' };
   },
 onMinus() { const n = this.data.n; if (n > 3) this.setNum(n - 1); },
@@ -89,6 +116,9 @@ onMinus() { const n = this.data.n; if (n > 3) this.setNum(n - 1); },
     const prev = ns[(this.drawer - 1 + n) % n];
     const next = ns[(this.drawer + 1) % n];
     const r = c.r;
+    const KS = { 14: 'A', 2: '2', 3: '3', 4: '4', 5: '5', 6: '6', 7: '7', 8: '8', 9: '9', 10: '10', 11: 'J', 12: 'Q', 13: 'K' };
+    let ov = {}; try { ov = wx.getStorageSync('xj_custom') || {}; } catch (e) {}
+    if (ov[KS[r]]) return { tag: KS[r] + ' · 自定义', desc: String(ov[KS[r]]).replace(/{我}/g, me).replace(/{上家}/g, prev).replace(/{下家}/g, next) };
     if (r === 14) return { tag: 'A · 点杀', desc: me + ' 点杀任意一人,并自己决定 TA 喝几杯!(也可玩蒙眼版:蒙一人眼,指人问 TA 喝不喝)' };
     if (r === 2) return { tag: '2 · 小姐', desc: me + ' 成为「小姐」,要立刻亮明身份。之后谁喝酒都能点小姐陪喝半杯,陪喝后要说「谢谢老板」——直到下一张 2 出现才换人/解除。' };
     if (r === 3) return { tag: '3 · 逛三园', desc: '从 ' + me + ' 开始「逛三园」:轮流说 动物园/植物园/水果园 里的东西,不能重复、不能卡壳,出错者喝半杯。' };

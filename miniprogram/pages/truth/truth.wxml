@@ -1,0 +1,49 @@
+<view class="wrap td-wrap">
+
+<!-- 选档 -->
+<block wx:if="{{!level}}">
+  <view class="td-hero">
+    <view class="td-title">真心话 · 大冒险</view>
+    <view class="td-sub">选个尺度 · 轮流抽题 · 不接受就喝一杯</view>
+  </view>
+  <view class="td-levels" style="flex-direction:column">
+    <view class="td-chip" hover-class="pbtn-press" data-l="mild" bindtap="onLevel">
+      <view class="td-chip-t" style="color:#5fcf86">清水</view>
+      <view class="td-chip-d">老少皆宜 · 破冰热场用</view>
+    </view>
+    <view class="td-chip" hover-class="pbtn-press" data-l="spicy" bindtap="onLevel">
+      <view class="td-chip-t" style="color:#e6b45f">微醺</view>
+      <view class="td-chip-d">有点意思了 · 朋友职场局适用</view>
+    </view>
+    <view class="td-chip" hover-class="pbtn-press" data-l="wild" bindtap="onLevel">
+      <view class="td-chip-t" style="color:#e8616b">重口</view>
+      <view class="td-chip-d">熟人局慎入 · 后果自负</view>
+    </view>
+  </view>
+  <view class="foot">请理性饮酒 · 切勿酒驾</view>
+</block>
+
+<!-- 抽题 -->
+<block wx:else>
+  <view class="td-count">{{levelName}} · 第 {{count}} 题</view>
+  <view class="td-card">
+    <block wx:if="{{!revealed}}">
+      <view class="td-pick">轮到的人选择:</view>
+      <view class="td-btns" style="width:100%">
+        <view class="pbtn td-truth big" hover-class="pbtn-press" bindtap="onTruth">真 心 话</view>
+        <view class="pbtn gold big" hover-class="pbtn-press" bindtap="onDare">大 冒 险</view>
+      </view>
+      <view class="td-hint">选完才会揭晓题目 · 不接受就喝一杯</view>
+    </block>
+    <block wx:else>
+      <view class="td-kind {{revealed === 't' ? 'truth' : 'dare'}}">{{revealed === 't' ? '真 心 话' : '大 冒 险'}}</view>
+      <view class="td-text">{{revealed === 't' ? q.t : q.d}}</view>
+    </block>
+  </view>
+  <block wx:if="{{revealed}}">
+    <view class="pbtn gold big" hover-class="pbtn-press" bindtap="onNext">完成 · 下 一 位</view>
+    <view class="pbtn ghost" hover-class="pbtn-press" bindtap="onSkip">不接受 · 喝一杯换题</view>
+  </block>
+  <view class="pbtn ghost" hover-class="pbtn-press" bindtap="onBack">换档位</view>
+</block>
+</view>

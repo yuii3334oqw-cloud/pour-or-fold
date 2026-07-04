@@ -149,3 +149,8 @@
     <view class="foot" style="margin-top:200rpx">连接房间中…</view>
   </block>
 </view>
+
+
+<view class="confetti" wx:if="{{vm.mode === 'result' && confetti.length}}">
+  <view class="cf" wx:for="{{confetti}}" wx:key="index" style="left:{{item.l}}%;width:{{item.s}}rpx;height:{{item.s}}rpx;background:{{item.c}};animation-duration:{{item.t}}s;animation-delay:{{item.d}}s"></view>
+</view>

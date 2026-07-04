@@ -6,7 +6,8 @@
     "pages/texas/texas",
     "pages/blackjack/blackjack",
     "pages/soccer/soccer",
-    "pages/xiaojie/xiaojie"
+    "pages/xiaojie/xiaojie",
+    "pages/truth/truth"
   ],
   "window": {
     "navigationBarBackgroundColor": "#0a0d12",

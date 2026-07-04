@@ -1,5 +1,6 @@
 const P = require('../../utils/poker');
 const FX = require('../../utils/fx');
+const CF = require('../../utils/confetti');
 
 Page({
   data: {
@@ -42,8 +43,8 @@ B: null, bet: 1,
   },
   deal() {
     const B = this.B;
-    B.deck = P.freshDeck(); B.hands = []; B.stood = [];
-    for (let i = 0; i < B.n; i++) { B.hands.push([B.deck.pop(), B.deck.pop()]); B.stood.push(false); }
+    B.deck = P.freshDeck(); B.hands = []; B.stood = []; B.doubled = [];
+    for (let i = 0; i < B.n; i++) { B.hands.push([B.deck.pop(), B.deck.pop()]); B.stood.push(false);  B.doubled.push(false);}
     B.phase = 'play'; B.hidden = true;
     let i = 0; while (i < B.n && i === B.dealer) i++;
     if (i >= B.n) { this.dealerPhase(); }
@@ -68,7 +69,18 @@ B: null, bet: 1,
     if (P.bjHandVal(h) > 21) { this.render(); setTimeout(() => this.done(), 750); }
     else this.render();
   },
-  onStand() { FX.feedback('tap'); this.done(); },
+  onDouble() {
+    const B = this.B;
+    if (!B || B.phase !== 'play') return;
+    const h = B.hands[B.turn];
+    if (!h || h.length !== 2 || B.doubled[B.turn]) return;
+    B.doubled[B.turn] = true;
+    FX.feedback('pour');
+    h.push(B.deck.pop());
+    this.render();
+    setTimeout(() => this.done(), 700);
+  },
+onStand() { FX.feedback('tap'); this.done(); },
   done() {
     const B = this.B;
     if (B.phase === 'dealer') { this.resolve(); return; }
@@ -87,7 +99,7 @@ B: null, bet: 1,
       const h = B.hands[i], v = P.bjHandVal(h);
       seats.push({
         name: B.names[i], cards: h.map(P.disp),
-        bust: v > 21, active: (B.phase === 'play' && i === B.turn),
+        bust: v > 21, active: (B.phase === 'play' && i === B.turn), doubled: !!(B.doubled && B.doubled[i]),
         status: P.bjIsBJ(h) ? '21点!' : (v > 21 ? ('爆 ' + v) : (B.stood[i] ? ('停 ' + v) : (v + ' 点')))
       });
     }
@@ -98,7 +110,7 @@ B: null, bet: 1,
         dCards,
         dVal: B.hidden ? '? 点' : (dv + ' 点'),
         dBust: !B.hidden && dv > 21,
-        seats,
+        seats, canDouble: B.phase === 'play' && !!B.hands[B.turn] && B.hands[B.turn].length === 2 && !(B.doubled && B.doubled[B.turn]),
         actor: B.phase === 'dealer' ? B.names[B.dealer] : B.names[B.turn],
         role: B.phase === 'dealer' ? '庄家' : '闲家'
       }
@@ -112,7 +124,7 @@ B: null, bet: 1,
     rows.push({ name: B.names[B.dealer] + ' 庄 · ' + dv + ' 点' + (dBust ? ' 爆' : ''), cards: dh.map(P.disp), win: true });
     for (let i = 0; i < B.n; i++) {
       if (i === B.dealer) continue;
-      const h = B.hands[i], pv = P.bjHandVal(h), pBust = pv > 21, pBJ = P.bjIsBJ(h);
+      const h = B.hands[i], pv = P.bjHandVal(h), pBust = pv > 21, pBJ = P.bjIsBJ(h); const bt = this.bet * (B.doubled && B.doubled[i] ? 2 : 1);
       let o;
       if (pBust) o = 'lose';
       else if (dBust) o = 'win';
@@ -121,9 +133,9 @@ B: null, bet: 1,
       else if (pv > dv) o = 'win';
       else if (pv < dv) o = 'lose';
       else o = 'push';
-      if (o === 'win') dealerDrinks += this.bet;
+      if (o === 'win') dealerDrinks += bt;
       drinks.push(
-        o === 'lose' ? { name: B.names[i], tag: '', amt: '喝 ' + P.cup(this.bet) + ' 杯', safe: false } :
+        o === 'lose' ? { name: B.names[i], tag: '', amt: '喝 ' + P.cup(bt) + ' 杯', safe: false } :
         o === 'win' ? { name: B.names[i], tag: '赢庄', amt: '免喝', safe: true } :
         { name: B.names[i], tag: '', amt: '平 · 免喝', safe: true }
       );
@@ -135,7 +147,7 @@ B: null, bet: 1,
       safe: dealerDrinks <= 0
     });
     this.setData({
-      view: 'result',
+      view: 'result', confetti: CF(),
       result: {
         title: dBust ? '庄家爆牌!' : '本 局 结 算',
         sub: '庄家 ' + B.names[B.dealer] + ' · ' + dv + ' 点' + (dBust ? '' : '') +
