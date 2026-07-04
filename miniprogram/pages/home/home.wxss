@@ -26,3 +26,13 @@
 }
 .garrow { color: var(--orange); font-size: 24rpx; opacity: .7; }
 .gcard.hot { border-color: var(--orange); box-shadow: 0 8rpx 0 rgba(0,0,0,.5), 0 0 26rpx rgba(217,119,87,.45); }
+
+
+/* BGM 开关 */
+.bgm-btn {
+  display: inline-block; margin-top: 20rpx; font-size: 22rpx; font-weight: 700;
+  color: var(--muted); border: 2rpx solid rgba(255,255,255,.18); border-radius: 30rpx;
+  padding: 8rpx 26rpx; letter-spacing: .08em;
+  font-family: 'Pixelify Sans', -apple-system, 'PingFang SC', 'Noto Sans SC', sans-serif;
+}
+.bgm-btn.on { color: var(--orange); border-color: var(--orange); box-shadow: 0 0 16rpx rgba(217,119,87,.35); }

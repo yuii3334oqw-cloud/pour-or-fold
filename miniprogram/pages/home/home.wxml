@@ -2,6 +2,7 @@
   <view class="hero">
     <view class="logo">POUR OR FOLD</view>
     <view class="tag">▚  P I X E L  P A R T Y  ▞</view>
+    <view class="bgm-btn {{bgmOn ? 'on' : ''}}" bindtap="toggleBgm">{{bgmOn ? '♪ BGM ON' : '♪ BGM OFF'}}</view>
   </view>
   <view class="sec-title">▶ 选 择 关 卡</view>
 
