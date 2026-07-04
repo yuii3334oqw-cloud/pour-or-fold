@@ -223,7 +223,7 @@ page {
 }
 /* 牌面手绘字(点数/花色/牌背) */
 .pc-r, .pc-s, .pc-9 {
-  font-family: 'Griffy', 'Pixelify Sans', serif;
+  font-family: 'Pixelify Sans', -apple-system, sans-serif;
 }
 
 /* 首页等页面级重点元素也用像素字 */
