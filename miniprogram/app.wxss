@@ -260,3 +260,16 @@ page {
   font-family: 'Pixelify Sans', 'Fusion Pixel', -apple-system, 'PingFang SC', 'Noto Sans SC', sans-serif;
 }
 .share-pbtn::after { border: none; }
+
+
+/* 牌背花纹:斜编织纹理 + 内框 */
+.pc.back {
+  background:
+    repeating-linear-gradient(45deg, rgba(233,226,207,.08) 0 6rpx, transparent 6rpx 14rpx),
+    repeating-linear-gradient(-45deg, rgba(233,226,207,.08) 0 6rpx, transparent 6rpx 14rpx),
+    linear-gradient(160deg, #241c16, #0c0907);
+}
+.pc.back::after {
+  content: ''; position: absolute; top: 8rpx; left: 8rpx; right: 8rpx; bottom: 8rpx;
+  border: 2rpx solid rgba(233,226,207,.30); border-radius: 6rpx; pointer-events: none;
+}

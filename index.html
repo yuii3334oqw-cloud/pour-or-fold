@@ -14,6 +14,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Griffy&family=Pixelify+Sans:wght@400;500;600;700&family=Silkscreen:wght@400;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
+@font-face{font-family:'Fusion Pixel';src:url('fonts/pixel-cn.ttf') format('truetype');font-display:swap;}
 /* ============ 基础与变量 ============ */
 :root{
   --bg:#0a0d12;
@@ -26,7 +27,7 @@
   --orange:#d97757;
   --orange-soft:#e8a585;
   --gold:#d4af37;
-  --pix:'Pixelify Sans','Silkscreen',system-ui,sans-serif;
+  --pix:'Pixelify Sans','Fusion Pixel','Silkscreen',system-ui,sans-serif;
   --gold-soft:#e7cd72;
   --gold-deep:#a8841f;
   --text:#f4f1e8;
@@ -57,7 +58,7 @@ body{
     var(--bg);
   background-attachment:fixed;
   color:var(--text);
-  font-family:'Noto Sans SC',system-ui,-apple-system,sans-serif;
+  font-family:'Pixelify Sans','Fusion Pixel','Noto Sans SC',system-ui,-apple-system,sans-serif;
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
   touch-action:manipulation;
@@ -217,7 +218,7 @@ h1,h2,h3,.brand,.bignum,.btn-lg{font-family:var(--pix),'Noto Sans SC',sans-serif
 .card:not(.back):not(.empty)::before{
   content:"";position:absolute;inset:2px;border:1px solid rgba(23,19,16,.4);border-radius:5px;pointer-events:none;
 }
-.card .r{font-size:calc(var(--cw,58px)*.37);line-height:.85;font-family:'Griffy',cursive;}
+.card .r{font-size:calc(var(--cw,58px)*.37);line-height:.85;font-family:'Pixelify Sans','Fusion Pixel',sans-serif;}
 .card .s{font-size:calc(var(--cw,58px)*.33);line-height:1;text-align:right;}
 .card.red{color:#b3241c;}
 /* 牌背:黑炭底 + 粗白手绘描边 + 哥特红点缀的中心 9 */
@@ -239,13 +240,8 @@ h1,h2,h3,.brand,.bignum,.btn-lg{font-family:var(--pix),'Noto Sans SC',sans-serif
   transform:translate(-50%,-50%) rotate(45deg);
   border:1.5px solid rgba(233,226,207,.5);border-radius:2px;
 }
-.card.back .r9{
-  position:absolute;left:50%;top:50%;transform:translate(-50%,-54%);
-  font-family:'Griffy',cursive;font-size:calc(var(--cw,58px)*.6);line-height:1;
-  color:#e9e2cf;z-index:1;
-  text-shadow:1.5px 0 0 rgba(179,36,28,.85), -0.5px 1px 0 #000;
-}
-.card.back .r9.br{display:none;}
+.card.back .r9{position:absolute;left:9%;top:6%;font-family:'Pixelify Sans','Fusion Pixel',sans-serif;font-size:calc(var(--cw,58px)*.42);line-height:1;color:#e9e2cf;z-index:1;text-shadow:1.5px 0 0 rgba(179,36,28,.85), -0.5px 1px 0 #000;}
+.card.back .r9.br{display:block;left:auto;top:auto;right:9%;bottom:6%;transform:rotate(180deg);}
 .card.empty{background:rgba(20,16,12,.35);border:1.5px dashed rgba(233,226,207,.2);box-shadow:none;}
 
 /* ============ 牌桌(像素) ============ */
