@@ -1,4 +1,5 @@
 const FX = require('../../utils/fx');
+const ADS = require('../../utils/ads');
 const PAIRS = [
   ['苹果','梨'],['可乐','雪碧'],['猫','老虎'],['筷子','叉子'],['西瓜','冬瓜'],
   ['太阳','月亮'],['铅笔','钢笔'],['奶茶','咖啡'],['地铁','火车'],['沙发','床'],
@@ -17,5 +18,5 @@ Page({
   peek(){ const isSpy=this.data.cur===this.data.spyIdx; FX.feedback('peek'); this.setData({ showWord:true, myWord: isSpy?this.data.spy:this.data.civ, myIsSpy:isSpy }); },
   hide(){ FX.feedback('tap'); const next=this.data.cur+1; if(next>this.data.count) this.setData({ showWord:false, phase:'play' }); else this.setData({ showWord:false, cur:next }); },
   reveal(){ FX.feedback('win'); this.setData({ phase:'result' }); },
-  again(){ FX.feedback('deal'); this.setData({ phase:'setup', showWord:false }); }
+  again(){ FX.feedback('deal'); ADS.showInterstitial(); this.setData({ phase:'setup', showWord:false }); }
 });

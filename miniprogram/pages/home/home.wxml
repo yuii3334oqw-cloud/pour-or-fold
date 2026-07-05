@@ -97,5 +97,9 @@
     <view class="garrow">▶</view>
   </view>
 
+  <view wx:if="{{rewardOn}}" class="support-btn" hover-class="pbtn-press" bindtap="onSupport">♥ 看个广告 · 支持作者</view>
+
+  <ad wx:if="{{bannerHome}}" unit-id="{{bannerHome}}" ad-type="banner" ad-theme="black"></ad>
+
   <view class="foot">请理性饮酒 · 切勿酒驾 · 未成年人请勿饮酒</view>
 </view>

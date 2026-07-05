@@ -1,8 +1,9 @@
 const NET = require('../../utils/net');
 const FX = require('../../utils/fx');
+const UNITS = require('../../utils/adunits');
 
 Page({
-  data: { nick: '', game: 'texas', code: '', busy: false },
+  data: { nick: '', game: 'texas', code: '', busy: false, bannerLobby: UNITS.bannerLobby },
   onLoad(q) {
     let nk = NET.nick();
     if (!nk) nk = '玩家' + Math.floor(100 + Math.random() * 900);

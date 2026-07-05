@@ -1,4 +1,5 @@
 const FX = require('../../utils/fx');
+const ADS = require('../../utils/ads');
 Page({
   data: { started:false, lo:1, hi:100, bomb:0, pick:50, turn:1, boom:false },
   onLoad(){ this.reset(); },
@@ -15,5 +16,5 @@ Page({
     if(pick<bomb) nlo=pick+1; else nhi=pick-1;
     this.setData({ lo:nlo, hi:nhi, pick:Math.floor((nlo+nhi)/2), turn:turn+1 });
   },
-  again(){ this.reset(); FX.feedback('deal'); }
+  again(){ this.reset(); FX.feedback('deal'); ADS.showInterstitial(); }
 });

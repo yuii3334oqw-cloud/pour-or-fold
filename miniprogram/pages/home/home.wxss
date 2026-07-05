@@ -38,6 +38,15 @@
 .bgm-btn.on { color: var(--orange); border-color: var(--orange); box-shadow: 0 0 16rpx rgba(217,119,87,.35); }
 
 
+/* 支持作者(自愿激励视频入口) */
+.support-btn {
+  display: block; text-align: center; margin: 40rpx auto 8rpx; max-width: 420rpx;
+  font-size: 22rpx; font-weight: 700; color: var(--muted);
+  border: 2rpx solid rgba(255,255,255,.16); border-radius: 30rpx;
+  padding: 14rpx 26rpx; letter-spacing: .06em;
+}
+.support-btn:active { color: var(--orange); border-color: var(--orange); }
+
 /* 花色小装饰 */
 .deco { margin-top: 16rpx; }
 .deco .d { font-size: 24rpx; color: var(--bone); opacity: .75; margin: 0 14rpx; }

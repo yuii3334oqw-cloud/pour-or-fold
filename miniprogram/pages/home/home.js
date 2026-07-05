@@ -1,7 +1,10 @@
 const FX = require('../../utils/fx');
 const BGM = require('../../utils/bgm');
+const UNITS = require('../../utils/adunits');
+const ADS = require('../../utils/ads');
 Page({
-  data: { bgmOn: false },
+  data: { bgmOn: false, bannerHome: UNITS.bannerHome, rewardOn: ADS.rewardEnabled() },
+  onSupport() { FX.feedback('tap'); ADS.showReward(function () { wx.showToast({ title: '谢谢支持 ❤', icon: 'none' }); }); },
   onShareAppMessage() {
     return { title: '像素聚会助手 · 一部手机,聚会小游戏全搞定!', path: '/pages/home/home' };
   },

@@ -1,4 +1,5 @@
 const FX = require('../../utils/fx');
+const ADS = require('../../utils/ads');
 
 const NAMES = { mild: '清水', spicy: '微醺', wild: '重口' };
 const BANK = {
@@ -76,7 +77,7 @@ Page({
   },
   onTruth() { FX.feedback('peek'); this.setData({ revealed: 't' }); },
   onDare() { FX.feedback('deal'); this.setData({ revealed: 'd' }); },
-  onNext() { FX.feedback('tap'); this.draw(); },
+  onNext() { FX.feedback('tap'); ADS.showInterstitial(); this.draw(); },
   onSkip() { FX.feedback('pour'); this.draw(); },
   onBack() { FX.feedback('tap'); this.setData({ level: '', q: null, revealed: '', count: 0 }); }
 });
