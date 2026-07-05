@@ -1,0 +1,2 @@
+/* 数字炸弹 —— 复用全局像素样式 */
+.rng-sep{ font-size:56rpx; color:var(--muted); margin:0 6rpx; }

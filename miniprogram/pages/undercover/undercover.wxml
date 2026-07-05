@@ -1,0 +1,54 @@
+<view class="wrap">
+  <view class="sec-title">🕵️ 谁 是 卧 底</view>
+  <block wx:if="{{phase==='setup'}}">
+    <view class="panel">
+      <view class="rules">
+        <view class="rule-line">每人一个词,只有 <text class="hl">1 位卧底</text> 的词不同。</view>
+        <view class="rule-line">轮流用一句话描述,别太直白!</view>
+        <view class="rule-line">投票抓卧底,被抓/猜错的 <text class="hl">接受惩罚</text>。</view>
+      </view>
+    </view>
+    <view class="sec-title">几 个 人 玩</view>
+    <view class="panel">
+      <view class="count-row">
+        <view class="pbtn stepper" hover-class="pbtn-press" bindtap="subP">−</view>
+        <text class="num">{{count}}</text>
+        <view class="pbtn stepper" hover-class="pbtn-press" bindtap="addP">+</view>
+      </view>
+    </view>
+    <view class="pbtn gold big" hover-class="pbtn-press" bindtap="begin">发 词</view>
+  </block>
+  <block wx:elif="{{phase==='reveal'}}">
+    <view class="panel" style="text-align:center">
+      <view class="ov-sub" style="margin:0 0 10rpx">把 手 机 传 给</view>
+      <view class="ov-name">玩家 {{cur}}</view>
+      <view class="rule-line" style="color:var(--muted)">看完记住,别让别人瞄到 👀</view>
+    </view>
+    <view class="pbtn gold big" hover-class="pbtn-press" bindtap="peek" wx:if="{{!showWord}}">查 看 我 的 词</view>
+  </block>
+  <block wx:elif="{{phase==='play'}}">
+    <view class="panel" style="text-align:center">
+      <view class="ov-title">开始描述 + 投票</view>
+      <view class="rules" style="margin-top:14rpx">
+        <view class="rule-line">轮流描述,一起投票抓卧底。</view>
+        <view class="rule-line">投完再点下面揭晓。</view>
+      </view>
+    </view>
+    <view class="pbtn gold big" hover-class="pbtn-press" bindtap="reveal">揭 晓 答 案</view>
+  </block>
+  <block wx:elif="{{phase==='result'}}">
+    <view class="panel" style="text-align:center">
+      <view class="ov-title">卧 底 是</view>
+      <view class="ov-name">玩家 {{spyIdx}}</view>
+      <view class="sd" style="margin-top:16rpx"><view class="sd-info">平民词:{{civ}}</view></view>
+      <view class="sd win"><view class="sd-info">卧底词:{{spy}}</view></view>
+    </view>
+    <view class="pbtn gold big" hover-class="pbtn-press" bindtap="again">再 来 一 局</view>
+  </block>
+  <view class="overlay" wx:if="{{showWord}}">
+    <view class="ov-title">{{myIsSpy ? '🤫 你 是 卧 底' : '你 的 词'}}</view>
+    <view class="ov-name">{{myWord}}</view>
+    <view class="ov-sub">记住它,描述时别太直白</view>
+    <view class="pbtn gold big ov-btn" hover-class="pbtn-press" bindtap="hide">记 住 了,藏 起 来</view>
+  </view>
+</view>

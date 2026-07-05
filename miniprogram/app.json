@@ -5,6 +5,9 @@
     "pages/room/room",
     "pages/texas/texas",
     "pages/blackjack/blackjack",
+    "pages/dice/dice",
+    "pages/undercover/undercover",
+    "pages/bomb/bomb",
     "pages/soccer/soccer",
     "pages/xiaojie/xiaojie",
     "pages/truth/truth"

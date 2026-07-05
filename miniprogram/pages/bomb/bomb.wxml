@@ -1,0 +1,37 @@
+<view class="wrap">
+  <view class="sec-title">💣 数 字 炸 弹</view>
+  <block wx:if="{{!started}}">
+    <view class="panel">
+      <view class="rules">
+        <view class="rule-line">范围 <text class="hl">1 ~ 100</text> 里藏着一颗雷。</view>
+        <view class="rule-line">轮流猜数字,范围越缩越小。</view>
+        <view class="rule-line">谁猜中那颗雷,就 <text class="hl">接受惩罚</text>(真心话/大冒险/喝一杯)。</view>
+      </view>
+    </view>
+    <view class="pbtn gold big" hover-class="pbtn-press" bindtap="start">开 始</view>
+  </block>
+  <block wx:else>
+    <view class="panel">
+      <view class="pot-label" style="text-align:center">当 前 范 围</view>
+      <view class="count-row">
+        <text class="num">{{lo}}</text><text class="rng-sep">~</text><text class="num">{{hi}}</text>
+      </view>
+      <view class="turn-of">轮到 第 {{turn}} 位</view>
+    </view>
+    <view class="panel" style="margin-top:20rpx">
+      <view class="count-row">
+        <view class="pbtn stepper" hover-class="pbtn-press" bindtap="dec">−</view>
+        <text class="num" style="min-width:200rpx">{{pick}}</text>
+        <view class="pbtn stepper" hover-class="pbtn-press" bindtap="inc">+</view>
+      </view>
+      <slider min="{{lo}}" max="{{hi}}" value="{{pick}}" block-size="28" activeColor="#d97757" backgroundColor="#39424f" bindchanging="onSlide" bindchange="onSlide"/>
+    </view>
+    <view class="pbtn gold big" hover-class="pbtn-press" bindtap="cut">拆 · 就 它 了</view>
+  </block>
+  <view class="overlay" wx:if="{{boom}}">
+    <view class="ov-title">💥 B O O M</view>
+    <view class="ov-name">{{pick}}</view>
+    <view class="ov-sub">第 {{turn}} 位踩雷了 · 接受惩罚!</view>
+    <view class="pbtn gold big ov-btn" hover-class="pbtn-press" bindtap="again">再 来 一 局</view>
+  </view>
+</view>

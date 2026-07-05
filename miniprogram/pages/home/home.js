@@ -3,17 +3,17 @@ const BGM = require('../../utils/bgm');
 Page({
   data: { bgmOn: false },
   onShareAppMessage() {
-    return { title: '像素聚会牌局 · 德州/21点/点球/小姐牌,一部手机全搞定!', path: '/pages/home/home' };
+    return { title: '像素聚会助手 · 一部手机,聚会小游戏全搞定!', path: '/pages/home/home' };
   },
-onShow() { this.setData({ bgmOn: BGM.isOn() }); },
-  toggleBgm() {
-    FX.feedback('tap');
-    this.setData({ bgmOn: BGM.toggle() });
-  },
+  onShow() { this.setData({ bgmOn: BGM.isOn() }); },
+  toggleBgm() { FX.feedback('tap'); this.setData({ bgmOn: BGM.toggle() }); },
   goOnline() { FX.feedback('tap'); wx.navigateTo({ url: '/pages/online/online' }); },
-  goTexas() { FX.feedback('tap'); wx.navigateTo({ url: '/pages/texas/texas' }); },
-  goBJ() { FX.feedback('tap'); wx.navigateTo({ url: '/pages/blackjack/blackjack' }); },
+  goTexas()  { FX.feedback('tap'); wx.navigateTo({ url: '/pages/texas/texas' }); },
+  goBJ()     { FX.feedback('tap'); wx.navigateTo({ url: '/pages/blackjack/blackjack' }); },
+  goDice()   { FX.feedback('tap'); wx.navigateTo({ url: '/pages/dice/dice' }); },
+  goSpy()    { FX.feedback('tap'); wx.navigateTo({ url: '/pages/undercover/undercover' }); },
+  goBomb()   { FX.feedback('tap'); wx.navigateTo({ url: '/pages/bomb/bomb' }); },
   goSoccer() { FX.feedback('tap'); wx.navigateTo({ url: '/pages/soccer/soccer' }); },
-  goXJ() { FX.feedback('tap'); wx.navigateTo({ url: '/pages/xiaojie/xiaojie' }); },
-  goTruth() { FX.feedback('tap'); wx.navigateTo({ url: '/pages/truth/truth' }); }
+  goXJ()     { FX.feedback('tap'); wx.navigateTo({ url: '/pages/xiaojie/xiaojie' }); },
+  goTruth()  { FX.feedback('tap'); wx.navigateTo({ url: '/pages/truth/truth' }); }
 });

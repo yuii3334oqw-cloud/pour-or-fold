@@ -8,6 +8,14 @@ const ROOMS = db.collection('rooms');       // 公开(客户端 watch)
 const STATE = db.collection('roomState');   // 私密(仅云函数读写:底牌/牌堆)
 
 const MAXP = 8;
+function clean(o) { return JSON.parse(JSON.stringify(o)); }
+async function pubUp(id, d) {
+  d = clean(d);
+  if (d.result !== undefined) d.result = _.set(d.result);
+  if (d.tx) d.tx = _.set(d.tx);
+  if (d.bj) d.bj = _.set(d.bj);
+  await ROOMS.doc(id).update({ data: d });
+}
 function code() { return String(Math.floor(1000 + Math.random() * 9000)); }
 async function getRoom(id) { const r = await ROOMS.doc(id).get().catch(() => null); return r && r.data ? (delete r.data._id, r.data) : null; }
 async function getState(id) { const r = await STATE.doc(id).get().catch(() => null); return r && r.data ? (delete r.data._id, r.data) : null; }
@@ -82,8 +90,8 @@ async function start(ev, openid) {
   const seats = r.players.map((p, i) => ({ openid: p.openid, name: p.name, seat: i }));
   const st = { game: r.game, seats, dealer: 0 };
   if (r.game === 'texas') dealTexas(st); else dealBJ(st);
-  await STATE.doc(ev.roomId).set({ data: st });
-  await ROOMS.doc(ev.roomId).update({ data: pub(st, r, r.handVersion + 1) });
+  await STATE.doc(ev.roomId).set({ data: clean(st) });
+  await pubUp(ev.roomId, pub(st, r, r.handVersion + 1));
   return { ok: true };
 }
 async function next(ev, openid) {
@@ -91,12 +99,12 @@ async function next(ev, openid) {
   if (!r) return { ok: false, err: '房间不存在' };
   if (r.host !== openid) return { ok: false, err: '只有房主能开始下一局' };
   const st = await getState(ev.roomId);
-  if (!st) return { ok: false, err: '状态丢失,请重新开始' };
+  if (!st) return { ok: false, err: '状态丢失，请重新开始' };
   st.dealer = (st.dealer + 1) % st.seats.length;
   st.result = null;
   if (st.game === 'texas') dealTexas(st); else dealBJ(st);
-  await STATE.doc(ev.roomId).set({ data: st });
-  await ROOMS.doc(ev.roomId).update({ data: pub(st, r, (r.handVersion || 0) + 1) });
+  await STATE.doc(ev.roomId).set({ data: clean(st) });
+  await pubUp(ev.roomId, pub(st, r, (r.handVersion || 0) + 1));
   return { ok: true };
 }
 
@@ -165,7 +173,7 @@ async function act(ev, openid) {
   if (seat !== st.actor) return { ok: false, err: '还没轮到你' };
   const p = st.seats[seat], n = st.seats.length, type = ev.type;
   if (type === 'fold') p.folded = true;
-  else if (type === 'check') { if (st.currentBet - p.roundBet > 0) return { ok: false, err: '不能过牌,需跟注' }; p.hasActed = true; }
+  else if (type === 'check') { if (st.currentBet - p.roundBet > 0) return { ok: false, err: '不能过牌，需跟注' }; p.hasActed = true; }
   else if (type === 'call') { pay(p, st.currentBet - p.roundBet); p.hasActed = true; }
   else if (type === 'raise') {
     let inc = Math.max(0.5, Math.min(5, Number(ev.amt) || 1));
@@ -181,8 +189,8 @@ async function act(ev, openid) {
     const nx = nextToAct(st, (seat + 1) % n);
     if (nx === -1) endRoundTexas(st); else st.actor = nx;
   }
-  await STATE.doc(ev.roomId).set({ data: st });
-  await ROOMS.doc(ev.roomId).update({ data: pub(st, r) });
+  await STATE.doc(ev.roomId).set({ data: clean(st) });
+  await pubUp(ev.roomId, pub(st, r));
   return { ok: true };
 }
 function endRoundTexas(st) {
@@ -252,8 +260,8 @@ async function bjAct(ev, openid) {
     if (P.bjHandVal(s.bjHand) > 21) { bjDone(st); }
   } else if (ev.type === 'stand') { bjDone(st); }
   else return { ok: false, err: '非法操作' };
-  await STATE.doc(ev.roomId).set({ data: st });
-  await ROOMS.doc(ev.roomId).update({ data: pub(st, r) });
+  await STATE.doc(ev.roomId).set({ data: clean(st) });
+  await pubUp(ev.roomId, pub(st, r));
   return { ok: true };
 }
 function bjDone(st) {

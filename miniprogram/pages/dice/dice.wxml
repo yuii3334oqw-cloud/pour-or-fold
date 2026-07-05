@@ -1,0 +1,13 @@
+<view class="dice-full">
+  <view class="n-pick">
+    <view class="n-opt {{n===3?'on':''}}" data-n="3" catchtap="setN">3</view>
+    <view class="n-opt {{n===5?'on':''}}" data-n="5" catchtap="setN">5</view>
+    <view class="n-opt {{n===6?'on':''}}" data-n="6" catchtap="setN">6</view>
+  </view>
+
+  <canvas type="2d" id="dc" class="cv" bindtap="toggle"></canvas>
+
+  <view class="tap-tip" wx:if="{{rolled && !rolling}}">{{opened ? '点盅 · 合 盅' : '点盅 · 开盅偷看'}}</view>
+
+  <view class="pbtn gold big rollbtn" hover-class="pbtn-press" catchtap="tapRoll">{{rolled ? '重 摇' : '摇 骰'}}</view>
+</view>

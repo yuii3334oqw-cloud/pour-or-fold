@@ -37,6 +37,36 @@
     <view class="garrow">▶</view>
   </view>
 
+  <view class="gcard" hover-class="pbtn-press" bindtap="goDice">
+    <view class="gicon gi-dice" style="border-color:#e6b45f;background-color:#2e2410"></view>
+    <view class="gbody">
+      <view class="gtitle">大话骰</view>
+      <view class="gdesc">摇一摇晃骰盅 · 开盅露出骰子,吹牛比胆量</view>
+      <view class="gpill" style="color:#e6b45f;border-color:#e6b45f">2-8 P</view>
+    </view>
+    <view class="garrow">▶</view>
+  </view>
+
+  <view class="gcard" hover-class="pbtn-press" bindtap="goSpy">
+    <view class="gicon gi-spy" style="border-color:#7aa8ff;background-color:#111a2e"></view>
+    <view class="gbody">
+      <view class="gtitle">谁是卧底</view>
+      <view class="gdesc">发词猜身份 · 揪出词不一样的那个人</view>
+      <view class="gpill" style="color:#7aa8ff;border-color:#7aa8ff">3-12 P</view>
+    </view>
+    <view class="garrow">▶</view>
+  </view>
+
+  <view class="gcard" hover-class="pbtn-press" bindtap="goBomb">
+    <view class="gicon gi-bomb" style="border-color:#d97757;background-color:#2e1710"></view>
+    <view class="gbody">
+      <view class="gtitle">数字炸弹</view>
+      <view class="gdesc">轮流猜数字 · 踩中雷的接受惩罚</view>
+      <view class="gpill" style="color:#d97757;border-color:#d97757">2-99 P</view>
+    </view>
+    <view class="garrow">▶</view>
+  </view>
+
   <view class="gcard" hover-class="pbtn-press" bindtap="goSoccer">
     <view class="gicon gi-soccer" style="border-color:#5fcf86;background-color:#0e2c1a"></view>
     <view class="gbody">
@@ -67,5 +97,5 @@
     <view class="garrow">▶</view>
   </view>
 
-<view class="foot">请理性饮酒 · 切勿酒驾 · 未成年人请勿饮酒</view>
+  <view class="foot">请理性饮酒 · 切勿酒驾 · 未成年人请勿饮酒</view>
 </view>
