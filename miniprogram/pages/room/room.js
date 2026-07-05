@@ -2,6 +2,7 @@ const NET = require('../../utils/net');
 const FX = require('../../utils/fx');
 const P = require('../../utils/poker');
 const CF = require('../../utils/confetti');
+const ADS = require('../../utils/ads');
 
 function cup(x) { return P.cup(x); }
 const STREET = { preflop: 'PRE-FLOP', flop: 'FLOP', turn: 'TURN', river: 'RIVER' };
@@ -133,7 +134,7 @@ return { title: '来一局!房号 ' + this.data.roomId, path: '/pages/online/onl
   /* 操作 */
   onReady() { FX.feedback('tap'); NET.call('ready', { roomId: this.data.roomId, ready: !this.data.vm.iReady }); },
   onStart() { FX.feedback('deal'); NET.call('start', { roomId: this.data.roomId }); },
-  onNext() { FX.feedback('deal'); NET.call('next', { roomId: this.data.roomId }); },
+  onNext() { FX.feedback('deal'); ADS.showInterstitial(); NET.call('next', { roomId: this.data.roomId }); },
   onLeave() { const id = this.data.roomId; NET.call('leave', { roomId: id }); wx.navigateBack(); },
   onFold() { FX.feedback('fold'); NET.call('act', { roomId: this.data.roomId, type: 'fold' }); },
   onCheck() { FX.feedback('tap'); NET.call('act', { roomId: this.data.roomId, type: 'check' }); },

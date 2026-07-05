@@ -1,6 +1,7 @@
 const P = require('../../utils/poker');
 const FX = require('../../utils/fx');
 const CF = require('../../utils/confetti');
+const ADS = require('../../utils/ads');
 
 const DIRP = { left: '22%', center: '50%', right: '78%' };
 const DL = { left: '左', center: '中', right: '右' };
@@ -122,10 +123,11 @@ timer: null, pos: 0, pdir: 1,
         vm: { winner: aWin ? this.data.a : this.data.b, loser: aWin ? this.data.b : this.data.a, pen: P.cup(this.pen) }
       });
       FX.feedback('win');
+      ADS.showInterstitial();
       return;
     }
     this.toShoot();
   },
-  onAgain() { this.kick = 0; this.setData({ scoreA: 0, scoreB: 0 }); FX.feedback('deal'); this.toShoot(); },
+  onAgain() { this.kick = 0; this.setData({ scoreA: 0, scoreB: 0 }); FX.feedback('deal'); ADS.showInterstitial(); this.toShoot(); },
   onBackSetup() { this.setData({ view: 'setup' }); }
 });

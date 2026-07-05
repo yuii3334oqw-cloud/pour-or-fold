@@ -1,6 +1,7 @@
 const P = require('../../utils/poker');
 const FX = require('../../utils/fx');
 const CF = require('../../utils/confetti');
+const ADS = require('../../utils/ads');
 
 Page({
   data: {
@@ -157,6 +158,6 @@ onStand() { FX.feedback('tap'); this.done(); },
     });
     FX.feedback('win');
   },
-  onNext() { const B = this.B; B.dealer = (B.dealer + 1) % B.n; FX.feedback('deal'); this.deal(); },
+  onNext() { const B = this.B; B.dealer = (B.dealer + 1) % B.n; FX.feedback('deal'); ADS.showInterstitial(); this.deal(); },
   onBackSetup() { this.setData({ view: 'setup', t: null, result: null }); }
 });

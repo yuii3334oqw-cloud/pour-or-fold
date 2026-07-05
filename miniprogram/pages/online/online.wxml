@@ -27,5 +27,7 @@
     <view class="pbtn big" hover-class="pbtn-press" bindtap="join">加 入</view>
   </view>
 
+  <ad wx:if="{{bannerLobby}}" unit-id="{{bannerLobby}}" ad-type="banner" ad-theme="black"></ad>
+
   <view class="foot">建房后把房号发到群里,大家各自手机加入 · 请理性饮酒</view>
 </view>
