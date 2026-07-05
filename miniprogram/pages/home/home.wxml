@@ -11,7 +11,6 @@
     <view class="gicon gi-online" style="border-color:#e6b45f;background-color:#2e2410"></view>
     <view class="gbody">
       <view class="gtitle">联机房间</view>
-      <view class="gdesc">各自手机建房联机 · 德州各看各的底牌</view>
       <view class="gpill" style="color:#e6b45f;border-color:#e6b45f">德州 / 21点</view>
     </view>
     <view class="garrow">▶</view>
@@ -21,7 +20,6 @@
     <view class="gicon gi-texas" style="border-color:#5fa6e0;background-color:#10243a"></view>
     <view class="gbody">
       <view class="gtitle">德州扑克</view>
-      <view class="gdesc">2–8 人 · 一台手机传着玩,倒酒下注</view>
       <view class="gpill" style="color:#5fa6e0;border-color:#5fa6e0">2-8 P</view>
     </view>
     <view class="garrow">▶</view>
@@ -31,7 +29,6 @@
     <view class="gicon gi-bj" style="border-color:#e08a5f;background-color:#3a1c10"></view>
     <view class="gbody">
       <view class="gtitle">21 点</view>
-      <view class="gdesc">轮流坐庄 · 爆牌或输庄就喝,赢庄换庄喝</view>
       <view class="gpill" style="color:#e08a5f;border-color:#e08a5f">2-8 P</view>
     </view>
     <view class="garrow">▶</view>
@@ -41,7 +38,7 @@
     <view class="gicon gi-dice" style="border-color:#e6b45f;background-color:#2e2410"></view>
     <view class="gbody">
       <view class="gtitle">大话骰</view>
-      <view class="gdesc">摇一摇晃骰盅 · 开盅露出骰子,吹牛比胆量</view>
+      <view class="gdesc">摇盅吹牛,吹不过就喝</view>
       <view class="gpill" style="color:#e6b45f;border-color:#e6b45f">2-8 P</view>
     </view>
     <view class="garrow">▶</view>
@@ -51,7 +48,7 @@
     <view class="gicon gi-spy" style="border-color:#7aa8ff;background-color:#111a2e"></view>
     <view class="gbody">
       <view class="gtitle">谁是卧底</view>
-      <view class="gdesc">发词猜身份 · 揪出词不一样的那个人</view>
+      <view class="gdesc">每人一个词,揪出卧底</view>
       <view class="gpill" style="color:#7aa8ff;border-color:#7aa8ff">3-12 P</view>
     </view>
     <view class="garrow">▶</view>
@@ -61,7 +58,7 @@
     <view class="gicon gi-bomb" style="border-color:#d97757;background-color:#2e1710"></view>
     <view class="gbody">
       <view class="gtitle">数字炸弹</view>
-      <view class="gdesc">轮流猜数字 · 踩中雷的接受惩罚</view>
+      <view class="gdesc">猜数字,踩到雷的认罚</view>
       <view class="gpill" style="color:#d97757;border-color:#d97757">2-99 P</view>
     </view>
     <view class="garrow">▶</view>
@@ -71,7 +68,7 @@
     <view class="gicon gi-soccer" style="border-color:#5fcf86;background-color:#0e2c1a"></view>
     <view class="gbody">
       <view class="gtitle">点球大战</view>
-      <view class="gdesc">瞄准 + 蓄力射门 vs 门将扑救的博弈</view>
+      <view class="gdesc">你射我扑,输的喝</view>
       <view class="gpill" style="color:#5fcf86;border-color:#5fcf86">2 P · 对战</view>
     </view>
     <view class="garrow">▶</view>
@@ -81,7 +78,7 @@
     <view class="gicon gi-xj" style="border-color:#d98fd0;background-color:#2c1230"></view>
     <view class="gbody">
       <view class="gtitle">小姐牌</view>
-      <view class="gdesc">抽牌触发整蛊规则 · A点杀/2小姐/K定酒…</view>
+      <view class="gdesc">抽张牌,照牌面规矩来</view>
       <view class="gpill" style="color:#d98fd0;border-color:#d98fd0">3-12 P</view>
     </view>
     <view class="garrow">▶</view>
@@ -91,7 +88,7 @@
     <view class="gicon gi-truth" style="border-color:#e8616b;background-color:#2f1216"></view>
     <view class="gbody">
       <view class="gtitle">真心话大冒险</view>
-      <view class="gdesc">清水/微醺/重口三档 · 不接受就喝</view>
+      <view class="gdesc">清水/微醺/重口,不敢接就喝</view>
       <view class="gpill" style="color:#e8616b;border-color:#e8616b">2+ P</view>
     </view>
     <view class="garrow">▶</view>
